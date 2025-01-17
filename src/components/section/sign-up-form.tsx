@@ -1,8 +1,12 @@
 'use client'
 import axios from "axios";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const SignUpForm = () => {
+
+  const router = useRouter(); 
   const [userDetails, setUserDetails] = useState({
     name: "",
     email: "",
@@ -21,15 +25,22 @@ const SignUpForm = () => {
   const submitHandler = async(event: React.FormEvent) => {
     event.preventDefault(); 
 
-      const data = await axios.post("https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/auth/sign-up", userDetails, {
-        withCredentials: true
-      }); 
+      try {
+        const { data } = await axios.post("https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/auth/sign-up", userDetails, {
+          withCredentials: true
+        }); 
 
-      console.log(data); 
+        if(data.status ==="success"){
+            router.push("/sign-in");
+        }
+
+      } catch (error) {
+          console.log(error);
+      }
   } 
 
   return (
-    <form className="border" onSubmit={submitHandler}>
+    <form className="border flex flex-col justify-center items-center gap-2" onSubmit={submitHandler}>
       <label htmlFor="name"> Name: </label>
       <input type="text" id="name" value={userDetails.name} onChange={handleInput} />
 
@@ -40,6 +51,8 @@ const SignUpForm = () => {
       <input type="text" id="password" value={userDetails.password} onChange={handleInput}/>
 
       <button type="submit">Sign Up</button>
+
+      <Link href={"/sign-up"} className="text-blue-500">Already have an account ? sign-in</Link>
     </form>
   );
 };
