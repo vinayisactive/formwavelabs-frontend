@@ -31,6 +31,10 @@ const SignInForm = () => {
   
         if(data.status === 'success'){
             router.push("/");
+
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
         };
         
       } catch (error) {
