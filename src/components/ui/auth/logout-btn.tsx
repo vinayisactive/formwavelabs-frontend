@@ -1,42 +1,37 @@
 "use client"
+import { useRouter } from "next/navigation";
 
-// import axios from "axios";
-// import { useRouter } from "next/navigation";
+const LogoutButton = () => {
+    const router = useRouter(); 
 
-const LogoutBtn = () => {
-    // const router = useRouter(); 
-
-    // In your Next.js frontend API calls
-//  const logout = async () => {
-//     await fetch('https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/auth/logout', {
-//       method: 'POST',
-//       credentials: 'include', // This is crucial
-//       headers: {
-//         'Content-Type': 'application/json'
-//       }
-//     });
-//   };
-
-    const logoutHandler = async() => {
+    const handleLogout = async () => {
         try {
-            await fetch('https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/auth/logout', {
+            const response = await fetch('https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/auth/logout', {
                 method: 'POST',
                 credentials: 'include', 
                 headers: {
-                  'Content-Type': 'application/json'
-                }
-              });
+                    'Content-Type': 'application/json',
+                },
+            });
 
+            const data = await response.json();
+            if (data?.status === "success") {
+                router.push("/");
+                setTimeout(() => window.location.reload(), 500);
+            }
         } catch (error) {
-            console.log(error)
+            console.error("Logout failed:", error);
         }
-    }
+    };
 
     return (
-    <button onClick={logoutHandler}  className='border px-3 py-1 flex justify-center items-center'>
-         Logout
-    </button>
-  )
-}; 
+        <button
+            onClick={handleLogout}
+            className="border px-3 py-1 flex justify-center items-center"
+        >
+            Logout
+        </button>
+    );
+};
 
-export default LogoutBtn
+export default LogoutButton;
