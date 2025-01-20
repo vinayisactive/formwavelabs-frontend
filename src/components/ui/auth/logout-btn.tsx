@@ -1,23 +1,23 @@
 "use client"
 
 import axios from "axios";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 
 const LogoutBtn = () => {
-    const router = useRouter(); 
+    // const router = useRouter(); 
 
     const logoutHandler = async() => {
         try {
-           const {data} = await axios.post("https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/auth/logout", {
+           const { data } = await axios.post("https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/auth/logout", {
                 withCredentials: true
               }); 
         
               if(data.status === 'success'){
-                  router.push("/");
+                  // router.push("/");
 
-                  setTimeout(() => {
-                    window.location.reload();
-                  }, 500);
+                  // setTimeout(() => {
+                  //   window.location.reload();
+                  // }, 500);
               };
         } catch (error) {
             console.log(error)

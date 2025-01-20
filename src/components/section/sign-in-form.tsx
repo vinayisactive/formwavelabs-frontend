@@ -1,12 +1,12 @@
 'use client'
 import axios from "axios";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const SignInForm = () => {
 
-  const router = useRouter(); 
+  // const router = useRouter(); 
   const [userDetails, setUserDetails] = useState({
     email: "",
     password: "",
@@ -30,11 +30,11 @@ const SignInForm = () => {
         }); 
   
         if(data.status === 'success'){
-            router.push("/");
+            // router.push("/");
 
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
+            // setTimeout(() => {
+            //   window.location.reload();
+            // }, 500);
         };
         
       } catch (error) {
