@@ -1,4 +1,7 @@
-export const navItems = [
+import { TextFiledFormElement } from "@/components/ui/form-elements/text-field/text-field";
+import { FormElemetsType, NavItemsInterface } from "./ts-types";
+
+export const navItems : NavItemsInterface[] = [
     {
         label: "Home",
         routeTo: "/"
@@ -16,3 +19,8 @@ export const navItems = [
         routeTo: "/about"
     }
 ]
+
+export const FormElemets: FormElemetsType = {
+    TextFiled: TextFiledFormElement,
+  };
+
