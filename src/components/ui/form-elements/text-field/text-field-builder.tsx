@@ -12,7 +12,7 @@ const TextFieldBuilderComp = ({
   return (
     <div className="flex flex-col gap-1 justify-start items-start text-black">
       <p className="text-md">
-        {label + element.id} <span>{required && "*"}</span>
+        {label} <span>{required && "*"}</span>
       </p>
       <input
         type="text"

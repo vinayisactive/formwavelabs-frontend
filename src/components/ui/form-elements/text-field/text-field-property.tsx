@@ -9,6 +9,9 @@ const TextPropertiesComponent = ({
 }: {
   elementInstance: FormElemetInstance;
 }) => {
+
+  // console.log(elementInstance);
+
   const currentElement = elementInstance as TextCustomInstance; 
   const [ extraAttributes, setExtraAttributes ] = useState(currentElement.extraAttributes);
 
@@ -27,7 +30,7 @@ const TextPropertiesComponent = ({
       extraAttributes,
     };
 
-    console.log(updatedElement);
+    // console.log(updatedElement);
 
     updateElementInstance(currentElement.id, updatedElement);
    setSelectedElementInstance(null); 
@@ -41,9 +44,9 @@ const TextPropertiesComponent = ({
         <span className="font-medium">Type:</span> {currentElement.type}
       </p>
 
-      <p className="">
+      {/* <p className="">
         <span className="font-medium">ID:</span> {currentElement.id}
-      </p>
+      </p> */}
 
       <div className="space-y-4">
         <div>
@@ -101,6 +104,7 @@ const TextPropertiesComponent = ({
 
       <button
         className="mt-2 bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-200 w-full"
+        onClick={() => setSelectedElementInstance(null)}
       >
         close
       </button>
