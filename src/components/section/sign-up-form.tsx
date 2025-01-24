@@ -34,7 +34,7 @@ const SignUpForm = () => {
 
     setUserDetails((prev) => ({
       ...prev,
-      [id]: value.toLocaleLowerCase,
+      [id]: value,
     }));
   };
 
@@ -58,6 +58,7 @@ const SignUpForm = () => {
       setLoading(false);
     }
   };
+
 
   return (
     <form

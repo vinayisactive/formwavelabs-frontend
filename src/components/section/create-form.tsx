@@ -42,7 +42,7 @@ const CreateForm = () => {
       setLoading(false);
 
       if (response.data.status === 'success') {
-        router.push(`/form/${response.data.data.id}`);
+        router.push(`/form/${response.data.data.id}/1/builder`);
       }
 
     } catch (error) {
