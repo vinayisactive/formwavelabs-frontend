@@ -35,7 +35,7 @@ const BuilderDropArea = () => {
           randomID()
         );
 
-        addElement(elements.length, newElement);
+        addElement(elements?.length, newElement);
         return;
       }
 
@@ -53,7 +53,7 @@ const BuilderDropArea = () => {
           randomID()
         );
 
-        const indexOfNewElement = elements.findIndex((el) => el.id === over.data.current?.id);
+        const indexOfNewElement = elements?.findIndex((el) => el.id === over.data.current?.id);
 
         if (indexOfNewElement === -1) {
           throw new Error("element not found");
@@ -65,7 +65,7 @@ const BuilderDropArea = () => {
           addElement(indexOfNewElement, newElement);
         }
 
-        console.log(`index of IsOverElement  : ${indexOfNewElement}`);
+        // console.log(`index of IsOverElement  : ${indexOfNewElement}`);
         return;
       }
 
@@ -75,13 +75,13 @@ const BuilderDropArea = () => {
       const droppingDesignerElementOverDesignerElement = (isDesignerElement && isTopHalfDropArea) || isBottonHalfDropArea;
 
       if (droppingDesignerElementOverDesignerElement) {
-        const indexOfNewElement = over.data.current?.id && elements.findIndex((el) => el.id === over.data.current?.id);
+        const indexOfNewElement = over.data.current?.id && elements?.findIndex((el) => el.id === over.data.current?.id);
 
         if (indexOfNewElement === -1) {
           throw new Error("element not found");
         }
 
-        const activeElementIndex = elements.findIndex((el) => el.id === designerElementId);
+        const activeElementIndex = elements?.findIndex((el) => el.id === designerElementId);
         const activeDesignerElement = { ...elements[activeElementIndex] };
         deleteElement(designerElementId);
 
@@ -105,18 +105,18 @@ const BuilderDropArea = () => {
             isOver ? "border-black/50" : ""
           }`}
         >
-          {elements.length === 0 && !isOver ? (
+          {elements?.length === 0 && !isOver ? (
             <p className="flex justify-center items-center text-4xl flex-grow">
               Drop here
             </p>
           ) : (
             <div className="flex flex-col gap-2">
-              {elements.map((el: FormElemetInstance) => (
+              {elements?.length>0 && elements?.map((el: FormElemetInstance) => (
                 <BuilderElemetWrapper element={el} key={el?.id} />
               ))}
             </div>
           )}
-          {isOver && elements.length === 0 && (
+          {isOver && elements?.length === 0 && (
             <div className="h-[100px] w-full bg-black/5 rounded-xl"></div>
           )}
         </div>

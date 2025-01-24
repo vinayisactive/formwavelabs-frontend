@@ -4,6 +4,7 @@ import BuilderDropArea from "./builder-drop-area";
 import DndOverlayWrapper from "./dnd-overlay";
 
 const Builder = () => {
+
     const mouseSensor = useSensor(MouseSensor, {
         activationConstraint: {
           distance: 10
@@ -18,9 +19,10 @@ const Builder = () => {
       }); 
     
       const sensor = useSensors(mouseSensor, touchSensor); 
+
   return (
     <DndContext sensors={sensor}>
-        <BuilderDropArea />
+        <BuilderDropArea/>
         <DndOverlayWrapper />
     </DndContext>  
   )

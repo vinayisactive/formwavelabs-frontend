@@ -49,7 +49,13 @@ const BuilderElemetWrapper = ({element}: {element: FormElemetInstance}) => {
         className="p-2 bg-black/10 rounded-md h-[120px] relative flex flex-col justify-center cursor-pointer"
         onMouseEnter={() => setMouseOver(true)}
         onMouseLeave={() => setMouseOver(false)}
-        onClick={() => setSelectedElementInstance(element)}
+        onClick={() =>{ 
+          setSelectedElementInstance(null);
+
+          setTimeout(() => {
+            setSelectedElementInstance(element)
+          }, 0);
+        }}
       >
         <div
           ref={topHalf.setNodeRef}
