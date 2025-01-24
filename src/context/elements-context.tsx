@@ -10,8 +10,8 @@ type ElementsContextType = {
     deleteElement: (id: string) => void; 
     selectedElementInstance: FormElemetInstance | null; 
     setSelectedElementInstance: Dispatch<SetStateAction<FormElemetInstance | null>>; 
+    setElements: Dispatch<SetStateAction<FormElemetInstance[] | []>>
 }
-
 export const ElementsContext = createContext<ElementsContextType | null>(null);
 
 const ElementsContextProvider = ({children}: {children: ReactNode}) => {
@@ -20,7 +20,7 @@ const ElementsContextProvider = ({children}: {children: ReactNode}) => {
 
     const addElement = (index: number, element : FormElemetInstance) => {
        setElements(prev => {
-            const elements = [...prev]; 
+            const elements = prev ? [...prev] : [] 
             elements.splice(index, 0, element); 
             return elements; 
         }); 
@@ -37,11 +37,11 @@ const ElementsContextProvider = ({children}: {children: ReactNode}) => {
                 return element.id === id ? { ...element, ...updatedElement } : element;
             })
         );
-    };
+    };  
 
       
     return (
-        <ElementsContext.Provider value={{elements, addElement, deleteElement, selectedElementInstance,  setSelectedElementInstance, updateElementInstance}}>
+        <ElementsContext.Provider value={{elements, addElement, deleteElement, selectedElementInstance,  setSelectedElementInstance, updateElementInstance, setElements}}>
             {children}
         </ElementsContext.Provider>
     )
