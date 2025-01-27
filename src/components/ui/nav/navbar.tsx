@@ -1,14 +1,14 @@
-import { getServerSession } from "next-auth";
+"use client";
+
 import NavItems from "./nav-items";
 import SignIn from "../auth/sign-in-btn";
 import UserProfile from "../auth/user-profile";
 import LogoutBtn from "../auth/logout-btn";
-import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import { useSession } from "next-auth/react";
 
-const Navbar = async () => {
-  const session = await getServerSession(authOptions);
-
-  const isAuth = !!session?.accessToken;
+const Navbar = () => {
+  const { data: session, status } = useSession();
+  const isAuth = status === "authenticated";
   const name = session?.user?.name || null;
 
   return (
