@@ -1,6 +1,6 @@
 // import axios from "axios";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import DashboardCard from "../ui/dashboard-card";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 
 interface Form {

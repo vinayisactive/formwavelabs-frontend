@@ -3,7 +3,7 @@ import NavItems from "./nav-items";
 import SignIn from "../auth/sign-in-btn";
 import UserProfile from "../auth/user-profile";
 import LogoutBtn from "../auth/logout-btn";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 
 const Navbar = async () => {
   const session = await getServerSession(authOptions);
