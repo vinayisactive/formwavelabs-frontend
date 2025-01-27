@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
-  const hasToken = request.cookies.has('next-auth.session-token')
+  const hasToken = request.cookies.has('__Secure-next-auth.session-token'); 
 
   const protectedPaths = [
     '/dashboard',
