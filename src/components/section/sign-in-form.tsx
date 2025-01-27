@@ -1,20 +1,17 @@
 "use client";
 
-import { handleAxiosError } from "@/utility/axios-err";
-import axios from "axios";
-import { Loader } from "lucide-react";
-import Link from "next/link";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { Loader } from "lucide-react";
+import Link from "next/link";
 
 const SignInForm = () => {
   const router = useRouter();
-
   const [userDetails, setUserDetails] = useState({
     email: "",
     password: "",
   });
-
   const [isValid, setIsValid] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -34,23 +31,28 @@ const SignInForm = () => {
     event.preventDefault();
     setLoading(true);
     setErrorMsg("");
-
+  
     try {
-      const response = await axios.post(
-        "https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/auth/sign-in",
-        userDetails,
-        { withCredentials: true }
-      );
-
-
-      if (response.data.status === "success") {
+      const result = await signIn("credentials", {
+        redirect: false,
+        email: userDetails.email,
+        password: userDetails.password,
+      });
+  
+      if (result?.ok) {
+        console.log("Sign-in successful:", result);
         router.push("/");
+
         setTimeout(() => {
-          window.location.reload();
-        }, 500);
+          window.location.reload()
+        }, 100);
+      } else {
+        console.error("Sign-in error:", result?.error);
+        setErrorMsg(result?.error || "Invalid credentials");
       }
     } catch (error) {
-      setErrorMsg(handleAxiosError(error));
+      console.error("Unexpected error:", error);
+      setErrorMsg("An unexpected error occurred");
     } finally {
       setLoading(false);
     }
@@ -63,29 +65,32 @@ const SignInForm = () => {
     >
       <label htmlFor="email">Email:</label>
       <input
-        type="text"
+        type="email"
         id="email"
         value={userDetails.email}
         onChange={handleInput}
+        required
       />
 
       <label htmlFor="password">Password:</label>
       <input
-        type="text"
+        type="password"
         id="password"
         value={userDetails.password}
-        placeholder="6 char at least"
+        placeholder="6 characters at least"
+        minLength={6}
         onChange={handleInput}
+        required
       />
 
-      <button type="submit" disabled={!isValid}>
-        {loading && <Loader />} Sign In
+      <button type="submit" disabled={!isValid || loading}>
+        {loading ? <Loader className="animate-spin" /> : "Sign In"}
       </button>
 
-      {errorMsg && <p>{errorMsg}</p>}
+      {errorMsg && <p className="text-red-500">{errorMsg}</p>}
 
-      <Link href="/sign-up" className="text-blue-500">
-        Sign-up here
+      <Link href="/sign-up" className="text-blue-500 hover:text-blue-700">
+        Do not have an account? Sign up here
       </Link>
     </form>
   );

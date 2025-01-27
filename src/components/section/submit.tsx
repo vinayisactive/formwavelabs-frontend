@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { handleAxiosError } from "@/utility/axios-err";
 import { FormElemets } from "@/utility/static-data";
 import { FormElemetInstance } from "@/utility/ts-types";
@@ -19,8 +19,7 @@ interface FormDataInterface {
   id: string;
 }
 
-const Submission = ({ formId }: { formId: string }) => {
-//   console.log(`Form ID inside Submission component: ${formId}`);
+const Submit = ({ formId }: { formId: string }) => {
 
   const [formData, setForm] = useState<FormDataInterface | null>(null);
   const [count, setCount] = useState<number>(0);
@@ -29,14 +28,49 @@ const Submission = ({ formId }: { formId: string }) => {
     []
   );
 
+  
+  const formValues = useRef<{[key: string] : string}>({});
+  const [loading, setLoading] = useState<boolean>(false);
+  const [errMsg, setErrMsg] = useState<string>("");
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+
+  
+  const handleValues = (key: string, value: string) => {
+    formValues.current[key] = value; 
+  }
+
+
+
+  const handleSubmit = async() => {
+    try {
+        
+        setLoading(true);
+        console.log(formValues.current)
+
+        const response = await axios.post(`https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formId}/submissions`, {
+            content: JSON.stringify(formValues.current)
+        })
+
+        if(response.data.status === "success"){
+            setIsSubmitted(true);
+        }
+
+        setLoading(false)
+        console.log(response.data.status); 
+
+    } catch (error) {
+        setErrMsg(handleAxiosError(error));
+        setLoading(false);
+        setIsSubmitted(false);
+    }
+  }
+
+
   useEffect(() => {
     const fetchForm = async () => {
       try {
         const response = await axios.get(
           `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formId}`,
-          {
-            withCredentials: true,
-          }
         );
 
         setForm(response.data.data);
@@ -60,7 +94,7 @@ const Submission = ({ formId }: { formId: string }) => {
   }, [count, formData]);
 
   return (
-    <div className="w-full h-full flex flex-col items-center bg-white text-black py-8 px-4">
+    <div className="w-full h-full flex flex-col gap-5 items-center bg-white text-black py-8 px-4">
       <div className="flex gap-2 mb-6">
         {Array(pageLength)
           .fill(0)
@@ -77,7 +111,7 @@ const Submission = ({ formId }: { formId: string }) => {
       <div className="w-full max-w-2xl space-y-4">
         {currentPageData.map((el) => {
           const SubmitComponent = FormElemets[el.type].submitComponent;
-          return <SubmitComponent elementInstance={el} key={el.id} />;
+          return <SubmitComponent elementInstance={el} key={el.id}  handleValues={handleValues} formValues={formValues}/>;
         })}
       </div>
 
@@ -103,13 +137,19 @@ const Submission = ({ formId }: { formId: string }) => {
         )}
 
         {count === pageLength - 1 && (
-          <button className="px-4 py-2 border border-black rounded-lg hover:bg-black hover:text-white transition">
-            Save
+          <button className={`px-4 py-2 border border-black rounded-lg hover:bg-black ${loading && 'opacity-50'} hover:text-white transition`}
+            onClick={handleSubmit}
+            disabled={loading}
+          >
+            {loading ? "Saving" : "Save"}
           </button>
         )}
       </div>
+
+      {errMsg && <p>{errMsg}</p>}
+      {isSubmitted && <p className="text-green-400">Form is submitted successfully</p>}
     </div>
   );
 };
 
-export default Submission;
+export default Submit;

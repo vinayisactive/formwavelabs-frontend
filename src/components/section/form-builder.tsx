@@ -11,6 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import useElements from "@/utility/useElements-hook";
 import { FormElemetInstance } from "@/utility/ts-types";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 type TabType = "preview" | "builder";
 
@@ -30,6 +31,9 @@ const FormBuilder = ({ formId, page }: { formId: string; page: number }) => {
   const [tab, setTab] = useState<TabType>("builder");
   const { setElements } = useElements();
 
+  const session = useSession(); 
+  const token = session.data?.accessToken;
+  
   const {
     data: formData,
     isLoading,
@@ -40,7 +44,9 @@ const FormBuilder = ({ formId, page }: { formId: string; page: number }) => {
       const response = await axios.get(
         `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formId}/with-page?p=${page}`,
         {
-          withCredentials: true,
+          headers: {
+            "Authorization" : `Bearer ${token}`
+          }
         }
       );
 
@@ -50,7 +56,7 @@ const FormBuilder = ({ formId, page }: { formId: string; page: number }) => {
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     refetchOnMount: false,
-    retry: 1,
+    retry: 2,
   });
 
   useEffect(() => {

@@ -3,6 +3,7 @@
 import { handleAxiosError } from '@/utility/axios-err';
 import axios from 'axios';
 import { Loader } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
@@ -12,6 +13,9 @@ interface CreateFormInterface {
 }
 
 const CreateForm = () => {
+  const session = useSession(); 
+  const token = session.data?.accessToken
+
   const [formDetails, setFormDetails] = useState<CreateFormInterface>({
     title: '',
     description: '',
@@ -36,7 +40,11 @@ const CreateForm = () => {
       const response = await axios.post(
         'https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms',
         formDetails,
-        { withCredentials: true }
+        {
+            headers: {
+              "Authorization" : `Bearer ${token}`
+            }
+         }
       );
 
       setLoading(false);
