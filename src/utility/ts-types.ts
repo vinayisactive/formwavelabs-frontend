@@ -23,6 +23,7 @@ export type FormElemet = {
   submitComponent: React.FC<{
     elementInstance: FormElemetInstance;
     handleValues?: submitValueType;
+    formValues?: React.RefObject<{ [key: string]: string }>;
   }>;
   elementButton: {
     label: string;
