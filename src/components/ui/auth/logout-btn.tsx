@@ -1,37 +1,26 @@
 "use client"
-import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react"
 
 const LogoutButton = () => {
-    const router = useRouter(); 
 
-    const handleLogout = async () => {
-        try {
-            const response = await fetch('https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/auth/logout', {
-                method: 'POST',
-                credentials: 'include', 
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+    const logoutHandler = () => {
+        signOut({
+            callbackUrl: "/"
+        })
 
-            const data = await response.json();
-            if (data?.status === "success") {
-                router.push("/");
-                setTimeout(() => window.location.reload(), 500);
-            }
-        } catch (error) {
-            console.error("Logout failed:", error);
-        }
-    };
+        setTimeout(() => {
+            window.location.reload()
+          }, 100);
+    }
 
     return (
         <button
-            onClick={handleLogout}
+            onClick={logoutHandler}
             className="border px-3 py-1 flex justify-center items-center"
         >
             Logout
         </button>
-    );
-};
+    )
+}
 
-export default LogoutButton;
+export default LogoutButton

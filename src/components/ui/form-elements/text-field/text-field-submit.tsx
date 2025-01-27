@@ -6,21 +6,25 @@ import { FormElemetInstance, submitValueType } from "@/utility/ts-types";
 
 type TextFieldSubmitProps = {
   elementInstance: FormElemetInstance;
-  handleValues?: submitValueType;
+  handleValues?: submitValueType | undefined; 
+  formValues?: React.RefObject<{ [key: string]: string }>;
 };
 
 const TextFieldSubmitComp: React.FC<TextFieldSubmitProps> = ({
   elementInstance,
   handleValues,
+  formValues
 }) => {
   const { id, extraAttributes } = elementInstance as TextCustomInstance;
   const { label, helperText, placeholder, required } = extraAttributes;
 
-  const [inputValue, setInputValue] = useState<string>("");
+  const [inputValue, setInputValue] = useState<string>(formValues?.current[id] || "");
 
-  const handleBlur = () => {
-    if (inputValue && handleValues) {
-      handleValues(id, inputValue);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setInputValue(newValue);
+    if (handleValues) {
+      handleValues(id, newValue);
     }
   };
 
@@ -36,9 +40,8 @@ const TextFieldSubmitComp: React.FC<TextFieldSubmitProps> = ({
         id={id}
         placeholder={placeholder}
         required={required}
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-        onBlur={handleBlur}
+        value={formValues?.current[id] || inputValue}
+        onChange={handleChange}
         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
       />
 

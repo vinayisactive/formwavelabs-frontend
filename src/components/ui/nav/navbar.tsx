@@ -1,35 +1,15 @@
-"use client";
-import { useEffect, useState } from "react";
+import { getServerSession } from "next-auth";
+import NavItems from "./nav-items";
 import SignIn from "../auth/sign-in-btn";
 import UserProfile from "../auth/user-profile";
-import NavItems from "./nav-items";
-import axios from "axios";
 import LogoutBtn from "../auth/logout-btn";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
-const Navbar = () => {
-  const [name, setName] = useState<string | null>(null);
-  const [isAuth, setIsAuth] = useState<boolean>(false);
+const Navbar = async () => {
+  const session = await getServerSession(authOptions);
 
-  useEffect(() => {
-    const fetchAuthDetails = async () => {
-      try {
-        const { data } = await axios.get(
-          "https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/auth/check-auth",
-          {
-            withCredentials: true,
-          }
-        );
-
-        setName(data.data.email);
-        setIsAuth(true);
-      } catch (error) {
-        console.log(error);
-        setIsAuth(false);
-      }
-    };
-
-    fetchAuthDetails();
-  }, []);
+  const isAuth = !!session?.accessToken;
+  const name = session?.user?.name || null;
 
   return (
     <div className="w-screen h-12 absolute top-0 left-0 border flex justify-center items-center px-4">
@@ -40,7 +20,7 @@ const Navbar = () => {
 
         {isAuth && name ? (
           <div className="flex gap-1">
-            <UserProfile name={name} /> 
+            <UserProfile name={name} />
             <LogoutBtn />
           </div>
         ) : (

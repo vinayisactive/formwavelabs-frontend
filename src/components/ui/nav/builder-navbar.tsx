@@ -9,6 +9,7 @@ import { useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { FormElemetInstance } from "@/utility/ts-types";
 import { Link } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 type TabType = "builder" | "preview";
 
@@ -23,6 +24,9 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
   formData,
   page,
 }) => {
+  const session = useSession(); 
+  const token = session.data?.accessToken;
+
   const { elements } = useElements();
   const queryClient = useQueryClient();
   const initialElements = useRef<FormElemetInstance[] | null>(null);
@@ -95,7 +99,6 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
     if (elements) {
       const hasChanged = areElementsChanged(initialElements.current, elements);
       setIsSaveAllowed(hasChanged);
-      console.log("Change detected:", hasChanged);
     }
 
     // console.log("Initial array:", initialElements.current);
@@ -122,7 +125,11 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
           pageId: formData.pages[0].id,
           content: elements,
         },
-        { withCredentials: true }
+        { 
+          headers: {
+            'Authorization' : `Bearer ${token}`
+          }
+        }
       );
 
       return response.data;
@@ -132,7 +139,7 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
         queryKey: ["formData"],
       });
 
-      console.log("Page saved successfully");
+      // console.log("Page saved successfully");
     },
     onError: (error) => {
       const errorMessage = handleAxiosError(error);
@@ -157,11 +164,13 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
           content: elements,
         },
         {
-          withCredentials: true,
+          headers: {
+            'Authorization' : `Bearer ${token}`
+          }
         }
       );
 
-      console.log(response);
+      // console.log(response);
       setIsSaved(false);
 
       if (response.data.status === "success") {
@@ -185,12 +194,13 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
         `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formData?.id}/status`,
         null,
         {
-          withCredentials: true,
+          headers: {
+            'Authorization' : `Bearer ${token}`
+          }
         }
       );
 
       setIsPublishing(false);
-      // console.log(response);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
