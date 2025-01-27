@@ -1,33 +1,35 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/ui/nav/navbar";
-import ReactQueryProvider from "@/utility/react-query-provider";
+import { Roboto } from "next/font/google";
+import { getServerSession } from "next-auth";
+import LayoutProvider from "@/components/wrap/layout-provider-wrapper";
 
-import { Roboto } from 'next/font/google'
- 
 const roboto = Roboto({
-  weight: '400',
-  subsets: ['latin'],
-  display: 'swap',
-})
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Formwavelabs",
   description: "A multi-step form creation",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const session = await getServerSession();
+
   return (
     <html lang="en" className={roboto.className}>
-      <body >
-        <ReactQueryProvider>
+      <body>
+        <LayoutProvider session={session}>
           <div className="w-screen flex flex-col justify-center items-center overflow-x-hidden">
             <Navbar />
             <div>{children}</div>
           </div>
-        </ReactQueryProvider>
+        </LayoutProvider>
       </body>
     </html>
   );
