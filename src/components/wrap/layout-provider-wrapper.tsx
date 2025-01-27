@@ -1,18 +1,18 @@
 "use client"
 import ReactQueryProvider from "@/utility/react-query-provider";
-import { Session } from "next-auth";
+// import { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import React from "react";
 
 const LayoutProvider = ({
   children,
-  session,
+//   session,
 }: {
-  session: Session | null;
+//   session: Session | null;
   children: React.ReactNode;
 }) => {
   return (
-    <SessionProvider session={session}>
+    <SessionProvider>
       <ReactQueryProvider>{children}</ReactQueryProvider>
     </SessionProvider>
   );
