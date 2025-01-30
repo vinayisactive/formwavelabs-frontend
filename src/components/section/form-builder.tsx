@@ -28,6 +28,8 @@ export interface FormData {
   id: string;
   title: string;
   status: boolean;
+  totalPages: number;
+
 }
 
 interface FormBuilderProps {
@@ -46,15 +48,16 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ formId, page }) => {
     queryKey: ["formData", formId, page],
     queryFn: async () => {
       const response = await axios.get(
-        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formId}/with-page?p=${page}`,
+        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formId}/page?p=${page}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       return response.data.data as FormData;
     },
+    staleTime: 0,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     refetchOnMount: false,
-    retry: 2,
+    retry: 5,
   });
 
   useEffect(() => {
@@ -70,6 +73,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ formId, page }) => {
     }
   }, [formData, setElements]);
 
+
   return (
     <div className="w-full h-full flex flex-col justify-center items-center">
       {isLoading ? (
@@ -81,7 +85,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ formId, page }) => {
         </div>
       ) : (
         <div className="w-full h-full flex flex-col mt-2">
-          <BuilderNavbar setTab={setTab} formData={formData} page={page}/>
+          <BuilderNavbar setTab={setTab} formData={formData} page={page} totalPage={formData?.totalPages}/>
           <div className="flex-grow">
             {tab === "builder" ? <Builder /> : <Preview />}
           </div>

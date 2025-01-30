@@ -13,7 +13,7 @@ import useElements from "@/utility/useElements-hook";
 import { FormElemetInstance } from "@/utility/ts-types";
 
 import CopyToClipboard from "../copy-to-clipboard";
-
+import { Loader } from "lucide-react";
 
 type TabType = "builder" | "preview";
 
@@ -21,29 +21,44 @@ interface BuilderNavbarProps {
   setTab: React.Dispatch<React.SetStateAction<TabType>>;
   formData: FormData | undefined;
   page: number;
+  totalPage: number | undefined;
 }
 
-const BuilderNavbar: React.FC<BuilderNavbarProps> = ({ setTab, formData, page}) => {
-  const session = useSession(); 
+const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
+  setTab,
+  formData,
+  page,
+  totalPage,
+}) => {
+  const session = useSession();
   const token = session.data?.accessToken;
 
   const queryClient = useQueryClient();
   const router = useRouter();
-  
+
   const { elements } = useElements();
   const initialElements = useRef<FormElemetInstance[] | null>(null);
 
+  const [isNextAvailable, setIsNextAvailable] = useState<boolean>(false);
 
   const [isSaveAllowed, setIsSaveAllowed] = useState<boolean>(false);
   const [isPublishAllowed, setIsPublishedAllowed] = useState<boolean>(false);
 
   const [isPublishing, setIsPublishing] = useState<boolean>(false);
-  const [isSaved, setIsSaved] = useState<boolean>(false);
+  const [isNextSaving, setIsNextSaving] = useState<boolean>(false);
 
+  const [isNextFetching, setIsNextFetching] = useState<boolean>(false);
+  const [isNextCreating, setIsNextCreating] = useState<boolean>(false)
 
-  const copyToClipboardText =  `https://formwavelabs-frontend.vercel.app/submit/${formData?.id}`; 
+  const copyToClipboardText = `https://formwavelabs-frontend.vercel.app/submit/${formData?.id}`;
 
-
+  useEffect(() => {
+    if (totalPage && page < totalPage) {
+      setIsNextAvailable(true);
+    } else if (totalPage && (page === totalPage || page > totalPage)) {
+      setIsNextAvailable(false);
+    }
+  }, [page, totalPage]);
 
   //useEffect one for parsing data / [formData]
   useEffect(() => {
@@ -63,16 +78,13 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({ setTab, formData, page}) 
     }
   }, [formData]);
 
-
-//useEffect two for checking if saving is allowed or not / [elements]
+  //useEffect two for checking if saving is allowed or not / [elements]
   useEffect(() => {
     if (elements) {
       const hasChanged = areElementsChanged(initialElements.current, elements);
       setIsSaveAllowed(hasChanged);
     }
   }, [elements]);
-
-
 
   //useEffect three to handle if publishing is allowed or not  / [elements]
   useEffect(() => {
@@ -81,7 +93,6 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({ setTab, formData, page}) 
     }
   }, [elements]);
 
-
   //useQuery save page mutation handler , revalidate formData query for updated elements data.
   const savePageMutation = useMutation({
     mutationFn: async () => {
@@ -89,16 +100,16 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({ setTab, formData, page}) 
         throw new Error("Invalid form data");
       }
 
-      const response = await axios.put(
+      const response = await axios.patch(
         `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formData.id}/page?p=${formData.pages[0].page}`,
         {
           pageId: formData.pages[0].id,
           content: elements,
         },
-        { 
+        {
           headers: {
-            'Authorization' : `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
@@ -108,7 +119,6 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({ setTab, formData, page}) 
       queryClient.invalidateQueries({
         queryKey: ["formData"],
       });
-
     },
     onError: (error) => {
       const errorMessage = handleAxiosError(error);
@@ -120,36 +130,34 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({ setTab, formData, page}) 
     savePageMutation.mutate();
   };
 
-
- // Save and Next handler 
+  // Save and Next handler
   const handleSaveAndNext = async () => {
     try {
-      setIsSaved(true);
+      setIsNextSaving(true);
 
-      const response = await axios.post(
-        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formData?.id}/page?p=${page}`,
+      const response = await axios.patch(
+        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formData?.id}/page/next?p=${page}`,
         {
           pageId: formData?.pages[0].id,
           content: elements,
         },
         {
           headers: {
-            'Authorization' : `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
-      setIsSaved(false);
+      setIsNextSaving(false);
 
       if (response.data.status === "success") {
         router.push(`/form/${formData?.id}/${response.data.data.page}/builder`);
       }
     } catch (error) {
       console.log(handleAxiosError(error));
-      setIsSaved(false);
+      setIsNextSaving(false);
     }
   };
-
 
   // publish/unpublish mutation handler, revalidate formData query for updated data.
   const savePublishMutation = useMutation({
@@ -165,8 +173,8 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({ setTab, formData, page}) 
         null,
         {
           headers: {
-            'Authorization' : `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
@@ -187,45 +195,144 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({ setTab, formData, page}) 
     savePublishMutation.mutate();
   };
 
- 
+  //next button handler for fetching next page
+  const handleNext = async () => {
+    try {
+
+      setIsNextFetching(true);
+
+      const response = await axios.get(
+        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formData?.id}/page/next?p=${page}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setIsNextFetching(false);
+
+      if (response.data.status === "success") {
+        router.push(`/form/${formData?.id}/${response.data.data.page}/builder`);
+      }
+
+
+    } catch (error) {
+      console.error(handleAxiosError(error));
+      setIsNextFetching(false);
+    }
+  };
+
+  const handleCreateNext = async () => {
+    try {
+
+      setIsNextCreating(true);
+      const response = await axios.post(
+        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formData?.id}/page/next?p=${page}`,
+        null,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setIsNextAvailable(false)
+      if (response.data.status === "success") {
+        router.push(`/form/${formData?.id}/${response.data.data.page}/builder`);
+      }
+    } catch (error) {
+      console.error(handleAxiosError(error));
+      setIsNextCreating(false);
+    }
+  };
+
+  const handlePrevious = () => {
+    router.push(`/form/${formData?.id}/${page - 1}/builder`);
+  };
+
   return (
     <div className="flex justify-between items-center border-b h-14 gap-2 px-4 bg-white shadow-sm">
-
       <h1 className="text-md font-semibold text-gray-800">{formData?.title}</h1>
 
-
-        {/* Builder and Preview buttons */}
+      {/* Builder and Preview buttons */}
       <div className="flex gap-2 items-center">
-        <BuilderTabButton setTab={setTab} tab='builder'/>
-        <BuilderTabButton setTab={setTab} tab='preview'/>
+        <BuilderTabButton setTab={setTab} tab="builder" />
+        <BuilderTabButton setTab={setTab} tab="preview" />
         <div className="h-6 w-px bg-gray-200 mx-2" />
 
 
+      {/* Previous button */}
+        {page > 1 && (
+          <button
+            onClick={handlePrevious}
+            className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors bg-blue-500 text-white hover:bg-blue-700`}
+          >
+            Previous
+          </button>
+        )}
+
+
         {/* Save page button */}
-        <button
-          onClick={handleSavePage}
-          disabled={!isSaveAllowed || savePageMutation.isPending}
-          className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-            !isSaveAllowed || savePageMutation.isPending
-              ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-              : "bg-blue-100 text-blue-700 hover:bg-blue-200"
-          }`}
-        >
-          {savePageMutation.isPending ? "Saving..." : "Save Changes"}
-        </button>
+        {!isNextSaving && (
+          <button
+            onClick={handleSavePage}
+            disabled={!isSaveAllowed || savePageMutation.isPending}
+            className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+              !isSaveAllowed || savePageMutation.isPending
+                ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                : "bg-blue-100 text-blue-700 hover:bg-blue-200"
+            }`}
+          >
+            {savePageMutation.isPending ? "Saving..." : "Save Changes"}
+          </button>
+        )}
+
 
         {/* Save and next page button */}
-        <button
-          onClick={handleSaveAndNext}
-          disabled={isSaved}
-          className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-            isSaved 
-              ? "bg-gray-100 text-gray-400 cursor-not-allowed" 
-              : "bg-purple-100 text-purple-700 hover:bg-purple-200"
-          }`}
-        >
-          {isSaved ? "Saving..." : "Save & Next Page"}
-        </button>
+        {!savePageMutation.isPending && isSaveAllowed && isNextAvailable && (
+          <button
+            onClick={handleSaveAndNext}
+            disabled={!isSaveAllowed}
+            className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+              !isSaveAllowed
+                ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                : "bg-purple-100 text-purple-700 hover:bg-purple-200"
+            }`}
+          >
+            {isNextSaving ? "Saving..." : "Save & Next Page"}
+          </button>
+        )}
+
+
+        {/* Next button */}
+        {isNextAvailable && (
+          <button
+            onClick={handleNext}
+            disabled={isNextFetching}
+            className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors flex gap-2 ${
+              isNextFetching
+                ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                : "bg-blue-500 text-white hover:bg-blue-700"
+            }`}
+          >
+            Next {isNextFetching && <Loader />} 
+          </button>
+        )}
+
+
+        {!isNextAvailable && elements?.length > 0 && (
+          <button
+            onClick={handleCreateNext}
+            className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors flex gap-2 ${
+              isNextCreating
+                ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                : "bg-blue-500 text-white hover:bg-blue-700"
+            }`}
+          >
+            Create Next {isNextCreating && <Loader/>}
+          </button>
+        )}
 
         <div className="h-6 w-px bg-gray-200 mx-2" />
 
@@ -233,7 +340,7 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({ setTab, formData, page}) 
         {/* Publish section */}
         {formData?.status ? (
           <div className="flex gap-2 items-center">
-            <button 
+            <button
               onClick={handlePublish}
               className="px-3 py-1.5 rounded-md text-sm font-medium bg-red-100 text-red-700 hover:bg-red-200 transition-colors flex items-center gap-1"
             >
@@ -272,37 +379,22 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({ setTab, formData, page}) 
 export default BuilderNavbar;
 
 
-
-
-
-
-
-
-
-
-const BuilderTabButton = ({setTab, tab} : {setTab : React.Dispatch<React.SetStateAction<TabType>>, tab: "builder" | "preview"}) => {
+const BuilderTabButton = ({
+  setTab,
+  tab,
+}: {
+  setTab: React.Dispatch<React.SetStateAction<TabType>>;
+  tab: "builder" | "preview";
+}) => {
   return (
-<button 
-onClick={() => setTab(tab)}
-className="px-3 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors border"
->
-{tab === "builder" ? "Builder" : "Preview"}
-</button>
-  )
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <button
+      onClick={() => setTab(tab)}
+      className={`px-3 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors border`}
+    >
+      {tab === "builder" ? "Builder" : "Preview"}
+    </button>
+  );
+};
 
 const areElementsChanged = (
   arr1: FormElemetInstance[] | null,
