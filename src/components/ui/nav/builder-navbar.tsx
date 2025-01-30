@@ -1,49 +1,59 @@
 "use client";
 
+import { useRef, useState, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+
 import axios from "axios";
-import { formDataInterface } from "@/components/section/form-builder";
+import { FormData } from "@/components/section/form-builder";
+
 import { handleAxiosError } from "@/utility/axios-err";
 import useElements from "@/utility/useElements-hook";
-import { useRef, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { FormElemetInstance } from "@/utility/ts-types";
-import { Link } from "lucide-react";
-import { useSession } from "next-auth/react";
+
+import CopyToClipboard from "../copy-to-clipboard";
+
 
 type TabType = "builder" | "preview";
 
 interface BuilderNavbarProps {
   setTab: React.Dispatch<React.SetStateAction<TabType>>;
-  formData: formDataInterface | undefined;
+  formData: FormData | undefined;
   page: number;
 }
 
-const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
-  setTab,
-  formData,
-  page,
-}) => {
+const BuilderNavbar: React.FC<BuilderNavbarProps> = ({ setTab, formData, page}) => {
   const session = useSession(); 
   const token = session.data?.accessToken;
 
-  const { elements } = useElements();
   const queryClient = useQueryClient();
+  const router = useRouter();
+  
+  const { elements } = useElements();
   const initialElements = useRef<FormElemetInstance[] | null>(null);
+
+
   const [isSaveAllowed, setIsSaveAllowed] = useState<boolean>(false);
   const [isPublishAllowed, setIsPublishedAllowed] = useState<boolean>(false);
-  const [isPublishing, setIsPublishing] = useState<boolean>(false);
-  const copyToClipboardText =  `https://formwavelabs-frontend.vercel.app/submit/${formData?.id}`; 
-  const [isCopied, setIsCopied] = useState<boolean>(false);
 
+  const [isPublishing, setIsPublishing] = useState<boolean>(false);
+  const [isSaved, setIsSaved] = useState<boolean>(false);
+
+
+  const copyToClipboardText =  `https://formwavelabs-frontend.vercel.app/submit/${formData?.id}`; 
+
+
+
+  //useEffect one for parsing data / [formData]
   useEffect(() => {
     try {
       if (
         formData?.pages[0]?.content &&
         typeof formData.pages[0].content === "string"
       ) {
-        initialElements.current = JSON.parse(formData.pages[0].content);
-        // console.log("Initial elements parsed:", initialElements.current);
+        const content = formData?.pages[0]?.content;
+        initialElements.current = JSON.parse(content);
       } else {
         initialElements.current = null;
       }
@@ -53,66 +63,26 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
     }
   }, [formData]);
 
+
+//useEffect two for checking if saving is allowed or not / [elements]
   useEffect(() => {
-    const areElementsChanged = (
-      arr1: FormElemetInstance[] | null,
-      arr2: FormElemetInstance[]
-    ): boolean => {
-      if (!arr1 || arr1.length === 0) {
-        return arr2.length > 0;
-      }
-
-      if (arr1.length !== arr2.length) return true;
-
-      const compareObjects = (
-        obj1: FormElemetInstance,
-        obj2: FormElemetInstance
-      ): boolean => {
-        const keys1 = Object.keys(obj1) as (keyof FormElemetInstance)[];
-        const keys2 = Object.keys(obj2) as (keyof FormElemetInstance)[];
-
-        if (keys1.length !== keys2.length) return true;
-
-        return keys1.some((key) => {
-          const val1 = obj1[key];
-          const val2 = obj2[key];
-
-          if (typeof val1 === "object" && typeof val2 === "object") {
-            if (Array.isArray(val1) && Array.isArray(val2)) {
-              return JSON.stringify(val1) !== JSON.stringify(val2);
-            }
-            return compareObjects(
-              val1 as FormElemetInstance,
-              val2 as FormElemetInstance
-            );
-          }
-
-          return val1 !== val2;
-        });
-      };
-
-      return arr1.some((originalObj, index) =>
-        compareObjects(originalObj, arr2[index])
-      );
-    };
-
     if (elements) {
       const hasChanged = areElementsChanged(initialElements.current, elements);
       setIsSaveAllowed(hasChanged);
     }
-
-    // console.log("Initial array:", initialElements.current);
-    // console.log("Current elements:", elements);
   }, [elements]);
 
+
+
+  //useEffect three to handle if publishing is allowed or not  / [elements]
   useEffect(() => {
     if (elements.length > 0) {
       setIsPublishedAllowed(true);
     }
   }, [elements]);
 
-  const router = useRouter();
 
+  //useQuery save page mutation handler , revalidate formData query for updated elements data.
   const savePageMutation = useMutation({
     mutationFn: async () => {
       if (!formData?.id || !formData.pages[0]) {
@@ -139,7 +109,6 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
         queryKey: ["formData"],
       });
 
-      // console.log("Page saved successfully");
     },
     onError: (error) => {
       const errorMessage = handleAxiosError(error);
@@ -151,8 +120,8 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
     savePageMutation.mutate();
   };
 
-  const [isSaved, setIsSaved] = useState<boolean>(false);
 
+ // Save and Next handler 
   const handleSaveAndNext = async () => {
     try {
       setIsSaved(true);
@@ -170,7 +139,6 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
         }
       );
 
-      // console.log(response);
       setIsSaved(false);
 
       if (response.data.status === "success") {
@@ -182,6 +150,8 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
     }
   };
 
+
+  // publish/unpublish mutation handler, revalidate formData query for updated data.
   const savePublishMutation = useMutation({
     mutationFn: async () => {
       if (!formData?.id) {
@@ -217,85 +187,81 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
     savePublishMutation.mutate();
   };
 
+ 
   return (
-    <div className="flex justify-between items-center border h-12 gap-2 px-4">
-      <div>
-        <p>{formData?.title}</p>
-      </div>
+    <div className="flex justify-between items-center border-b h-14 gap-2 px-4 bg-white shadow-sm">
 
-      <div className="flex gap-2">
-        <button onClick={() => setTab("builder")} className="border px-2">
-          Builder
-        </button>
+      <h1 className="text-md font-semibold text-gray-800">{formData?.title}</h1>
 
-        <button onClick={() => setTab("preview")} className="border px-2">
-          Preview
-        </button>
 
+        {/* Builder and Preview buttons */}
+      <div className="flex gap-2 items-center">
+        <BuilderTabButton setTab={setTab} tab='builder'/>
+        <BuilderTabButton setTab={setTab} tab='preview'/>
+        <div className="h-6 w-px bg-gray-200 mx-2" />
+
+
+        {/* Save page button */}
         <button
           onClick={handleSavePage}
           disabled={!isSaveAllowed || savePageMutation.isPending}
-          className={`border px-2 ${
+          className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
             !isSaveAllowed || savePageMutation.isPending
-              ? "opacity-50 cursor-not-allowed"
-              : ""
+              ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+              : "bg-blue-100 text-blue-700 hover:bg-blue-200"
           }`}
         >
-          {savePageMutation.isPending ? "Saving..." : "Save"}
+          {savePageMutation.isPending ? "Saving..." : "Save Changes"}
         </button>
 
+        {/* Save and next page button */}
         <button
           onClick={handleSaveAndNext}
           disabled={isSaved}
-          className={`border px-2 ${
-            isSaved ? "opacity-50 cursor-not-allowed" : ""
+          className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+            isSaved 
+              ? "bg-gray-100 text-gray-400 cursor-not-allowed" 
+              : "bg-purple-100 text-purple-700 hover:bg-purple-200"
           }`}
         >
-          {isSaved ? "Saving..." : "Save and next"}
+          {isSaved ? "Saving..." : "Save & Next Page"}
         </button>
 
+        <div className="h-6 w-px bg-gray-200 mx-2" />
+
+
+        {/* Publish section */}
         {formData?.status ? (
-          <div className="flex gap-2">
-          <button 
-           className={`border px-2 bg-red-100`}
-          onClick={handlePublish}
-          >
-            {isPublishing ? "unpublishing": "unpublish"}
-          </button>
-
-
-          <button 
-           className={`border p-2 rounded-md flex gap-2 items-center ${isCopied ? "bg-green-200": "bg-transparent"}`}
-           onClick={() => {
-            navigator.clipboard.writeText(copyToClipboardText) .then(() => {
-              console.log('Text copied to clipboard');
-              setIsCopied(true);
-
-              setTimeout(() => {
-                setIsCopied(false);
-              }, 3000);
-            })
-            .catch(err => {
-              console.error('Failed to copy text: ', err);
-              setIsCopied(false);
-            });
-           }}
-          >
-           {isCopied ? "link copied" : "Public link"}   <Link size={15}/>
-          </button>
-          
+          <div className="flex gap-2 items-center">
+            <button 
+              onClick={handlePublish}
+              className="px-3 py-1.5 rounded-md text-sm font-medium bg-red-100 text-red-700 hover:bg-red-200 transition-colors flex items-center gap-1"
+            >
+              {isPublishing ? (
+                <>
+                  <span className="animate-pulse">Unpublishing</span>
+                </>
+              ) : (
+                "Unpublish Form"
+              )}
+            </button>
+            <CopyToClipboard textToCopy={copyToClipboardText} />
           </div>
         ) : (
           <button
             onClick={handlePublish}
             disabled={!isPublishAllowed}
-            className={`border px-2 ${
+            className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
               !isPublishAllowed
-                ? "opacity-50 cursor-not-allowed bg-transparent"
-                : " bg-green-300"
+                ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                : "bg-green-100 text-green-700 hover:bg-green-200"
             }`}
           >
-            {isPublishing ? "publishing..." : "publish"}
+            {isPublishing ? (
+              <span className="animate-pulse">Publishing...</span>
+            ) : (
+              "Publish Form"
+            )}
           </button>
         )}
       </div>
@@ -304,3 +270,78 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
 };
 
 export default BuilderNavbar;
+
+
+
+
+
+
+
+
+
+
+const BuilderTabButton = ({setTab, tab} : {setTab : React.Dispatch<React.SetStateAction<TabType>>, tab: "builder" | "preview"}) => {
+  return (
+<button 
+onClick={() => setTab(tab)}
+className="px-3 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors border"
+>
+{tab === "builder" ? "Builder" : "Preview"}
+</button>
+  )
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const areElementsChanged = (
+  arr1: FormElemetInstance[] | null,
+  arr2: FormElemetInstance[]
+): boolean => {
+  if (!arr1 || arr1.length === 0) {
+    return arr2.length > 0;
+  }
+
+  if (arr1.length !== arr2.length) return true;
+
+  const compareObjects = (
+    obj1: FormElemetInstance,
+    obj2: FormElemetInstance
+  ): boolean => {
+    const keys1 = Object.keys(obj1) as (keyof FormElemetInstance)[];
+    const keys2 = Object.keys(obj2) as (keyof FormElemetInstance)[];
+
+    if (keys1.length !== keys2.length) return true;
+
+    return keys1.some((key) => {
+      const val1 = obj1[key];
+      const val2 = obj2[key];
+
+      if (typeof val1 === "object" && typeof val2 === "object") {
+        if (Array.isArray(val1) && Array.isArray(val2)) {
+          return JSON.stringify(val1) !== JSON.stringify(val2);
+        }
+        return compareObjects(
+          val1 as FormElemetInstance,
+          val2 as FormElemetInstance
+        );
+      }
+
+      return val1 !== val2;
+    });
+  };
+
+  return arr1.some((originalObj, index) =>
+    compareObjects(originalObj, arr2[index])
+  );
+};

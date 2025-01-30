@@ -2,20 +2,17 @@
 
 import { handleAxiosError } from "@/utility/axios-err";
 import axios from "axios";
-import { Loader } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 const SignUpForm = () => {
   const router = useRouter();
-
   const [userDetails, setUserDetails] = useState({
     name: "",
     email: "",
     password: "",
   });
-
   const [isValid, setIsValid] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -25,22 +22,18 @@ const SignUpForm = () => {
       userDetails.password.length >= 6 &&
       userDetails.name.trim().length > 0 &&
       userDetails.email.includes("@");
-
     setIsValid(isFormValid);
   }, [userDetails]);
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
-
-    setUserDetails((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
+    setUserDetails((prev) => ({ ...prev, [id]: value }));
   };
 
   const submitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
     setLoading(true);
+    setErrorMsg("");
 
     try {
       const { data } = await axios.post(
@@ -59,47 +52,68 @@ const SignUpForm = () => {
     }
   };
 
-
   return (
-    <form
-      className="border flex flex-col justify-center items-center gap-2"
-      onSubmit={submitHandler}
-    >
-      <label htmlFor="name">Name:</label>
-      <input
-        type="text"
-        id="name"
-        value={userDetails.name}
-        onChange={handleInput}
-      />
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <form 
+        onSubmit={submitHandler}
+        className="w-full max-w-sm space-y-4 bg-white p-6 border rounded-lg"
+      >
+        <h2 className="text-2xl font-bold text-center">Sign Up</h2>
 
-      <label htmlFor="email">Email:</label>
-      <input
-        type="text"
-        id="email"
-        value={userDetails.email}
-        onChange={handleInput}
-      />
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Name</label>
+          <input
+            type="text"
+            id="name"
+            value={userDetails.name}
+            onChange={handleInput}
+            className="w-full px-3 py-2 border rounded"
+            required
+          />
+        </div>
 
-      <label htmlFor="password">Password:</label>
-      <input
-        type="text"
-        id="password"
-        value={userDetails.password}
-        onChange={handleInput}
-        placeholder="6 char at least"
-      />
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Email</label>
+          <input
+            type="email"
+            id="email"
+            value={userDetails.email}
+            onChange={handleInput}
+            className="w-full px-3 py-2 border rounded"
+            required
+          />
+        </div>
 
-      <button type="submit" disabled={!isValid}>
-        Sign Up {loading && <Loader />}
-      </button>
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">Password</label>
+          <input
+            type="password"
+            id="password"
+            value={userDetails.password}
+            onChange={handleInput}
+            className="w-full px-3 py-2 border rounded"
+            minLength={6}
+            required
+          />
+        </div>
 
-      {errorMsg && <p>{errorMsg}</p>}
+        <button
+          type="submit"
+          disabled={!isValid || loading}
+          className="w-full py-2 bg-blue-600 text-white rounded disabled:bg-gray-300"
+        >
+          {loading ? "Signing Up..." : "Sign Up"}
+        </button>
 
-      <Link href="/sign-up" className="text-blue-500">
-        Already have an account? Sign in
-      </Link>
-    </form>
+        {errorMsg && <p className="text-red-500 text-sm text-center">{errorMsg}</p>}
+
+        <div className="text-center text-sm">
+          <Link href="/sign-in" className="text-blue-600">
+            Already have an account? Sign in
+          </Link>
+        </div>
+      </form>
+    </div>
   );
 };
 

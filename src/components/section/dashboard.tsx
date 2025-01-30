@@ -47,7 +47,7 @@ const Dashboard = async () => {
           <p>{errorMsg}</p>
         </div>
       ) : forms.length > 0 ? (
-        <div className="w-full max-w-4xl grid gap-4">
+        <div className="w-full max-w-4xl grid gap-4 pb-20">
           {forms.map((form) => (
             <DashboardCard key={form.id} form={form} />
           ))}

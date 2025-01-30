@@ -1,11 +1,13 @@
 "use client";
 
-import { handleAxiosError } from '@/utility/axios-err';
-import axios from 'axios';
-import { Loader } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+
+import { handleAxiosError } from '@/utility/axios-err';
+import axios from 'axios';
+
+import { Loader, PenSquare, TextCursorInput, TextQuote, AlertTriangle } from 'lucide-react';
 
 interface CreateFormInterface {
   title: string;
@@ -69,62 +71,82 @@ const CreateForm = () => {
   };
 
   return (
-    <div className="w-full h-screen flex justify-center items-center bg-gray-50">
+    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-blue-50/20 to-purple-50/20 p-4">
       <form
         onSubmit={submitHandler}
-        className="w-96 p-6 bg-white shadow-md rounded-lg flex flex-col gap-4 border border-gray-200"
+        className="w-full max-w-md space-y-6 bg-white rounded-2xl shadow-xl p-8 border border-gray-100/80 backdrop-blur-sm"
       >
-        <h2 className="text-xl font-semibold text-gray-700">Create a New Form</h2>
-
-        <div className="flex flex-col gap-2">
-          <label htmlFor="title" className="text-gray-600 font-medium">
-            Title
-          </label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            value={formDetails.title}
-            onChange={handleInputChange}
-            className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter the form title"
-          />
+        <div className="space-y-2 text-center">
+          <h2 className="text-3xl font-bold text-gray-900 mt-2">Create New Form</h2>
+          <p className="text-gray-500">Start collecting data with a beautiful new form</p>
         </div>
 
-        <div className="flex flex-col gap-2">
-          <label htmlFor="description" className="text-gray-600 font-medium">
-            Description
-          </label>
-          <input
-            type="text"
-            id="description"
-            name="description"
-            value={formDetails.description}
-            onChange={handleInputChange}
-            className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter the form description"
-          />
-        </div>
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <label htmlFor="title" className="flex items-center gap-2 text-sm font-medium text-gray-700">
+              <TextCursorInput className="w-5 h-5 text-blue-600" />
+              Form Title
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                id="title"
+                name="title"
+                value={formDetails.title}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 pl-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white/50 backdrop-blur-sm"
+                placeholder="Trip member details"
+              />
+            </div>
+          </div>
 
-        {errorMsg && (
-          <p className="text-red-500 text-sm font-medium">{errorMsg}</p>
-        )}
+          <div className="space-y-2">
+            <label htmlFor="description" className="flex items-center gap-2 text-sm font-medium text-gray-700">
+              <TextQuote className="w-5 h-5 text-purple-600" />
+              Description
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                id="description"
+                name="description"
+                value={formDetails.description}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 pl-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all bg-white/50 backdrop-blur-sm"
+                placeholder="Optional description for your form"
+              />
+            </div>
+          </div>
 
-        <button
-          type="submit"
-          disabled={!isValid || loading}
-          className={`flex items-center justify-center gap-2 px-4 py-2 text-white font-medium rounded-md transition-all ${
-            isValid
-              ? 'bg-blue-500 hover:bg-blue-600'
-              : 'bg-gray-300 cursor-not-allowed'
-          }`}
-        >
-          {loading ? (
-            <Loader className="animate-spin" size={16} />
-          ) : (
-            'Create Form'
+          {errorMsg && (
+            <div className="flex items-center gap-3 p-3 bg-red-50/80 border border-red-200 rounded-lg">
+              <AlertTriangle className="w-5 h-5 text-red-600 flex-shrink-0" />
+              <p className="text-red-600 text-sm">{errorMsg}</p>
+            </div>
           )}
-        </button>
+
+          <button
+            type="submit"
+            disabled={!isValid || loading}
+            className={`w-full py-3 px-6 flex items-center justify-center gap-2 rounded-lg font-medium transition-all ${
+              isValid && !loading
+                ? 'bg-gradient-to-br from-blue-600 to-purple-600 text-white hover:shadow-lg hover:shadow-blue-100'
+                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+            }`}
+          >
+            {loading ? (
+              <>
+                <Loader className="w-5 h-5 animate-spin" />
+                <span>Creating...</span>
+              </>
+            ) : (
+              <>
+                <PenSquare className="w-5 h-5" />
+                <span>Create Form</span>
+              </>
+            )}
+          </button>
+        </div>
       </form>
     </div>
   );

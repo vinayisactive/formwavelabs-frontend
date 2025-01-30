@@ -1,5 +1,16 @@
 import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 import { getServerSession } from 'next-auth';
+import { 
+  ClipboardList, 
+  BarChart2, 
+  Hash, 
+  Pin, 
+  Calendar, 
+  Inbox, 
+  AlertTriangle,
+  HelpCircle
+} from 'lucide-react';
+
 
 interface FormElement {
   id: string;
@@ -93,40 +104,84 @@ const Submissions = async ({ formId }: { formId: string }) => {
   }
 
   return (
-    <div className="space-y-8 pt-14">
-      <h1 className="text-2xl font-bold">Form Submissions</h1>
-      
+    <div className=" w-full space-y-8 pt-20 px-4">
+      <div className="border-b pb-4">
+        <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
+          <ClipboardList className="w-8 h-8 text-blue-600" />
+          <span>Form Submissions</span>
+          {submissions.length > 0 && (
+            <span className="text-lg font-medium text-gray-500 flex items-center gap-2">
+              <BarChart2 className="w-5 h-5 text-gray-400" />
+              {submissions.length} responses
+            </span>
+          )}
+        </h1>
+      </div>
+
       {submissions.length > 0 ? (
-        <div className='flex justify-center items-start gap-2 flex-wrap'>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {submissions.map(submission => (
-            <div key={submission.id} className="border rounded-lg p-6 shadow-sm">
-              <div className="mb-4">
-                <h3 className="font-medium">Submission {submission.id.slice(0, 6)}</h3>
-                <p className="text-sm text-gray-500">
-                  {new Date(submission.createdAt).toLocaleString()}
-                </p>
-              </div>
-              
-              <div className="grid gap-4">
-                {Object.entries(submission.content).map(([label, value]) => (
-                  <div key={label} className="border-b pb-2">
-                    <p className="text-sm text-gray-500">{label}</p>
-                    <p className="text-sm text-gray-900 mt-1">
-                      {value || <span className="text-gray-400">(empty)</span>}
-                    </p>
+            <div 
+              key={submission.id}
+              className="relative bg-white rounded-xl border border-gray-200 hover:border-blue-200 transition-all duration-200 shadow-sm hover:shadow-md group"
+            >
+              <div className="p-5 space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <Hash className="w-4 h-4 text-blue-600" />
+                    </div>
+                    <h3 className="font-medium text-gray-700">Response</h3>
                   </div>
-                ))}
+                  <p className="text-sm text-gray-400 flex items-center gap-1">
+                    <Calendar className="w-4 h-4" />
+                    {new Date(submission.createdAt).toLocaleDateString('en-GB')}
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  {Object.entries(submission.content).map(([label, value]) => (
+                    <div 
+                      key={label}
+                      className="p-3 bg-gray-50 rounded-lg transition-colors hover:bg-gray-100"
+                    >
+                      <div className="text-xs font-medium text-gray-500 mb-1 flex items-center gap-1">
+                        <Pin className="w-4 h-4 text-gray-400" />
+                        {label}
+                      </div>
+                      <p className="text-sm text-gray-900 break-words flex items-center gap-1">
+                        {value || (
+                          <>
+                            <HelpCircle className="w-4 h-4 text-gray-400" />
+                            <span className="italic text-gray-400">No response provided</span>
+                          </>
+                        )}
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </div>
+
+              {/* Hover effect decorator */}
+              <div className="absolute inset-0 border-2 border-transparent group-hover:border-blue-100 rounded-xl pointer-events-none transition-all duration-300" />
             </div>
           ))}
         </div>
       ) : (
-        !errMsg && <p className="text-gray-500">No submissions found</p>
+        !errMsg && (
+          <div className="p-8 bg-gray-50 rounded-xl border border-dashed border-gray-200 text-center flex flex-col items-center gap-3">
+            <Inbox className="w-12 h-12 text-gray-400" />
+            <p className="text-gray-500">
+              No submissions received yet
+            </p>
+          </div>
+        )
       )}
 
       {errMsg && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-          <p className='text-red-600'>{errMsg}</p>
+        <div className="p-4 bg-red-50/80 backdrop-blur-sm rounded-xl border border-red-200 flex items-center gap-3">
+          <AlertTriangle className="w-6 h-6 text-red-500" />
+          <p className='text-red-600 font-medium'>{errMsg}</p>
         </div>
       )}
     </div>
@@ -136,10 +191,10 @@ const Submissions = async ({ formId }: { formId: string }) => {
 const createFieldMap = (formData: FormData['data']) => {
   const map = new Map<string, string>();
   
-  formData.pages.forEach((page) => {
+  formData.pages?.forEach((page) => {
     try {
       const elements: FormElement[] = JSON.parse(page.content);
-      elements.forEach(element => {
+      elements?.forEach(element => {
         if (element.extraAttributes?.label) {
           map.set(element.id, element.extraAttributes.label);
         }
@@ -160,11 +215,10 @@ const transformSubmissions = (
     try {
       const content: Record<string, string> = JSON.parse(response.content);
       const transformedContent: Record<string, string> = {};
-      
-      Object.entries(content).forEach(([fieldId, value]) => {
-        const label = fieldMap.get(fieldId) || fieldId;
-        transformedContent[label] = value as string;
-      });
+
+      fieldMap?.forEach((label, fieldId) => {
+        transformedContent[label] = content[fieldId] ?? "";
+      })
 
       return {
         id: response.id,
