@@ -11,7 +11,7 @@ export type FormElemetInstance = {
   extraAttributes?: Record<string, unknown>;
 };
 
-export type FormElemet = {
+export type FormElement = {
   construct: (id: string) => FormElemetInstance;
   type: ElementsType;
   builderComponent: React.FC<{
@@ -33,7 +33,7 @@ export type FormElemet = {
 export type submitValueType = (key: string, value: string) => void;
 
 export type FormElemetsType = {
-    [key in ElementsType]: FormElemet;
+    [key in ElementsType]: FormElement;
   };
 
 
