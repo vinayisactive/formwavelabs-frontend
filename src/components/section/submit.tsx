@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
-import { handleAxiosError } from "@/utility/axios-err";
+import { handleAxiosError } from "@/utility/axios-err-handler";
 import { FormElemets } from "@/utility/static-data";
 import { FormElemetInstance } from "@/utility/ts-types";
 

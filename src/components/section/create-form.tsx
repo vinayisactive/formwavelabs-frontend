@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
-import { handleAxiosError } from '@/utility/axios-err';
+import { handleAxiosError } from '@/utility/axios-err-handler';
 import axios from 'axios';
 
 import { Loader, PenSquare, TextCursorInput, TextQuote, AlertTriangle } from 'lucide-react';

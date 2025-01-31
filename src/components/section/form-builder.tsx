@@ -8,11 +8,11 @@ import Link from "next/link";
 import { Loader } from "lucide-react";
 
 import Builder from "../ui/builder/builder";
-import Preview from "../ui/preview/preview";
-import BuilderNavbar from "../ui/nav/builder-navbar";
+import BuilderPreview from "../ui/builder/builder-preview";
+import BuilderNavbar from "../ui/builder/builder-navbar";
 
 import useElements from "@/utility/useElements-hook";
-import { handleAxiosError } from "@/utility/axios-err";
+import { handleAxiosError } from "@/utility/axios-err-handler";
 import { FormElemetInstance } from "@/utility/ts-types";
 
 type TabType = "preview" | "builder";
@@ -29,7 +29,6 @@ export interface FormData {
   title: string;
   status: boolean;
   totalPages: number;
-
 }
 
 interface FormBuilderProps {
@@ -43,8 +42,11 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ formId, page }) => {
   const { data: session } = useSession();
   const token = session?.accessToken;
 
-
-  const { data: formData, isLoading, error } = useQuery({
+  const {
+    data: formData,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["formData", formId, page],
     queryFn: async () => {
       const response = await axios.get(
@@ -63,7 +65,9 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ formId, page }) => {
   useEffect(() => {
     if (formData?.pages[0]?.content) {
       try {
-        const parsedData = JSON.parse(formData.pages[0].content) as FormElemetInstance[];
+        const parsedData = JSON.parse(
+          formData.pages[0].content
+        ) as FormElemetInstance[];
         setElements(parsedData);
       } catch {
         setElements([]);
@@ -73,7 +77,6 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ formId, page }) => {
     }
   }, [formData, setElements]);
 
-
   return (
     <div className="w-full h-full flex flex-col justify-center items-center">
       {isLoading ? (
@@ -81,13 +84,23 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ formId, page }) => {
       ) : error ? (
         <div className="flex flex-col items-center text-center space-y-4">
           <p className="text-red-500 font-medium">{handleAxiosError(error)}</p>
-          <Link href={`/form/${formId}/1/builder`} className="border p-2 rounded-lg bg-gray-100 hover:bg-gray-200">Go back to form</Link>
+          <Link
+            href={`/form/${formId}/1/builder`}
+            className="border p-2 rounded-lg bg-gray-100 hover:bg-gray-200"
+          >
+            Go back to form
+          </Link>
         </div>
       ) : (
         <div className="w-full h-full flex flex-col mt-2">
-          <BuilderNavbar setTab={setTab} formData={formData} page={page} totalPage={formData?.totalPages}/>
+          <BuilderNavbar
+            setTab={setTab}
+            formData={formData}
+            page={page}
+            totalPage={formData?.totalPages}
+          />
           <div className="flex-grow">
-            {tab === "builder" ? <Builder /> : <Preview />}
+            {tab === "builder" ? <Builder /> : <BuilderPreview />}
           </div>
         </div>
       )}

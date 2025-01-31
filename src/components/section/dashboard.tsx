@@ -47,11 +47,11 @@ const Dashboard = async () => {
           <p>{errorMsg}</p>
         </div>
       ) : forms.length > 0 ? (
-        <div className="w-full max-w-4xl grid gap-4 pb-20">
-          {forms.map((form) => (
-            <DashboardCard key={form.id} form={form} />
-          ))}
-        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {forms.map((form) => (
+          <DashboardCard key={form.id} form={form} />
+        ))}
+      </div>
       ) : (
         <p className="text-gray-500">No forms found.</p>
       )}
