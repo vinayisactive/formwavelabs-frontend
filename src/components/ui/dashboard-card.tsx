@@ -14,7 +14,6 @@ const DashboardCard = ({ form }: { form: DashboardCard }) => {
 
   return (
     <div className="group relative p-6 border rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]">
-      {/* Status Ribbon */}
       <div className="absolute -top-3 -right-3">
         <div className={`px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1 ${
           form.status
@@ -31,7 +30,6 @@ const DashboardCard = ({ form }: { form: DashboardCard }) => {
       </div>
 
       <div className="flex flex-col gap-3">
-        {/* Title Row */}
         <div className="flex items-start justify-between">
           <h2 className="font-semibold text-lg text-gray-800 pr-4">
             {form.title}
@@ -41,14 +39,15 @@ const DashboardCard = ({ form }: { form: DashboardCard }) => {
           )}
         </div>
 
-        {/* Description */}
-        {form.description && (
-          <p className="text-gray-500 text-sm leading-relaxed">
+        {form.description ? (
+          <p className="h-4 text-gray-500 text-sm leading-relaxed">
             {form.description}
           </p>
-        )}
+        ):   <div className="h-4 text-gray-500 text-sm leading-relaxed">
+          
+      </div>
+      }
 
-        {/* Action Buttons */}
         <div className="mt-3 flex items-center gap-3 border-t pt-4">
           <Link
             href={`/form/${form.id}/1/builder`}
@@ -75,7 +74,6 @@ const DashboardCard = ({ form }: { form: DashboardCard }) => {
         </div>
       </div>
 
-      {/* Hover Gradient Effect */}
       <div className="absolute inset-0 -z-10 bg-gradient-to-r from-blue-50/30 to-purple-50/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
     </div>
   );

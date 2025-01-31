@@ -1,23 +1,36 @@
 "use client";
 import { FormElemetInstance } from "@/utility/ts-types";
 import { TextCustomInstance } from "./text-prop-attributes";
-import { useState } from "react";
+import { FC, useState } from "react";
 import useElements from "@/utility/useElements-hook";
 
-const TextPropertiesComponent = ({
-  elementInstance,
-}: {
+import { TextCursorInput, HelpCircle, ListChecks } from "lucide-react";
+
+import {
+  InputTile,
+  PropertiesFooter,
+  PropertiesHeader,
+  PropertiesWrapper,
+  RequiredCheckTile,
+} from "../property-reusable-comp";
+
+interface TextPropertiesComponentInterface {
   elementInstance: FormElemetInstance;
+}
+
+const TextPropertiesComponent: FC<TextPropertiesComponentInterface> = ({
+  elementInstance,
 }) => {
+  const currentElement = elementInstance as TextCustomInstance;
+  const [extraAttributes, setExtraAttributes] = useState(
+    currentElement.extraAttributes
+  );
+  const { updateElementInstance, setSelectedElementInstance } = useElements();
 
-  // console.log(elementInstance);
-
-  const currentElement = elementInstance as TextCustomInstance; 
-  const [ extraAttributes, setExtraAttributes ] = useState(currentElement.extraAttributes);
-
-  const { updateElementInstance, setSelectedElementInstance} = useElements();
-
-  const handleInputChange = (key: keyof typeof currentElement.extraAttributes, value: string | boolean) => {
+  const handleInputChange = (
+    key: keyof typeof currentElement.extraAttributes,
+    value: string | boolean
+  ) => {
     setExtraAttributes((prev) => ({
       ...prev,
       [key]: value,
@@ -30,86 +43,59 @@ const TextPropertiesComponent = ({
       extraAttributes,
     };
 
-    // console.log(updatedElement);
-
     updateElementInstance(currentElement.id, updatedElement);
-   setSelectedElementInstance(null); 
+    setSelectedElementInstance(null);
   };
 
   return (
-    <div className="w-full flex flex-col justify-start gap-2">
-      <h3 className="font-semibold">Text Properties</h3>
+    <PropertiesWrapper>
+      <PropertiesHeader
+        title="Text Field Settings"
+        description="Configure text input properties"
+        onClose={() => setSelectedElementInstance(null)}
+        icon={TextCursorInput}
+      />
 
-      <p className="">
-        <span className="font-medium">Type:</span> {currentElement.type}
-      </p>
+      <div className="space-y-2">
+        <InputTile
+          icon={TextCursorInput}
+          label="Field Label"
+          value={extraAttributes.label}
+          onChange={(value) => handleInputChange("label", value)}
+          placeholder="Enter field label"
+        />
 
-      {/* <p className="">
-        <span className="font-medium">ID:</span> {currentElement.id}
-      </p> */}
+        <InputTile
+          icon={HelpCircle}
+          label="Helper Text"
+          value={extraAttributes.helperText}
+          onChange={(value) => handleInputChange("helperText", value)}
+          placeholder="Enter helper text"
+          helperText="Appears below the input field"
+        />
 
-      <div className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium mb-1">Label</label>
-          <input
-            type="text"
-            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
-            value={extraAttributes.label}
-            onChange={(e) => handleInputChange("label", e.target.value)}
-            placeholder={extraAttributes.label}
-          />
-        </div>
+        <InputTile
+          icon={TextCursorInput}
+          label="Placeholder Text"
+          value={extraAttributes.placeholder}
+          onChange={(value) => handleInputChange("placeholder", value)}
+          placeholder="Enter placeholder text"
+        />
 
-        <div>
-          <label className="block text-sm font-medium mb-1">Helper Text</label>
-          <input
-            type="text"
-            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
-            value={extraAttributes.helperText}
-            onChange={(e) => handleInputChange("helperText", e.target.value)}
-            placeholder={extraAttributes.helperText}
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-1">Placeholder</label>
-          <input
-            type="text"
-            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
-            value={extraAttributes.placeholder}
-            onChange={(e) => handleInputChange("placeholder", e.target.value)}
-            placeholder={extraAttributes.placeholder}
-          />
-        </div>
-
-
-        <div className="flex items-center space-x-2">
-          <input
-            type="checkbox"
-            className="w-5 h-5 border-gray-300 rounded focus:ring focus:ring-blue-300"
-            checked={extraAttributes.required}
-            onChange={(e) => handleInputChange("required", e.target.checked)}
-          />
-          <label className="text-sm font-medium">Required</label>
-        </div>
+        <RequiredCheckTile
+          icon={ListChecks}
+          label="Required Field"
+          checked={extraAttributes.required}
+          onChange={(checked) => handleInputChange("required", checked)}
+          helperText="User must provide value to submit form"
+        />
       </div>
 
-
-      <button
-        className="mt-6 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200 w-full"
-        onClick={handleSave}
-      >
-        Save
-      </button>
-
-      <button
-        className="mt-2 bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-200 w-full"
-        onClick={() => setSelectedElementInstance(null)}
-      >
-        close
-      </button>
-
-    </div>
+      <PropertiesFooter
+        onCancel={() => setSelectedElementInstance(null)}
+        onSave={handleSave}
+      />
+    </PropertiesWrapper>
   );
 };
 
