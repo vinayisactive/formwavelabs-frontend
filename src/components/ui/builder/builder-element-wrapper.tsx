@@ -5,6 +5,7 @@ import { FormElemetInstance } from "@/utility/ts-types";
 import useElements from "@/utility/useElements-hook";
 import { useDraggable, useDroppable } from "@dnd-kit/core";
 import { useEffect, useState } from "react";
+import { Pencil, Trash } from "lucide-react";
 
 const BuilderElemetWrapper = ({element}: {element: FormElemetInstance}) => {
     const [isMounted, setIsMounted] = useState<boolean>(false);
@@ -46,52 +47,53 @@ const BuilderElemetWrapper = ({element}: {element: FormElemetInstance}) => {
         ref={draggable.setNodeRef}
         {...draggable.listeners}
         {...draggable.attributes}
-        className="p-2 bg-black/10 rounded-md h-[120px] relative flex flex-col justify-center cursor-pointer"
+        className="group p-4 bg-white/80 backdrop-blur-md rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-md relative h-[120px] transition-all cursor-pointer"
         onMouseEnter={() => setMouseOver(true)}
         onMouseLeave={() => setMouseOver(false)}
         onClick={() =>{ 
           setSelectedElementInstance(null);
-
           setTimeout(() => {
             setSelectedElementInstance(element)
           }, 0);
         }}
       >
+  
         <div
           ref={topHalf.setNodeRef}
-          className={`h-1/2 absolute top-0 left-0 w-full rounded-t-md ${
-            topHalf.isOver && "border-t-2 border-t-purple-500"
+          className={`absolute top-0 left-0 w-full h-1/2 rounded-t-lg ${
+            topHalf.isOver ? "bg-gray-100/50 border-t-4 border-gray-400" : ""
           }`}
-        ></div>
-  
+        />
+        
         <div
           ref={bottomHalf.setNodeRef}
-          className={`h-1/2 absolute bottom-0 left-0 w-full rounded-b-md ${
-            bottomHalf.isOver && "border-b-2 border-b-purple-500"
+          className={`absolute bottom-0 left-0 w-full h-1/2 rounded-b-lg ${
+            bottomHalf.isOver ? "bg-gray-100/50 border-b-4 border-gray-400" : ""
           }`}
-        ></div>
+        />
   
-        <div className={`opacity-100 ${isMouseOver && "opacity-25"}`}>
+        <div className={`relative h-full transition-opacity ${isMouseOver ? "opacity-20" : "opacity-100"}`}>
           <BuilderComponent elementInstance={element} />
         </div>
   
         {isMouseOver && (
-          <>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-              <p>Click to set form details</p>
+          <div className="absolute inset-0 bg-white/50 backdrop-blur-md rounded-lg flex items-center justify-center gap-4">
+         
+            <div className="flex flex-col items-center gap-2 text-gray-600">
+              <Pencil className="w-6 h-6" />
             </div>
-            <div className="absolute right-0 h-full flex justify-center items-center">
-              <button
-                className="bg-purple-300 h-full text-white p-2 rounded-md flex justify-center items-center"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  deleteElement(element.id);
-                }}
-              >
-                delete
-              </button>
-            </div>
-          </>
+            
+            <button
+              className="p-1.5 hover:bg-red-100 rounded-md transition-colors"
+              onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                e.stopPropagation();
+                deleteElement(element.id);
+                setSelectedElementInstance(null);
+              }}
+            >
+              <Trash className="w-6 h-6 text-red-500 hover:text-red-700" />
+            </button>
+          </div>
         )}
       </div>
     );

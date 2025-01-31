@@ -8,6 +8,7 @@ import { useDndMonitor, useDroppable } from "@dnd-kit/core";
 import DesignerSidebar from "./builder-sidebar";
 import BuilderElemetWrapper from "./builder-element-wrapper";
 import useElements from "@/utility/useElements-hook";
+import { Download } from "lucide-react";
 
 const BuilderDropArea = () => {
   const {addElement, elements, deleteElement} = useElements()
@@ -101,13 +102,13 @@ const BuilderDropArea = () => {
       <div className="p-2 flex flex-grow">
         <div
           ref={setNodeRef}
-          className={`max-w-[920px] flex flex-col gap-2 flex-grow mx-auto p-2 border rounded-md ${
+          className={`max-w-[720px] flex flex-col gap-2 flex-grow mx-auto p-2 border-dotted border-2 border-black/10 rounded-md ${
             isOver ? "border-black/50" : ""
           }`}
         >
           {elements?.length === 0 && !isOver ? (
-            <p className="flex justify-center items-center text-4xl flex-grow">
-              Drop here
+            <p className="flex justify-center items-center gap-2 text-xl flex-grow text-gray-500">
+              Drop here <Download/>
             </p>
           ) : (
             <div className="flex flex-col gap-2">

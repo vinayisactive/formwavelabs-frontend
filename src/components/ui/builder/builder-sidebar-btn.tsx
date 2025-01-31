@@ -1,16 +1,18 @@
 "use client";
 
-import { FormElemet } from "@/utility/ts-types";
+import { FormElement } from "@/utility/ts-types";
 import { useDraggable } from "@dnd-kit/core";
-import React, { useState, useEffect } from "react";
+import { LucideIcon, TextCursorInput } from "lucide-react";
 
-const SidebarBtnElement = ({ FormElement }: { FormElement: FormElemet}) => {
-  const [mounted, setMounted] = useState(false);
+type FormElementType = FormElement["elementButton"]["label"];
+
+export const IconMap: Record<FormElementType, LucideIcon> = {
+  "TextField": TextCursorInput,
+};
+
+const SidebarBtnElement = ({ FormElement }: { FormElement: FormElement}) => {
   const label = FormElement.elementButton.label;
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const Icon = IconMap[label];
 
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: `designer-btn-${FormElement.type}`,
@@ -20,26 +22,16 @@ const SidebarBtnElement = ({ FormElement }: { FormElement: FormElemet}) => {
     },
   });
 
-  if (!mounted) {
-    return (
-      <button
-        className="w-[100px] h-[100px] flex justify-center items-center border rounded-md cursor-grab"
-      >
-        {label}
-      </button>
-    );
-  }
-
   return (
     <button
       ref={setNodeRef}
       {...attributes}
       {...listeners}
-      className={`w-[100px] h-[100px] flex justify-center items-center border rounded-md cursor-grab ${
+      className={`w-[50px] h-[50px] flex justify-center items-center border-2 rounded-md cursor-grab ${
         isDragging ? "bg-black text-white" : ""
       }`}
     >
-      {label}
+      <Icon/>
     </button>
   );
 };

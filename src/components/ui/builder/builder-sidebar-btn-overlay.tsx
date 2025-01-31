@@ -1,17 +1,19 @@
-import { FormElemet } from "@/utility/ts-types";
+import { FormElement } from "@/utility/ts-types"; 
+import { IconMap } from "./builder-sidebar-btn";
 
-const SidebarBtnElementOverlay = ({
-  FormElement,
-}: {
-  FormElement: FormElemet;
-}) => {
-  const label = FormElement.elementButton.label;
+
+const SidebarBtnElementOverlay = ({ FormElement }: { FormElement: FormElement }) => {
+  const { label } = FormElement.elementButton;
+  const Icon = IconMap[label];
 
   return (
     <button
-      className={`w-[100px] h-[100px] flex justify-center items-center border rounded-md cursor-grab bg-gray-300`}
+      className={` min-w-[100px] p-3 flex items-center gap-2 border border-gray-200 rounded-lg 
+        cursor-grab bg-white hover:bg-gray-50 transition-colors shadow-sm 
+        hover:shadow-md w-full text-gray-700 text-sm`}
     >
-      {label}
+      {Icon && <Icon className="w-4 h-4 text-gray-500 flex-shrink-0" />}
+      <span className="text-left">{label}</span>
     </button>
   );
 };
