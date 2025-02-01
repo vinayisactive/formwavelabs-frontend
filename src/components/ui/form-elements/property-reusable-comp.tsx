@@ -5,7 +5,7 @@ interface PropertiesWrapperProps {
 }
 
 export const PropertiesWrapper = ({ children }: PropertiesWrapperProps) => (
-  <div className="w-full bg-white rounded-xl shadow-lg p-6 space-y-5 border border-gray-100">
+  <div className="w-full h-[80vh] bg-white rounded-xl shadow-lg p-4 space-y-5 border border-gray-100 overflow-y-scroll">
     {children}
   </div>
 );
