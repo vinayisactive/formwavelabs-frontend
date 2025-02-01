@@ -1,9 +1,4 @@
-export interface NavItemsInterface {
-  label: string;
-  routeTo: string;
-}
-
-export type ElementsType = "TextFiled";
+export type ElementsType = "TextFiled" | "SelectField"
 
 export type FormElemetInstance = {
   id: string;
