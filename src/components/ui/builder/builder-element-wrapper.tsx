@@ -47,7 +47,7 @@ const BuilderElemetWrapper = ({element}: {element: FormElemetInstance}) => {
         ref={draggable.setNodeRef}
         {...draggable.listeners}
         {...draggable.attributes}
-        className="group p-4 bg-white/80 backdrop-blur-md rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-md relative h-[120px] transition-all cursor-pointer"
+        className="group p-4 bg-white/80 backdrop-blur-md rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-md  h-[120px] transition-all cursor-pointer"
         onMouseEnter={() => setMouseOver(true)}
         onMouseLeave={() => setMouseOver(false)}
         onClick={() =>{ 
@@ -60,19 +60,19 @@ const BuilderElemetWrapper = ({element}: {element: FormElemetInstance}) => {
   
         <div
           ref={topHalf.setNodeRef}
-          className={`absolute top-0 left-0 w-full h-1/2 rounded-t-lg ${
+          className={`absolute inset-0 top-0 left-0 w-full h-1/2 rounded-t-lg ${
             topHalf.isOver ? "bg-gray-100/50 border-t-4 border-gray-400" : ""
           }`}
         />
         
         <div
           ref={bottomHalf.setNodeRef}
-          className={`absolute bottom-0 left-0 w-full h-1/2 rounded-b-lg ${
+          className={`absolute inset-0 bottom-0 left-0 w-full h-1/2 rounded-b-lg ${
             bottomHalf.isOver ? "bg-gray-100/50 border-b-4 border-gray-400" : ""
           }`}
         />
   
-        <div className={`relative h-full transition-opacity ${isMouseOver ? "opacity-20" : "opacity-100"}`}>
+        <div className={`h-full transition-opacity ${isMouseOver ? "opacity-20" : "opacity-100"}`}>
           <BuilderComponent elementInstance={element} />
         </div>
   

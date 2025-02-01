@@ -25,7 +25,7 @@ const DesignerSidebar = () => {
   }
 
   return (
-    <aside className="w-[400px] max-w-[400px] flex flex-col gap-3 sticky top-0">
+    <aside className="w-[400px] max-w-[400px] flex flex-col gap-3">
       {!selectedElementInstance && (
         <div className="w-full h-[80vh] bg-white rounded-xl shadow-lg p-4 space-y-5 border-gray-100 overflow-y-scroll">
           <div className="flex flex-col gap-2 flex-grow">

@@ -7,7 +7,7 @@ const page = async({params}: {params: Promise<{formId: string}>}) => {
 
   return (
     <ElementsContextProvider>
-      <div className='w-screen h-screen pt-14 bg-white'>
+      <div className='w-screen pt-10 bg-white relative top-0 right-0 z-[100]'>
          <Submit formId = {formId}/>
       </div>
     </ElementsContextProvider>
@@ -15,3 +15,4 @@ const page = async({params}: {params: Promise<{formId: string}>}) => {
 }
 
 export default page; 
+ 

@@ -23,8 +23,8 @@ export default async function RootLayout({
     <html lang="en" className={roboto.className}>
       <body>
         <LayoutProvider>
-          <div className="w-screen flex flex-col justify-center items-center relative overflow-x-hidden">
-             <div className="w-full fixed top-0 right-0">
+          <div className="w-screen flex flex-col justify-center items-center overflow-x-hidden">
+             <div className="w-full fixed top-0 right-0 z-50">
                <Navbar />
              </div>
             
