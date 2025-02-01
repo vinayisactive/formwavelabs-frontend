@@ -43,10 +43,7 @@ const Submit = ({ formId }: { formId: string }) => {
 
   const handleSubmit = async() => {
     try {
-        
         setLoading(true);
-        console.log(formValues.current)
-
         const response = await axios.post(`https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formId}/submissions`, {
             content: JSON.stringify(formValues.current)
         })
@@ -56,8 +53,6 @@ const Submit = ({ formId }: { formId: string }) => {
         }
 
         setLoading(false)
-        console.log(response.data.status); 
-
     } catch (error) {
         setErrMsg(handleAxiosError(error));
         setLoading(false);

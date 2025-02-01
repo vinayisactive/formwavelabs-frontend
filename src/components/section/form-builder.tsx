@@ -78,7 +78,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ formId, page }) => {
   }, [formData, setElements]);
 
   return (
-    <div className="w-full h-full flex flex-col justify-center items-center">
+    <div className="w-full h-full flex flex-col justify-center items-center overflow-hidden">
       {isLoading ? (
         <Loader className="animate-spin text-gray-500 w-10 h-10" />
       ) : error ? (
@@ -92,14 +92,18 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ formId, page }) => {
           </Link>
         </div>
       ) : (
-        <div className="w-full h-full flex flex-col mt-2">
+        <div className="w-full h-full flex flex-col">
+          <div className="fixed top-[3.0rem] left-0 w-full z-10 bg-purple-500 shadow-md">
+
+        
           <BuilderNavbar
             setTab={setTab}
             formData={formData}
             page={page}
             totalPage={formData?.totalPages}
           />
-          <div className="flex-grow">
+            </div>
+            <div className="flex-grow pt-14 h-full overflow-y-auto w-full">
             {tab === "builder" ? <Builder /> : <BuilderPreview />}
           </div>
         </div>
