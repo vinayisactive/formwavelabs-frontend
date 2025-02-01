@@ -5,7 +5,7 @@ import SidebarBtnElement from "./builder-sidebar-btn";
 import useElements from "@/utility/useElements-hook";
 import { ElementsType } from "@/utility/ts-types";
 
-const ELEMENT_ORDER: ElementsType[] = ["TextFiled"];
+const ELEMENT_ORDER: ElementsType[] = ["TextFiled", "SelectField"];
 
 const ElementsLable = ({ type }: { type: string }) => {
   return (
@@ -25,12 +25,12 @@ const DesignerSidebar = () => {
   }
 
   return (
-    <aside className="w-[400px] max-w-[400px] flex flex-col gap-3">
+    <aside className="w-[400px] max-w-[400px] flex flex-col gap-3 sticky top-0">
       {!selectedElementInstance && (
-        <div className="border-l flex flex-grow flex-col gap-1 p-2">
+        <div className="w-full h-[80vh] bg-white rounded-xl shadow-lg p-4 space-y-5 border-gray-100 overflow-y-scroll">
           <div className="flex flex-col gap-2 flex-grow">
             <ElementsLable type="Form" />
-            <div>
+            <div className="flex gap-2">
               {ELEMENT_ORDER.map((el) => {
                 return (
                   <SidebarBtnElement FormElement={FormElemets[el]} key={el} />
@@ -42,7 +42,7 @@ const DesignerSidebar = () => {
       )}
 
       {selectedElementInstance && (
-        <div className="flex flex-grow p-2">
+        <div className="flex flex-grow">
           {PropertiesFormSidebar && (
             <PropertiesFormSidebar elementInstance={selectedElementInstance} />
           )}

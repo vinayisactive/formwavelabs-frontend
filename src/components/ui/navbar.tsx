@@ -4,7 +4,6 @@ import Link from "next/link"
 import { ChevronDown, LogIn, LogOut, User } from "lucide-react"
 import { useSession } from "next-auth/react"
 
-// NavItems.tsx
 const navItems = [
   { label: "Home", routeTo: "/" },
   { label: "Create", routeTo: "/form" },
@@ -28,7 +27,6 @@ const NavItems = () => {
   )
 }
 
-// LogoutButton.tsx
 const LogoutButton = () => {
   const logoutHandler = () => {
     signOut({ callbackUrl: "/" }).then(() => window.location.reload())
@@ -45,7 +43,6 @@ const LogoutButton = () => {
   )
 }
 
-// SignIn.tsx
 const SignIn = () => {
   return (
     <Link
@@ -58,7 +55,6 @@ const SignIn = () => {
   )
 }
 
-// UserProfile.tsx
 const UserProfile = ({ name }: { name: string }) => {
   return (
     <div className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg hover:border-blue-200 transition-colors cursor-pointer group">
@@ -71,14 +67,13 @@ const UserProfile = ({ name }: { name: string }) => {
   )
 }
 
-// Merged Navbar Component
 const Navbar = () => {
   const { data: session, status } = useSession()
   const isAuth = status === "authenticated"
   const name = session?.user?.name || null
 
   return (
-    <nav className="w-full fixed top-0 left-0 h-16 flex items-center justify-between px-8 backdrop-blur-lg bg-white/80 border-b border-gray-100/50 z-50">
+    <nav className="w-full h-12 flex items-center justify-between px-8 backdrop-blur-lg bg-red-300/20 border-b border-gray-100/50]">
       <Link href="/" className="flex items-center gap-2">
         <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
           <span className="text-white font-bold text-lg">F</span>

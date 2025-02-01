@@ -151,7 +151,7 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({setTab, formData, page, to
   };
 
   return (
-    <div className="flex justify-between items-center border-b h-14 gap-2 px-4 bg-white shadow-sm">
+    <div className="flex justify-between items-center border-b h-12 gap-2 px-4 py-2 bg-white shadow-sm">
       <h1 className="text-md font-semibold text-gray-800">
         {formData?.title}
       </h1>

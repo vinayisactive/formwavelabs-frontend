@@ -98,8 +98,8 @@ const BuilderDropArea = () => {
   });
 
   return (
-    <main className="w-full h-full flex">
-      <div className="p-2 flex flex-grow">
+    <main className="w-screen pb-10 overflow-x-hidden flex flex-grow px-2 relative">
+      <div className="flex flex-grow">
         <div
           ref={setNodeRef}
           className={`max-w-[720px] flex flex-col gap-2 flex-grow mx-auto p-2 border-dotted border-2 border-black/10 rounded-md ${
@@ -122,6 +122,8 @@ const BuilderDropArea = () => {
           )}
         </div>
       </div>
+
+
       <DesignerSidebar />
     </main>
   );
