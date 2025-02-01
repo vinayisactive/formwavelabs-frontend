@@ -28,7 +28,7 @@ export default async function RootLayout({
                <Navbar />
              </div>
             
-            <div className="">{children}</div>
+            <div className="relative">{children}</div>
           </div>
         </LayoutProvider>
       </body>
