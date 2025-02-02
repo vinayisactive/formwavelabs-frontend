@@ -1,7 +1,6 @@
 import { FormElement } from "@/utility/ts-types"; 
 import { IconMap } from "./builder-sidebar-btn";
 
-
 const SidebarBtnElementOverlay = ({ FormElement }: { FormElement: FormElement }) => {
   const { label } = FormElement.elementButton;
   const Icon = IconMap[label];

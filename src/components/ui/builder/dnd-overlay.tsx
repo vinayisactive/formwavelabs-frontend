@@ -5,7 +5,7 @@ import { ElementsType } from "@/utility/ts-types";
 import useElements from "@/utility/useElements-hook";
 import { Active, DragOverlay, useDndMonitor } from "@dnd-kit/core";
 import React, { useState } from "react";
-import SidebarBtnElementOverlay from "./builder-sidebar-btn-overlay";
+import SidebarBtnElementOverlay from "./builder-sidebar/builder-sidebar-btn-overlay";
 
 
 const DndOverlayWrapper = () => {

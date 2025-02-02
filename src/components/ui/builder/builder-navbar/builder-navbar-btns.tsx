@@ -1,6 +1,15 @@
 import { UseMutationResult } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { Loader } from "lucide-react";
+import {
+  Earth,
+  Edit,
+  Eye,
+  Loader,
+  MoveLeft,
+  MoveRightIcon,
+  Save,
+  StepForward,
+} from "lucide-react";
 
 interface BuilderTabButtonProps {
   setTab: React.Dispatch<React.SetStateAction<"builder" | "preview">>;
@@ -13,11 +22,16 @@ export const BuilderTabButton = ({ setTab, tab }: BuilderTabButtonProps) => {
       onClick={() => setTab(tab)}
       className={`px-3 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors border`}
     >
-      {tab === "builder" ? "Builder" : "Preview"}
+      <span className="hidden md:flex">
+        {tab === "builder" ? "Builder" : "Preview"}
+      </span>
+
+      <span className="flex md:hidden">
+        {tab === "builder" ? <Edit /> : <Eye />}
+      </span>
     </button>
   );
 };
-
 
 interface SaveBtnProps {
   savePageMutation: UseMutationResult<void, AxiosError, void, unknown>;
@@ -36,7 +50,12 @@ export const SaveBtn = ({ savePageMutation, isSaveAllowed }: SaveBtnProps) => {
             : "bg-blue-100 text-blue-700 hover:bg-blue-200"
         }`}
     >
-      {savePageMutation.isPending ? "Saving..." : "Save Changes"}
+      <p className=" hidden md:flex whitespace-nowrap">
+        {savePageMutation.isPending ? "Saving..." : "Save Changes"}
+      </p>
+      <p className="flex md:hidden">
+        <Save />
+      </p>
     </button>
   );
 };
@@ -51,9 +70,12 @@ export const PreviousBtn = ({ handlePrevious }: PreviousBtnProps) => {
     <button
       onClick={handlePrevious}
       className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors 
-        bg-blue-500 text-white hover:bg-blue-700`}
+        bg-black text-white hover:bg-black/70`}
     >
-      Previous
+      <span className="hidden md:flex">Previous</span>
+      <span className="flex md:hidden">
+        <MoveLeft />
+      </span>
     </button>
   );
 };
@@ -73,10 +95,15 @@ export const NextBtn = ({ handleNextPage, isNextFetching }: NextBtnProps) => {
         ${
           isNextFetching
             ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-            : "bg-blue-500 text-white hover:bg-blue-700"
+            : "bg-black text-white hover:bg-black/70"
         }`}
     >
-      Next {isNextFetching && <Loader />}
+      <span className="hidden md:flex gap-1">
+        Next {isNextFetching && <Loader />}
+      </span>
+      <span className="flex md:hidden">
+        <MoveRightIcon />
+      </span>
     </button>
   );
 };
@@ -94,10 +121,16 @@ export const CreateNextBtn = ({ createNextMutation }: CreateNextBtnProps) => {
         ${
           createNextMutation.isPending
             ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-            : "bg-blue-500 text-white hover:bg-blue-700"
+            : "bg-black text-white hover:bg-black/70"
         }`}
     >
-      Create Next {createNextMutation.isPending && <Loader />}
+      <span className="md:flex hidden whitespace-nowrap">
+        Create Next {createNextMutation.isPending && <Loader />}
+      </span>
+
+      <span className="flex md:hidden">
+        <StepForward />
+      </span>
     </button>
   );
 };
@@ -108,7 +141,10 @@ interface PublishBtnProps {
   isNextAvailable: boolean;
 }
 
-export const PublishBtn = ({ savePublishMutation, isNextAvailable }: PublishBtnProps) => {
+export const PublishBtn = ({
+  savePublishMutation,
+  isNextAvailable,
+}: PublishBtnProps) => {
   return (
     <button
       onClick={() => savePublishMutation.mutate()}
@@ -120,11 +156,21 @@ export const PublishBtn = ({ savePublishMutation, isNextAvailable }: PublishBtnP
             : "bg-green-100 text-green-700 hover:bg-green-200"
         }`}
     >
-      {savePublishMutation.isPending ? (
-        <span className="animate-pulse">Publishing...</span>
-      ) : (
-        "Publish Form"
-      )}
+      <span className="hidden md:flex whitespace-nowrap">
+        {savePublishMutation.isPending ? (
+          <span className="animate-pulse">Publishing...</span>
+        ) : (
+          "Publish Form"
+        )}
+      </span>
+
+      <span className="flex md:hidden">
+        {savePublishMutation.isPending ? (
+          <Earth className="text-gray-600" />
+        ) : (
+          <Earth className="text-green-400" />
+        )}
+      </span>
     </button>
   );
 };
@@ -141,11 +187,21 @@ export const UnPublishBtn = ({ savePublishMutation }: UnPublishBtnProps) => {
       className="px-3 py-1.5 rounded-md text-sm font-medium bg-red-100 
        text-red-700 hover:bg-red-200 transition-colors flex items-center gap-1"
     >
-      {savePublishMutation.isPending ? (
-        <span className="animate-pulse">Unpublishing</span>
-      ) : (
-        "Unpublish Form"
-      )}
+      <span className="hidden md:flex whitespace-normal">
+        {savePublishMutation.isPending ? (
+          <span className="animate-pulse">unpublishing...</span>
+        ) : (
+          <span className=" whitespace-nowrap">Unpublish Form</span>
+        )}
+      </span>
+
+      <span className="flex md:hidden">
+        {savePublishMutation.isPending ? (
+          <Earth className="text-gray-600" />
+        ) : (
+          <Earth className="text-red-700" />
+        )}
+      </span>
     </button>
   );
 };

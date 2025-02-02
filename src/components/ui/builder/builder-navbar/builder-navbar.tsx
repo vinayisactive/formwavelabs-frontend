@@ -12,8 +12,8 @@ import { handleAxiosError } from "@/utility/axios-err-handler";
 import useElements from "@/utility/useElements-hook";
 import { FormElemetInstance } from "@/utility/ts-types";
 
-import CopyToClipboard from "../copy-to-clipboard";
-import { BuilderTabButton, CreateNextBtn, NextBtn, PreviousBtn, PublishBtn, SaveBtn, UnPublishBtn } from "./builder-navbar-btns";
+import CopyToClipboard from "../../copy-to-clipboard"
+import { BuilderTabButton, CreateNextBtn, NextBtn, PreviousBtn, PublishBtn, SaveBtn, UnPublishBtn } from "../builder-navbar/builder-navbar-btns";
 import { areElementsChanged } from "@/utility/compare-fns";
 
 type TabType = "builder" | "preview";
@@ -151,8 +151,8 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({setTab, formData, page, to
   };
 
   return (
-    <div className="flex justify-between items-center border-b h-12 gap-2 px-4 py-2 bg-white shadow-sm">
-      <h1 className="text-md font-semibold text-gray-800">
+    <div className="flex flex-col md:flex-row justify-between items-center border-b gap-2 px-2 md:px-4 py-1 bg-white shadow-sm">
+      <h1 className="w-full text-sm text-black text-center">
         {formData?.title}
       </h1>
   
@@ -164,7 +164,7 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({setTab, formData, page, to
             key={btn}
           />
         ))}
-        <div className="h-6 w-px bg-gray-200 mx-2" />
+        <div className="hidden md:flex h-6 w-px bg-gray-200 mx-2" />
   
         {page > 1 && (
           <PreviousBtn handlePrevious={handlePrevious} />
@@ -186,7 +186,7 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({setTab, formData, page, to
           <CreateNextBtn createNextMutation={createNextMutation} />
         )}
   
-        <div className="h-6 w-px bg-gray-200 mx-2" />
+        <div className="hidden md:flex h-6 w-px bg-gray-200 mx-2" />
   
         {formData?.status ? (
           <div className="flex gap-2 items-center">

@@ -5,7 +5,7 @@ import { randomID } from "@/utility/randomID";
 import { FormElemets } from "@/utility/static-data";
 import { ElementsType, FormElemetInstance } from "@/utility/ts-types";
 import { useDndMonitor, useDroppable } from "@dnd-kit/core";
-import DesignerSidebar from "./builder-sidebar";
+import DesignerSidebar from "./builder-sidebar/builder-sidebar";
 import BuilderElemetWrapper from "./builder-element-wrapper";
 import useElements from "@/utility/useElements-hook";
 import { Download } from "lucide-react";
@@ -98,18 +98,17 @@ const BuilderDropArea = () => {
   });
 
   return (
-    <main className="w-screen pb-10 overflow-x-hidden flex flex-grow px-2 border">
-      <div className="flex flex-grow ">
+    <main className="flex h-full">
+    
+      <div className="min-h-0 h-full flex-grow overflow-y-auto py-4">
         <div
           ref={setNodeRef}
-          className={`max-w-[720px] flex flex-col gap-2 flex-grow mx-auto p-2 border-dotted border-2 border-black/10 rounded-md ${
+          className={`max-w-[720px] flex flex-col gap-2 min-h-full mx-auto p-2 border-dotted border-black/20 border-2 rounded-md ${
             isOver ? "border-black/50" : ""
           }`}
         >
           {elements?.length === 0 && !isOver ? (
-            <p className="flex justify-center items-center gap-2 text-xl flex-grow text-gray-500">
-              Drop here <Download/>
-            </p>
+            <DropHereContainer/>
           ) : (
             <div className="flex flex-col gap-2">
               {elements?.length>0 && elements?.map((el: FormElemetInstance) => (
@@ -122,11 +121,21 @@ const BuilderDropArea = () => {
           )}
         </div>
       </div>
-
-
-      <DesignerSidebar />
+  
+        <DesignerSidebar />
     </main>
   );
 };
 
 export default BuilderDropArea;
+
+
+
+
+const DropHereContainer = () => {
+  return (
+    <div className="flex flex-grow justify-center items-center gap-2 text-xl">
+    Drop here <Download/>
+  </div>
+  )
+}
