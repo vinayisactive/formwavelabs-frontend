@@ -40,7 +40,7 @@ const Dashboard = async () => {
   }
 
   return (
-    <div className="w-full h-full p-6 flex flex-col items-center pt-24">
+    <div className="w-full h-full p-6 flex flex-col items-center">
       {errorMsg ? (
         <div className="text-red-500 text-center">
           <p>Error loading forms:</p>

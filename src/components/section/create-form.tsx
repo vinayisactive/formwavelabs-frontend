@@ -71,7 +71,7 @@ const CreateForm = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-blue-50/20 to-purple-50/20 p-4">
+    <div className="h-full flex items-center justify-center bg-gradient-to-br from-blue-50/20 to-purple-50/20 p-4">
       <form
         onSubmit={submitHandler}
         className="w-full max-w-md space-y-6 bg-white rounded-2xl shadow-xl p-8 border border-gray-100/80 backdrop-blur-sm"

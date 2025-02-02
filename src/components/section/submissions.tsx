@@ -1,7 +1,6 @@
 import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 import { getServerSession } from 'next-auth';
 import { 
-  ClipboardList, 
   BarChart2, 
   Hash, 
   Pin, 
@@ -104,13 +103,12 @@ const Submissions = async ({ formId }: { formId: string }) => {
   }
 
   return (
-    <div className=" w-full space-y-8 pt-20 px-4">
-      <div className="border-b pb-4">
-        <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-          <ClipboardList className="w-8 h-8 text-blue-600" />
-          <span>Form Submissions</span>
+    <div className=" w-full space-y-5 py-2 px-4">
+      <div className="">
+        <h1 className="text-xl font-bold text-gray-900 flex items-center gap-3">
+          <span>Submissions</span>
           {submissions.length > 0 && (
-            <span className="text-lg font-medium text-gray-500 flex items-center gap-2">
+            <span className="text-lg font-medium text-gray-500 flex items-center gap-2 pt-1">
               <BarChart2 className="w-5 h-5 text-gray-400" />
               {submissions.length} responses
             </span>

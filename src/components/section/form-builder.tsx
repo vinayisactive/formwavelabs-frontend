@@ -9,7 +9,7 @@ import { Loader } from "lucide-react";
 
 import Builder from "../ui/builder/builder";
 import BuilderPreview from "../ui/builder/builder-preview";
-import BuilderNavbar from "../ui/builder/builder-navbar";
+import BuilderNavbar from "../ui/builder/builder-navbar/builder-navbar";
 
 import useElements from "@/utility/useElements-hook";
 import { handleAxiosError } from "@/utility/axios-err-handler";
@@ -78,7 +78,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ formId, page }) => {
   }, [formData, setElements]);
 
   return (
-    <div className="w-full h-full flex flex-col justify-center items-center overflow-hidden">
+    <div className="w-full h-full flex flex-col justify-center items-center">
       {isLoading ? (
         <Loader className="animate-spin text-gray-500 w-10 h-10" />
       ) : error ? (
@@ -93,17 +93,16 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ formId, page }) => {
         </div>
       ) : (
         <div className="w-full h-full flex flex-col">
-          <div className="fixed top-[3.0rem] left-0 w-full z-10 bg-purple-500 shadow-md">
+          <div className="h-[6%] ">
+            <BuilderNavbar
+              setTab={setTab}
+              formData={formData}
+              page={page}
+              totalPage={formData?.totalPages}
+            />
+          </div>
 
-        
-          <BuilderNavbar
-            setTab={setTab}
-            formData={formData}
-            page={page}
-            totalPage={formData?.totalPages}
-          />
-            </div>
-            <div className="flex-grow pt-14 h-full overflow-y-auto w-full">
+          <div className=" h-[94%] mt-5 md:mt-0">
             {tab === "builder" ? <Builder /> : <BuilderPreview />}
           </div>
         </div>
