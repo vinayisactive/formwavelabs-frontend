@@ -1,19 +1,23 @@
-"use client"
-import { signOut } from "next-auth/react"
-import Link from "next/link"
-import { ChevronDown, LogIn, LogOut, User } from "lucide-react"
-import { useSession } from "next-auth/react"
+"use client";
+import { signOut } from "next-auth/react";
+import Link from "next/link";
+import {
+  ArrowUpRight,
+  ChevronDown,
+  LogIn,
+  User,
+} from "lucide-react";
+import { useSession } from "next-auth/react";
+import { useState } from "react";
 
 const navItems = [
   { label: "Home", routeTo: "/" },
   { label: "Create", routeTo: "/form" },
-  { label: "Dashbaord", routeTo: "/dashboard" },
-  { label: "About", routeTo: "/about"}
-]
+];
 
-const NavItems = () => {
+const NavItems = ({ isAuth }: { isAuth: boolean }) => {
   return (
-    <div className="flex items-center gap-6">
+    <div className="flex items-center gap-2">
       {navItems.map((item) => (
         <Link
           key={item.label}
@@ -23,80 +27,125 @@ const NavItems = () => {
           {item.label}
         </Link>
       ))}
+
+      {isAuth && (
+        <Link
+          href={"/dashboard"}
+          className=" hidden md:flex text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors px-2 py-1 rounded-lg hover:bg-blue-50/50"
+        >
+          Dashbaord
+        </Link>
+      )}
     </div>
-  )
-}
+  );
+};
 
 const LogoutButton = () => {
   const logoutHandler = () => {
-    signOut({ callbackUrl: "/" }).then(() => window.location.reload())
-  }
+    signOut({ callbackUrl: "/" }).then(() => window.location.reload());
+  };
 
   return (
     <button
       onClick={logoutHandler}
-      className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50/80 rounded-lg transition-colors group"
+      className="w-full py-2 text-sm bg-red-500 text-white rounded-md"
     >
-      <LogOut className="w-4 h-4 text-red-500 group-hover:animate-pulse" />
-      <span>Sign Out</span>
+      <span>Logout</span>
     </button>
-  )
-}
+  );
+};
 
 const SignIn = () => {
   return (
     <Link
       href="/sign-in"
-      className="flex items-center gap-2 px-4 py-2 bg-gradient-to-br from-blue-600 to-purple-600 text-white text-sm font-medium rounded-lg hover:shadow-md hover:shadow-blue-100 transition-all"
+      className="flex items-center gap-2 px-4 py-2 bg-black text-white text-sm font-medium rounded-lg hover:shadow-md hover:shadow-blue-100 transition-all"
     >
       <LogIn className="w-4 h-4" />
-      <span>Get Started</span>
+      <span>Login</span>
     </Link>
-  )
-}
+  );
+};
+
+const AccountDetails = () => {
+  return (
+    <button className="w-full pt-1 text-sm rounded-md text-gray-700 hover:text-black flex justify-center items-center">
+      <span className="flex items-center gap-1 ">
+        Account <ArrowUpRight size={15} />
+      </span>
+    </button>
+  );
+};
+
+const DashboardBtn = () => {
+  return (
+    <Link  href="/dashboard" className="md:hidden w-full py-1 text-sm rounded-md text-gray-700 hover:text-black flex justify-center items-center">
+      Dashboard
+    </Link>
+  );
+};
 
 const UserProfile = ({ name }: { name: string }) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const userProfileToggle = () => {
+    setIsOpen(!isOpen)
+
+    if(isOpen)
+    setTimeout(() => {
+      setIsOpen(false)
+    }, 3000);
+  };
+
   return (
-    <div className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg hover:border-blue-200 transition-colors cursor-pointer group">
-      <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-        <User className="w-3 h-3 text-blue-600" />
+    <div
+      className=" relative flex items-center gap-2 px-3 py-2 bg-black border rounded-lg transition-colors cursor-pointer group"
+      onClick={userProfileToggle}
+    >
+      <div className="w-5 h-5 bg-white/50 rounded-full flex items-center justify-center">
+        <User className="w-3 h-3 text-white" />
       </div>
-      <span className="text-sm font-medium text-gray-700">{name.slice(0, 3)}</span>
-      <ChevronDown className="w-4 h-4 text-gray-500 group-hover:text-blue-600 transition-colors" />
+      <span className="text-sm font-medium text-white">
+        {name.length > 5 ? name.slice(0, 5) : name}
+      </span>
+      <ChevronDown className="w-4 h-4 text-white" />
+
+      {isOpen && (
+        <div className="w-full absolute top-12 left-0 rounded-md flex flex-col gap-2 justify-center items-center border-2 p-1 z-50 bg-white">
+          <AccountDetails />
+          <DashboardBtn />
+          <LogoutButton />
+        </div>
+      )}
     </div>
-  )
-}
+  );
+};
 
 const Navbar = () => {
-  const { data: session, status } = useSession()
-  const isAuth = status === "authenticated"
-  const name = session?.user?.name || null
+  const { data: session, status } = useSession();
+  const isAuth = status === "authenticated";
+  const name = session?.user?.name || null;
 
   return (
-    <nav className="w-full h-12 flex items-center justify-between px-8 backdrop-blur-lg bg-red-300/20 border-b border-gray-100/50]">
+    <nav className="w-full h-[6vh] flex items-center justify-between px-4 border-b">
       <Link href="/" className="flex items-center gap-2">
-        <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-          <span className="text-white font-bold text-lg">F</span>
-        </div>
-        <span className="text-xl font-bold bg-gradient-to-br from-blue-600 to-purple-600 bg-clip-text text-transparent">
-          FormWave
-        </span>
+        <span className="text-xl font-bold text-black/50 hidden md:flex">Formwavelabs</span>
+        <span className="text-xl font-bold text-black/50 flex md:hidden">FWLabs</span>
       </Link>
 
-      <div className="flex items-center gap-6">
-        <NavItems />
-        <div className="h-6 w-px bg-gray-200 mx-4" />
+      <div className="flex items-center gap-4">
+        <NavItems isAuth={isAuth} />
+
         {isAuth && name ? (
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             <UserProfile name={name} />
-            <LogoutButton />
           </div>
         ) : (
           <SignIn />
         )}
       </div>
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

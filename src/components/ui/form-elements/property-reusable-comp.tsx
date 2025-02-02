@@ -5,7 +5,7 @@ interface PropertiesWrapperProps {
 }
 
 export const PropertiesWrapper = ({ children }: PropertiesWrapperProps) => (
-  <div className="w-full h-[80vh] bg-white rounded-xl shadow-lg p-4 space-y-5 border border-gray-100 overflow-y-scroll">
+  <div className="w-full p-4 space-y-5">
     {children}
   </div>
 );
@@ -119,7 +119,7 @@ export const PropertiesFooter = ({
   onCancel,
   onSave,
 }: PropertiesFooterProps) => (
-  <div className="flex gap-3 pt-4 border-t border-gray-150">
+  <div className="flex flex-col md:flex-row gap-3 pt-4 border-t border-gray-150">
     <button
       className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
       onClick={onCancel}

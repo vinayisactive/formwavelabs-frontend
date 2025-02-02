@@ -22,7 +22,7 @@ const CopyToClipboard: React.FC<CopyToClipboardProps> = ({ textToCopy }) => {
 
   return (
     <button
-      className={`border rounded-md p-1 ${
+      className={`border rounded-md p-2 ${
         isCopied ? "bg-green-300" : "bg-transparent"
       }`}
       onClick={handleCopy}
