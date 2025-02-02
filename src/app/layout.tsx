@@ -18,17 +18,13 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-
   return (
     <html lang="en" className={roboto.className}>
       <body>
         <LayoutProvider>
-          <div className="w-screen flex flex-col justify-center items-center overflow-x-hidden">
-             <div className="w-full fixed top-0 right-0 z-50">
-               <Navbar />
-             </div>
-            
-            <div className="relative">{children}</div>
+          <div className="w-screen h-screen flex flex-col justify-center items-center">
+            <Navbar />
+            <div className="h-[94vh]">{children}</div>
           </div>
         </LayoutProvider>
       </body>
