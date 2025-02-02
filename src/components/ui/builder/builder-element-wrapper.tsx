@@ -47,7 +47,7 @@ const BuilderElemetWrapper = ({element}: {element: FormElemetInstance}) => {
         ref={draggable.setNodeRef}
         {...draggable.listeners}
         {...draggable.attributes}
-        className="group p-4 bg-white/80 backdrop-blur-md rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-md  h-[120px] transition-all cursor-pointer"
+        className="group p-4 bg-white/80 backdrop-blur-md rounded-lg border-2 border-gray-200 shadow-sm hover:shadow-md transition-all cursor-pointer"
         onMouseEnter={() => setMouseOver(true)}
         onMouseLeave={() => setMouseOver(false)}
         onClick={() =>{ 
