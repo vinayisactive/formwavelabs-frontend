@@ -10,7 +10,8 @@ const SelectFieldBuilderComp: FC<SelectFieldBuilderCompProps> = ({
   elementInstance,
 }) => {
   const { extraAttributes } = elementInstance as selectFieldCustomInstance;
-  const { label, helperText, required, options, selectPlaceHolder } = extraAttributes;
+  const { label, helperText, required, options, selectPlaceHolder } =
+    extraAttributes;
 
   return (
     <div className="flex flex-col gap-1 justify-start items-start text-black">
@@ -31,7 +32,10 @@ const SelectFieldBuilderComp: FC<SelectFieldBuilderCompProps> = ({
             </option>
           ))}
       </select>
-      <p>{helperText}</p>
+
+      {helperText && (
+        <p className="text-xs text-muted-foreground">{helperText}</p>
+      )}
     </div>
   );
 };

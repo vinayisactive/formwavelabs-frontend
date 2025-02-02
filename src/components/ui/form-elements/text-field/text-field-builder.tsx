@@ -21,7 +21,10 @@ const TextFieldBuilderComp = ({
         className="border-2 border-black w-full rounded-lg px-3 py-1"
         placeholder={placeholder}
       />
-      <p>{helperText}</p>
+
+      {helperText && (
+        <p className="text-xs text-muted-foreground">{helperText}</p>
+      )}
     </div>
   );
 };

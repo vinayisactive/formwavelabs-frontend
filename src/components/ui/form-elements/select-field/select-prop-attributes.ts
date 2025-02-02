@@ -9,8 +9,8 @@ interface selectExtraAttributesInterface{
 }
 
 export const selectExtraAttributes = {
-    label : "label",
-    helperText: "helper text",
+    label : "Select label",
+    helperText: "Check setting to edit",
     selectPlaceHolder: "Select an option",
     required: false, 
     options: []
