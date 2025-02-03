@@ -5,7 +5,7 @@ import useElements from "@/utility/useElements-hook";
 import { ElementsType } from "@/utility/ts-types";
 import SidebarFormElements from "./sidebar-form-elements";
 
-const elementOrder: ElementsType[] = ["TextFiled", "SelectField", "CheckboxField", "RadioButtonField"];
+const elementOrder: ElementsType[] = ["TextFiled", "SelectField", "CheckboxField", "RadioButtonField", "TextAreaField"];
 
 const DesignerSidebar = () => {
   const { selectedElementInstance } = useElements();

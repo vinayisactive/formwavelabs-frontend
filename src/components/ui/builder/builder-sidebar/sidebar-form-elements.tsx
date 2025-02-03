@@ -22,7 +22,7 @@ const SidebarFormElements: FC<ElementsSidebarProps> = ({
     return (
       <div className="h-full p-2 space-y-2">
         <ElementsLable type="Form" />
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           {elementOrder.map((el) => (
             <SidebarBtnElement FormElement={FormElements[el]} key={el} />
           ))}

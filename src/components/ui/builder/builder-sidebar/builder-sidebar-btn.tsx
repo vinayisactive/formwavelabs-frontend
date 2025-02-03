@@ -2,7 +2,7 @@
 
 import { FormElement } from "@/utility/ts-types";
 import { useDraggable } from "@dnd-kit/core";
-import { LucideIcon, MousePointer2, TextCursorInput, TextSelectIcon, ToggleLeft } from "lucide-react";
+import { LucideIcon, MousePointer2, Text, TextCursorInput, TextSelectIcon, ToggleLeft } from "lucide-react";
 
 type FormElementType = FormElement["elementButton"]["label"];
 
@@ -11,16 +11,17 @@ export const IconMap: Record<FormElementType, LucideIcon> = {
   "SelectField" : TextSelectIcon,
   "CheckboxField": ToggleLeft,
   "RadioButtonField": MousePointer2,
+  "TextAreaField" : Text
 };
 
 const SidebarBtnElement = ({ FormElement }: { FormElement: FormElement}) => {
-  const label = FormElement.elementButton.label;
+  const label = FormElement?.elementButton.label;
   const Icon = IconMap[label];
 
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
-    id: `designer-btn-${FormElement.type}`,
+    id: `designer-btn-${FormElement?.type}`,
     data: {
-      type: FormElement.type,
+      type: FormElement?.type,
       isDesignerBtnElement: true,
     },
   });
@@ -30,7 +31,7 @@ const SidebarBtnElement = ({ FormElement }: { FormElement: FormElement}) => {
       ref={setNodeRef}
       {...attributes}
       {...listeners}
-      className={`w-[50px] h-[50px] flex justify-center items-center border-2 rounded-md cursor-grab ${
+      className={` w-full md:w-[50px] h-[50px] flex justify-center items-center border-2 rounded-md cursor-grab ${
         isDragging ? "bg-black text-white" : ""
       }`}
     >
