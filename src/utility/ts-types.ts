@@ -1,4 +1,4 @@
-export type ElementsType = "TextFiled" | "SelectField" | "CheckboxField" | "RadioButtonField"
+export type ElementsType = "TextFiled" | "SelectField" | "CheckboxField" | "RadioButtonField"  | "TextAreaField";
 
 export type FormElemetInstance = {
   id: string;
