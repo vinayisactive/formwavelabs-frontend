@@ -5,6 +5,8 @@ import CheckBoxFieldElement from "@/components/ui/form-elements/checkbox-field/c
 import RadioBtnFormElement from "@/components/ui/form-elements/radio-btn-field/radio-btn-field";
 import TextAreaFormElement from "@/components/ui/form-elements/text-area-field/text-area-field";
 import YesAndNoFormElement from "@/components/ui/form-elements/yes-n-no-field/yes-n-no-field";
+import MultipleChoiceFieldFormElement from "@/components/ui/form-elements/multiple-choice-field/multiple-choice-field";
+import DateFieldFormElement from "@/components/ui/form-elements/date-field/date-field";
 
 export const FormElemets: FormElemetsType = {
     TextFiled: TextFiledFormElement,
@@ -12,6 +14,8 @@ export const FormElemets: FormElemetsType = {
     CheckboxField : CheckBoxFieldElement,
     RadioButtonField: RadioBtnFormElement,
     TextAreaField: TextAreaFormElement, 
-    YesAndNoField: YesAndNoFormElement
+    YesAndNoField: YesAndNoFormElement,
+    MultipleChoiceField: MultipleChoiceFieldFormElement,
+    DateField: DateFieldFormElement
   };
 

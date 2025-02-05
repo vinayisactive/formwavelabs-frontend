@@ -1,4 +1,4 @@
-export type ElementsType = "TextFiled" | "SelectField" | "CheckboxField" | "RadioButtonField"  | "TextAreaField" | "YesAndNoField"
+export type ElementsType = "TextFiled" | "SelectField" | "CheckboxField" | "RadioButtonField"  | "TextAreaField" | "YesAndNoField" | "MultipleChoiceField" | "DateField"
 
 export type FormElemetInstance = {
   id: string;
@@ -30,5 +30,4 @@ export type submitValueType = (key: string, value: string) => void;
 export type FormElemetsType = {
     [key in ElementsType]: FormElement;
   };
-
 
