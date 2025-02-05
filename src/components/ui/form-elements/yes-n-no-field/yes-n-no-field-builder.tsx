@@ -1,13 +1,9 @@
 "use client"
 import { FC } from "react";
-import { FormElemetInstance } from "@/utility/ts-types";
+import { FormElementProps } from "@/utility/ts-types";
 import { YesAndNoFieldCustomInstance } from "./yes-n-no-prop-attributes";
 
-interface RadioBtnBuilderCompProps {
-  elementInstance: FormElemetInstance;
-}
-
-const YesAndNoFieldBuilderComp: FC<RadioBtnBuilderCompProps> = ({
+const YesAndNoFieldBuilderComp: FC<FormElementProps> = ({
   elementInstance,
 }) => {
   const { extraAttributes } = elementInstance as YesAndNoFieldCustomInstance;

@@ -1,18 +1,16 @@
 "use client";
-import { FormElemetInstance, submitValueType } from "@/utility/ts-types";
+import { submitCompPropsType } from "@/utility/ts-types";
 import { FC, useState } from "react";
 import { YesAndNoFieldCustomInstance } from "./yes-n-no-prop-attributes";
+import { RequiredFieldError } from "../property-reusable-comp";
 
-interface YesAndNoSubmitCompProps {
-  elementInstance: FormElemetInstance;
-  handleValues?: submitValueType | undefined;
-  formValues?: React.RefObject<{ [key: string]: string }>;
-}
-
-const YesAndNoFieldSubmitComp: FC<YesAndNoSubmitCompProps> = ({
+const YesAndNoFieldSubmitComp: FC<submitCompPropsType> = ({
   elementInstance,
   handleValues,
-  formValues
+  formValues,
+  elementsToValidate,
+  setElementsToValidate,
+  isFormError
 }) => {
   const { id, extraAttributes } = elementInstance as YesAndNoFieldCustomInstance;
   const { label, helperText, options, required } = extraAttributes;
@@ -20,6 +18,14 @@ const YesAndNoFieldSubmitComp: FC<YesAndNoSubmitCompProps> = ({
 
   const handleChange = (value: string) => {
     setInputValue(value);
+
+    if(required){
+      setElementsToValidate?.((prev) => ({
+        ...prev,
+        [id]: value
+      }))
+    }
+
     if (handleValues) {
       handleValues(id, value);
     }
@@ -58,6 +64,7 @@ const YesAndNoFieldSubmitComp: FC<YesAndNoSubmitCompProps> = ({
       </div>
 
       {helperText && <p className="text-xs text-gray-500">{helperText}</p>}
+      {elementsToValidate?.[id] === "" && isFormError && <RequiredFieldError/>}
     </div>
   );
 };

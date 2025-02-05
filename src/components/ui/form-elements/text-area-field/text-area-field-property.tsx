@@ -2,20 +2,18 @@
 import { TextAreaCustomInstance } from "./text-area-prop-attributes";
 import { FC, useState } from "react";
 import useElements from "@/utility/useElements-hook";
-
 import { TextCursorInput, HelpCircle, ListChecks } from "lucide-react";
-
 import {
-  FormElementPropertyProps,
   InputTile,
   PropertiesFooter,
   PropertiesHeader,
   PropertiesWrapper,
   RequiredCheckTile,
 } from "../property-reusable-comp";
+import { FormElementProps } from "@/utility/ts-types";
 
 
-const TextAreaPropertiesComponent: FC<FormElementPropertyProps> = ({
+const TextAreaPropertiesComponent: FC<FormElementProps> = ({
   elementInstance,
 }) => {
   const currentElement = elementInstance as TextAreaCustomInstance;

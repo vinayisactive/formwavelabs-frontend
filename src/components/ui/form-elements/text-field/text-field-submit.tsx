@@ -2,26 +2,35 @@
 
 import React, { useState } from "react";
 import { TextCustomInstance } from "./text-prop-attributes";
-import { FormElemetInstance, submitValueType } from "@/utility/ts-types";
+import { submitCompPropsType } from "@/utility/ts-types";
+import { RequiredFieldError } from "../property-reusable-comp";
 
-type TextFieldSubmitProps = {
-  elementInstance: FormElemetInstance;
-  handleValues?: submitValueType | undefined; 
-  formValues?: React.RefObject<{ [key: string]: string }>;
-};
 
-const TextFieldSubmitComp: React.FC<TextFieldSubmitProps> = ({
+const TextFieldSubmitComp: React.FC<submitCompPropsType> = ({
   elementInstance,
   handleValues,
-  formValues
+  formValues,
+  elementsToValidate,
+  setElementsToValidate,
+  isFormError
 }) => {
   const { id, extraAttributes } = elementInstance as TextCustomInstance;
   const { label, helperText, placeholder, required } = extraAttributes;
 
-  const [inputValue, setInputValue] = useState<string>(formValues?.current[id] || "");
+  const [inputValue, setInputValue] = useState<string>(
+    formValues?.current[id] || ""
+  );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
+
+    if (required) {
+      setElementsToValidate?.((prev) => ({
+        ...prev,
+        [id]: newValue.trim() === "" ? "" : undefined
+      }));
+    }
+
     setInputValue(newValue);
     if (handleValues) {
       handleValues(id, newValue);
@@ -31,7 +40,7 @@ const TextFieldSubmitComp: React.FC<TextFieldSubmitProps> = ({
   return (
     <div className="flex flex-col gap-2 p-2">
       <label htmlFor={id} className="text-sm font-medium text-gray-700">
-       {label}
+        {label}
         {required && <span className="text-red-500 ml-1">*</span>}
       </label>
 
@@ -46,6 +55,10 @@ const TextFieldSubmitComp: React.FC<TextFieldSubmitProps> = ({
       />
 
       {helperText && <p className="text-xs text-gray-500">{helperText}</p>}
+    
+      {elementsToValidate?.[id] === "" && isFormError && (
+        <RequiredFieldError />
+      )}
     </div>
   );
 };

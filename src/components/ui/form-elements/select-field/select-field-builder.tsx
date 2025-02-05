@@ -1,12 +1,9 @@
 import { FC } from "react";
-import { FormElemetInstance } from "@/utility/ts-types";
 import { selectFieldCustomInstance } from "./select-prop-attributes";
+import { FormElementProps } from "@/utility/ts-types";
 
-interface SelectFieldBuilderCompProps {
-  elementInstance: FormElemetInstance;
-}
 
-const SelectFieldBuilderComp: FC<SelectFieldBuilderCompProps> = ({
+const SelectFieldBuilderComp: FC<FormElementProps> = ({
   elementInstance,
 }) => {
   const { extraAttributes } = elementInstance as selectFieldCustomInstance;

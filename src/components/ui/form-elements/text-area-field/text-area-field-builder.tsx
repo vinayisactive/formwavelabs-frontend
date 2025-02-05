@@ -1,10 +1,9 @@
-import { FormElemetInstance } from "@/utility/ts-types";
+import { FormElementProps } from "@/utility/ts-types";
 import { TextAreaCustomInstance } from "./text-area-prop-attributes";
+import { FC } from "react";
 
-const TextAreaBuilderComp = ({
+const TextAreaBuilderComp: FC<FormElementProps>= ({
   elementInstance,
-}: {
-  elementInstance: FormElemetInstance;
 }) => {
   const element = elementInstance as TextAreaCustomInstance;
   const { label, helperText, placeholder, required } = element.extraAttributes;

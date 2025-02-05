@@ -6,16 +6,16 @@ import useElements from "@/utility/useElements-hook";
 import { TextCursorInput, HelpCircle, ListChecks } from "lucide-react";
 
 import {
-  FormElementPropertyProps,
   InputTile,
   PropertiesFooter,
   PropertiesHeader,
   PropertiesWrapper,
   RequiredCheckTile,
 } from "../property-reusable-comp";
+import { FormElementProps } from "@/utility/ts-types";
 
 
-const TextPropertiesComponent: FC<FormElementPropertyProps> = ({
+const TextPropertiesComponent: FC<FormElementProps> = ({
   elementInstance,
 }) => {
   const currentElement = elementInstance as TextCustomInstance;

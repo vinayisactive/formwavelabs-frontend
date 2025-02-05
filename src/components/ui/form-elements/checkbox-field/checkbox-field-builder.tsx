@@ -1,12 +1,8 @@
 import { FC } from "react";
-import { FormElemetInstance } from "@/utility/ts-types";
+import { FormElementProps } from "@/utility/ts-types";
 import { CheckboxCustomInstance } from "./checkbox-prop-attributes";
 
-interface CheckboxBuilderCompProps {
-  elementInstance: FormElemetInstance;
-}
-
-const CheckBoxFieldBuilderComp: FC<CheckboxBuilderCompProps> = ({
+const CheckBoxFieldBuilderComp: FC<FormElementProps> = ({
   elementInstance,
 }) => {
   const { extraAttributes } = elementInstance as CheckboxCustomInstance;

@@ -3,7 +3,6 @@
 import { FC, useState } from "react";
 import { MultipleChoiceFieldCustomInstance } from "./multiple-choice-prop-attributes";
 import {
-  FormElementPropertyProps,
   InputTile,
   PropertiesFooter,
   PropertiesHeader,
@@ -12,9 +11,10 @@ import {
 } from "../property-reusable-comp";
 import { HelpCircle, ListCheck, MousePointer2, PenBoxIcon, X } from "lucide-react";
 import useElements from "@/utility/useElements-hook";
+import { FormElementProps } from "@/utility/ts-types";
 
 
-const MultipleChoicePropertiesComponent: FC<FormElementPropertyProps> = ({
+const MultipleChoicePropertiesComponent: FC<FormElementProps> = ({
   elementInstance,
 }) => {
   const element = elementInstance as MultipleChoiceFieldCustomInstance;

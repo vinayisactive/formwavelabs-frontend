@@ -1,18 +1,17 @@
 "use client";
-import { FormElemetInstance, submitValueType } from "@/utility/ts-types";
+import { submitCompPropsType } from "@/utility/ts-types";
 import { FC, useState } from "react";
 import { selectFieldCustomInstance } from "./select-prop-attributes";
+import { RequiredFieldError } from "../property-reusable-comp";
 
-interface SelectFieldSubmitCompProps {
-  elementInstance: FormElemetInstance;
-  handleValues?: submitValueType | undefined;
-  formValues?: React.RefObject<{ [key: string]: string }>;
-}
 
-const SelectFieldSubmitComp: FC<SelectFieldSubmitCompProps> = ({
+const SelectFieldSubmitComp: FC<submitCompPropsType> = ({
   elementInstance,
   handleValues,
-  formValues
+  formValues,
+  elementsToValidate,
+  setElementsToValidate,
+  isFormError
 }) => {
   const { id, extraAttributes } = elementInstance as selectFieldCustomInstance;
   const { label, helperText, options, required, selectPlaceHolder } = extraAttributes;
@@ -21,6 +20,14 @@ const SelectFieldSubmitComp: FC<SelectFieldSubmitCompProps> = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newValue = e.target.value;
+
+    if(required){
+      setElementsToValidate?.((prev) => ({
+        ...prev,
+        [id]: newValue.trim() === "" ? "" : undefined
+      }))
+    }
+
     setInputValue(newValue);
     if (handleValues) {
         handleValues(id, newValue);
@@ -57,6 +64,9 @@ const SelectFieldSubmitComp: FC<SelectFieldSubmitCompProps> = ({
       </select>
 
       {helperText && <p className="text-xs text-gray-500">{helperText}</p>}
+      {
+        elementsToValidate?.[id] === "" && isFormError && <RequiredFieldError />
+      }
     </div>
   );
 };

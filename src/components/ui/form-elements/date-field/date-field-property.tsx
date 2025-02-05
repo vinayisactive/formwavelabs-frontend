@@ -3,7 +3,6 @@
 import { FC, useState } from "react";
 import { DateFieldCustomElement } from "./date-prop-attributes";
 import {
-    FormElementPropertyProps,
   InputTile,
   PropertiesFooter,
   PropertiesHeader,
@@ -12,10 +11,11 @@ import {
 } from "../property-reusable-comp";
 import { Calendar, HelpCircle, ListCheck, TextCursorInputIcon } from "lucide-react";
 import useElements from "@/utility/useElements-hook";
+import { FormElementProps } from "@/utility/ts-types";
 
 
 
-const DateFieldPropertyComp: FC<FormElementPropertyProps> = ({
+const DateFieldPropertyComp: FC<FormElementProps> = ({
   elementInstance,
 }) => {
   const element = elementInstance as DateFieldCustomElement;

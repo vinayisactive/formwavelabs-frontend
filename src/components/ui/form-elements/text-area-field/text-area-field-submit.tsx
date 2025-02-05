@@ -2,18 +2,17 @@
 
 import React, { useState } from "react";
 import { TextAreaCustomInstance } from "./text-area-prop-attributes";
-import { FormElemetInstance, submitValueType } from "@/utility/ts-types";
+import { submitCompPropsType } from "@/utility/ts-types";
+import { RequiredFieldError } from "../property-reusable-comp";
 
-type TextFieldSubmitProps = {
-  elementInstance: FormElemetInstance;
-  handleValues?: submitValueType | undefined; 
-  formValues?: React.RefObject<{ [key: string]: string }>;
-};
 
-const TextAreaFieldSubmitComp: React.FC<TextFieldSubmitProps> = ({
+const TextAreaFieldSubmitComp: React.FC<submitCompPropsType> = ({
   elementInstance,
   handleValues,
-  formValues
+  formValues, 
+  elementsToValidate,
+  setElementsToValidate,
+  isFormError
 }) => {
   const { id, extraAttributes } = elementInstance as TextAreaCustomInstance;
   const { label, helperText, placeholder, required } = extraAttributes;
@@ -22,6 +21,14 @@ const TextAreaFieldSubmitComp: React.FC<TextFieldSubmitProps> = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = e.target.value;
+
+    if(required){
+      setElementsToValidate?.((prev) => ({
+        ...prev,
+        [id]: newValue.trim() === "" ? "" : undefined
+      }))
+    }
+
     setInputValue(newValue);
     if (handleValues) {
       handleValues(id, newValue);
@@ -45,6 +52,10 @@ const TextAreaFieldSubmitComp: React.FC<TextFieldSubmitProps> = ({
       />
 
       {helperText && <p className="text-xs text-gray-500">{helperText}</p>}
+      {
+        elementsToValidate?.[id] === "" && isFormError && <RequiredFieldError />
+      }
+
     </div>
   );
 };

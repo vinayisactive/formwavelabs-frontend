@@ -5,7 +5,6 @@ import {
   ToggleLeft,
 } from "lucide-react";
 import {
-  FormElementPropertyProps,
   InputTile,
   PropertiesFooter,
   PropertiesHeader,
@@ -15,8 +14,9 @@ import {
 import useElements from "@/utility/useElements-hook";
 import { CheckboxCustomInstance } from "./checkbox-prop-attributes";
 import { FC, useState } from "react";
+import { FormElementProps } from "@/utility/ts-types";
 
-const CheckBoxPropertiesComponent: FC<FormElementPropertyProps> = ({
+const CheckBoxPropertiesComponent: FC<FormElementProps> = ({
   elementInstance,
 }) => {
   const { setSelectedElementInstance, updateElementInstance } = useElements();

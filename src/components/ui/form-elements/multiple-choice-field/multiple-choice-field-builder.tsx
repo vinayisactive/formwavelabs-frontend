@@ -1,12 +1,8 @@
 import { FC } from "react";
-import { FormElemetInstance } from "@/utility/ts-types";
+import { FormElementProps } from "@/utility/ts-types";
 import { MultipleChoiceFieldCustomInstance } from "./multiple-choice-prop-attributes";
 
-interface MultipleChoiceFieldBuilderCompProps {
-  elementInstance: FormElemetInstance;
-}
-
-const MultipleChoiceFieldBuilderComp: FC<MultipleChoiceFieldBuilderCompProps> = ({
+const MultipleChoiceFieldBuilderComp: FC<FormElementProps> = ({
   elementInstance,
 }) => {
   const { extraAttributes } = elementInstance as MultipleChoiceFieldCustomInstance;

@@ -1,18 +1,17 @@
 "use client";
-import { FormElemetInstance, submitValueType } from "@/utility/ts-types";
+import { submitCompPropsType } from "@/utility/ts-types";
 import { FC, useState } from "react";
 import { RadioButtonCustomInstance } from "./radio-btn-prop-attributes";
+import { RequiredFieldError } from "../property-reusable-comp";
 
-interface RadioBtnSubmitCompProps {
-  elementInstance: FormElemetInstance;
-  handleValues?: submitValueType | undefined;
-  formValues?: React.RefObject<{ [key: string]: string }>;
-}
 
-const RadioBtnFieldSubmitComp: FC<RadioBtnSubmitCompProps> = ({
+const RadioBtnFieldSubmitComp: FC<submitCompPropsType> = ({
   elementInstance,
   handleValues,
-  formValues
+  formValues,
+  elementsToValidate,
+  setElementsToValidate,
+  isFormError
 }) => {
   const { id, extraAttributes } = elementInstance as RadioButtonCustomInstance;
   const { label, helperText, options, required } = extraAttributes;
@@ -20,6 +19,14 @@ const RadioBtnFieldSubmitComp: FC<RadioBtnSubmitCompProps> = ({
 
   const handleChange = (value: string) => {
     setInputValue(value);
+
+    if(required){
+      setElementsToValidate?.((prev) => ({
+        ...prev,
+        [id] : value.trim() === "" ? "" : undefined
+      }))
+    }
+
     if (handleValues) {
       handleValues(id, value);
     }
@@ -58,6 +65,7 @@ const RadioBtnFieldSubmitComp: FC<RadioBtnSubmitCompProps> = ({
       </div>
 
       {helperText && <p className="text-xs text-gray-500">{helperText}</p>}
+      {elementsToValidate?.[id] === "" && isFormError && <RequiredFieldError/>}
     </div>
   );
 };

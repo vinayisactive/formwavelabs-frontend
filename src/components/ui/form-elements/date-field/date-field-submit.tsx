@@ -1,27 +1,29 @@
-import { FormElemetInstance, submitValueType } from "@/utility/ts-types";
+import { submitCompPropsType } from "@/utility/ts-types";
 import { DateFieldCustomElement } from "./date-prop-attributes";
 import { FC, useState, useEffect } from "react";
+import { RequiredFieldError } from "../property-reusable-comp";
 
-interface DateFieldSubmitCompProps {
-  elementInstance: FormElemetInstance;
-  handleValues?: submitValueType;
-  formValues?: React.RefObject<{ [key: string]: string }>;
-}
-
-const DateFieldSubmitComp: FC<DateFieldSubmitCompProps> = ({
+const DateFieldSubmitComp: FC<submitCompPropsType> = ({
   elementInstance,
   handleValues,
   formValues,
+  elementsToValidate,
+  setElementsToValidate,
+  isFormError,
 }) => {
   const element = elementInstance as DateFieldCustomElement;
   const { label, helperText, required } = element.extraAttributes;
 
   const formatDate = (dateString?: string) => {
     const date = dateString ? new Date(dateString) : null;
-    return date && !isNaN(date.getTime()) ? date.toISOString().split("T")[0] : "";
+    return date && !isNaN(date.getTime())
+      ? date.toISOString().split("T")[0]
+      : "";
   };
 
-  const [inputDate, setInputDate] = useState(() => formatDate(formValues?.current?.[element.id]));
+  const [inputDate, setInputDate] = useState(() =>
+    formatDate(formValues?.current?.[element.id])
+  );
 
   useEffect(() => {
     setInputDate(formatDate(formValues?.current?.[element.id]));
@@ -29,6 +31,14 @@ const DateFieldSubmitComp: FC<DateFieldSubmitCompProps> = ({
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const date = new Date(e.target.value);
+   
+    if (required) {
+      setElementsToValidate?.((prev) => ({
+        ...prev,
+        [element.id]: date.toLocaleString(),
+      }));
+    }
+    
     setInputDate(e.target.value);
     handleValues?.(element.id, date.toLocaleString());
   };
@@ -38,11 +48,18 @@ const DateFieldSubmitComp: FC<DateFieldSubmitCompProps> = ({
       <p className="text-md">
         {label} {required && "*"}
       </p>
-      <input type="date" required={required} onChange={handleDateChange} value={inputDate} />
-      {helperText && <p className="text-xs text-muted-foreground">{helperText}</p>}
+      <input
+        type="date"
+        required={required}
+        onChange={handleDateChange}
+        value={inputDate}
+      />
+      {helperText && (
+        <p className="text-xs text-muted-foreground">{helperText}</p>
+      )}
+      {elementsToValidate?.[element.id] === "" && isFormError && <RequiredFieldError />}
     </div>
   );
 };
 
 export default DateFieldSubmitComp;
-

@@ -1,18 +1,11 @@
-import { FormElemetInstance } from "@/utility/ts-types";
 import { LucideIcon, Save, X } from "lucide-react";
-
-export interface FormElementPropertyProps{
-    elementInstance: FormElemetInstance;
-}
 
 interface PropertiesWrapperProps {
   children: React.ReactNode;
 }
 
 export const PropertiesWrapper = ({ children }: PropertiesWrapperProps) => (
-  <div className="w-full p-4 space-y-5">
-    {children}
-  </div>
+  <div className="w-full p-4 space-y-5">{children}</div>
 );
 
 interface PropertiesHeaderProps {
@@ -141,3 +134,9 @@ export const PropertiesFooter = ({
     </button>
   </div>
 );
+
+export const RequiredFieldError = () => {
+  return (
+    <div className="text-[12px] py-1 text-red-400">Please fill this field</div>
+  );
+};

@@ -1,18 +1,17 @@
 "use client";
 import { FC, useState } from "react";
-import { FormElemetInstance, submitValueType } from "@/utility/ts-types";
+import { submitCompPropsType } from "@/utility/ts-types";
 import { CheckboxCustomInstance } from "./checkbox-prop-attributes";
+import { RequiredFieldError } from "../property-reusable-comp";
 
-interface CheckboxSubmitCompProps {
-  elementInstance: FormElemetInstance;
-  handleValues?: submitValueType | undefined;
-  formValues?: React.RefObject<{ [key: string]: string }>;
-}
 
-const CheckBoxFieldSubmitComp: FC<CheckboxSubmitCompProps> = ({
+const CheckBoxFieldSubmitComp: FC<submitCompPropsType> = ({
   elementInstance,
   handleValues,
-  formValues
+  formValues,
+  elementsToValidate,
+  setElementsToValidate,
+  isFormError
 }) => {
   const { id, extraAttributes } = elementInstance as CheckboxCustomInstance;
   const { label, helperText, required } = extraAttributes;
@@ -22,6 +21,14 @@ const CheckBoxFieldSubmitComp: FC<CheckboxSubmitCompProps> = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
+
+    if(required){
+      setElementsToValidate?.((prev) => ({
+        ...prev,
+        [id]: isChecked.toString()
+      }))
+    }
+
     setChecked(isChecked);
     if (handleValues) {
       handleValues(id, isChecked.toString());
@@ -49,6 +56,7 @@ const CheckBoxFieldSubmitComp: FC<CheckboxSubmitCompProps> = ({
         </label>
       </div>
       {helperText && <p className="text-xs text-gray-500">{helperText}</p>}
+      {elementsToValidate?.[id] === "" && isFormError && <RequiredFieldError/>}
     </div>
   );
 };

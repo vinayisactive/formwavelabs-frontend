@@ -1,10 +1,9 @@
-import { FormElemetInstance } from "@/utility/ts-types";
+import { FormElementProps } from "@/utility/ts-types";
 import { DateFieldCustomElement } from "./date-prop-attributes";
+import { FC } from "react";
 
-const DateFieldBuilderComp = ({
+const DateFieldBuilderComp: FC<FormElementProps> = ({
   elementInstance,
-}: {
-  elementInstance: FormElemetInstance;
 }) => {
   const element = elementInstance as DateFieldCustomElement;
   const { label, helperText, required } = element.extraAttributes;
