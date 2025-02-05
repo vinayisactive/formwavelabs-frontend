@@ -1,4 +1,9 @@
+import { FormElemetInstance } from "@/utility/ts-types";
 import { LucideIcon, Save, X } from "lucide-react";
+
+export interface FormElementPropertyProps{
+    elementInstance: FormElemetInstance;
+}
 
 interface PropertiesWrapperProps {
   children: React.ReactNode;

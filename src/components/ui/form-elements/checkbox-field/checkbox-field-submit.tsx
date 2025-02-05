@@ -6,18 +6,18 @@ import { CheckboxCustomInstance } from "./checkbox-prop-attributes";
 interface CheckboxSubmitCompProps {
   elementInstance: FormElemetInstance;
   handleValues?: submitValueType | undefined;
-  formValue?: React.RefObject<{ [key: string]: string }>;
+  formValues?: React.RefObject<{ [key: string]: string }>;
 }
 
 const CheckBoxFieldSubmitComp: FC<CheckboxSubmitCompProps> = ({
   elementInstance,
   handleValues,
-  formValue
+  formValues
 }) => {
   const { id, extraAttributes } = elementInstance as CheckboxCustomInstance;
   const { label, helperText, required } = extraAttributes;
   const [checked, setChecked] = useState<boolean>(
-    formValue?.current?.[id] === "true"
+    formValues?.current?.[id] === "true"
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,6 +25,7 @@ const CheckBoxFieldSubmitComp: FC<CheckboxSubmitCompProps> = ({
     setChecked(isChecked);
     if (handleValues) {
       handleValues(id, isChecked.toString());
+      console.log(formValues?.current)
     }
   };
 
@@ -35,7 +36,7 @@ const CheckBoxFieldSubmitComp: FC<CheckboxSubmitCompProps> = ({
           type="checkbox"
           id={id}
           required={required}
-          checked={formValue?.current?.[id] === "true" || checked}
+          checked={formValues?.current?.[id] === "true" || checked}
           onChange={handleChange}
           className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
         />

@@ -7,6 +7,7 @@ import {
   X,
 } from "lucide-react";
 import {
+  FormElementPropertyProps,
   InputTile,
   PropertiesFooter,
   PropertiesHeader,
@@ -15,13 +16,10 @@ import {
 } from "../property-reusable-comp";
 import useElements from "@/utility/useElements-hook";
 import { RadioButtonCustomInstance } from "./radio-btn-prop-attributes";
-import { FormElemetInstance } from "@/utility/ts-types";
 import { FC, useState } from "react";
 
-const RadioBtnFieldPropertiesComp = ({
+const RadioBtnFieldPropertiesComp: FC<FormElementPropertyProps> = ({
   elementInstance,
-}: {
-  elementInstance: FormElemetInstance;
 }) => {
   const element = elementInstance as RadioButtonCustomInstance;
   const [extraAttributes, setExtraAttributes] = useState({

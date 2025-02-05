@@ -5,6 +5,7 @@ import {
     TextCursorInputIcon,
   } from "lucide-react";
   import {
+    FormElementPropertyProps,
     InputTile,
     PropertiesFooter,
     PropertiesHeader,
@@ -13,13 +14,10 @@ import {
   } from "../property-reusable-comp";
   import useElements from "@/utility/useElements-hook";
   import { YesAndNoFieldCustomInstance } from "./yes-n-no-prop-attributes";
-  import { FormElemetInstance } from "@/utility/ts-types";
-  import { useState } from "react";
+  import { FC, useState } from "react";
   
-  const YesAndNoFieldPropertiesComp = ({
+  const YesAndNoFieldPropertiesComp : FC<FormElementPropertyProps> = ({
     elementInstance,
-  }: {
-    elementInstance: FormElemetInstance;
   }) => {
     const element = elementInstance as YesAndNoFieldCustomInstance;
     const [extraAttributes, setExtraAttributes] = useState({

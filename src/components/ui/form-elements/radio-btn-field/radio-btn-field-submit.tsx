@@ -6,17 +6,17 @@ import { RadioButtonCustomInstance } from "./radio-btn-prop-attributes";
 interface RadioBtnSubmitCompProps {
   elementInstance: FormElemetInstance;
   handleValues?: submitValueType | undefined;
-  formValue?: React.RefObject<{ [key: string]: string }>;
+  formValues?: React.RefObject<{ [key: string]: string }>;
 }
 
 const RadioBtnFieldSubmitComp: FC<RadioBtnSubmitCompProps> = ({
   elementInstance,
   handleValues,
-  formValue
+  formValues
 }) => {
   const { id, extraAttributes } = elementInstance as RadioButtonCustomInstance;
   const { label, helperText, options, required } = extraAttributes;
-  const [inputValue, setInputValue] = useState<string>(formValue?.current?.[id] || "");
+  const [inputValue, setInputValue] = useState<string>(formValues?.current?.[id] || "");
 
   const handleChange = (value: string) => {
     setInputValue(value);
@@ -43,7 +43,7 @@ const RadioBtnFieldSubmitComp: FC<RadioBtnSubmitCompProps> = ({
               id={`${id}-${option}`}
               name={id}
               value={option}
-              checked={formValue?.current?.[id] === option || inputValue === option}
+              checked={formValues?.current?.[id] === option || inputValue === option}
               onChange={(e) => handleChange(e.target.value)}
               className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500 cursor-pointer"
             />

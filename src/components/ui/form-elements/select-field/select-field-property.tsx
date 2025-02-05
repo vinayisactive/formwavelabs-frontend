@@ -1,9 +1,9 @@
 "use client";
 
-import { FormElemetInstance } from "@/utility/ts-types";
 import { FC, useState } from "react";
 import { selectFieldCustomInstance } from "./select-prop-attributes";
 import {
+  FormElementPropertyProps,
   InputTile,
   PropertiesFooter,
   PropertiesHeader,
@@ -13,11 +13,8 @@ import {
 import { HelpCircle, ListCheck, MousePointer2, PenBoxIcon, X } from "lucide-react";
 import useElements from "@/utility/useElements-hook";
 
-interface SelectPropertiesComponentProps {
-  elementInstance: FormElemetInstance;
-}
 
-const SelectPropertiesComponent: FC<SelectPropertiesComponentProps> = ({
+const SelectPropertiesComponent: FC<FormElementPropertyProps> = ({
   elementInstance,
 }) => {
   const element = elementInstance as selectFieldCustomInstance;

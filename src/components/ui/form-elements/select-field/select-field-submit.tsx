@@ -6,18 +6,18 @@ import { selectFieldCustomInstance } from "./select-prop-attributes";
 interface SelectFieldSubmitCompProps {
   elementInstance: FormElemetInstance;
   handleValues?: submitValueType | undefined;
-  formValue?: React.RefObject<{ [key: string]: string }>;
+  formValues?: React.RefObject<{ [key: string]: string }>;
 }
 
 const SelectFieldSubmitComp: FC<SelectFieldSubmitCompProps> = ({
   elementInstance,
   handleValues,
-  formValue
+  formValues
 }) => {
   const { id, extraAttributes } = elementInstance as selectFieldCustomInstance;
   const { label, helperText, options, required, selectPlaceHolder } = extraAttributes;
 
-  const [inputValue, setInputValue] = useState<string>(formValue?.current[id] || "");
+  const [inputValue, setInputValue] = useState<string>(formValues?.current[id] || "");
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newValue = e.target.value;
@@ -37,7 +37,7 @@ const SelectFieldSubmitComp: FC<SelectFieldSubmitCompProps> = ({
       <select
         id={id}
         required={required}
-        value={formValue?.current[id] || inputValue}
+        value={formValues?.current[id] || inputValue}
         onChange={handleChange}
         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
       >
