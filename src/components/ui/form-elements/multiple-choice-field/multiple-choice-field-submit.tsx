@@ -33,7 +33,8 @@ const MultipleChoiceFieldSubmitComp: FC<submitCompPropsType> = ({
     });
 
     if (required) {
-      const isValid = selectedOptions.length > 0;
+      const isExists = formValues?.current?.[id] && formValues.current?.[id].split(", ");
+      const isValid =  isExists && isExists?.length > 0;
       setElementsToValidate?.((prev) => ({
         ...prev,
         [id]: isValid ? undefined : ""
