@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+
 export type ElementsType = "TextFiled" | "SelectField" | "CheckboxField" | "RadioButtonField"  | "TextAreaField" | "YesAndNoField" | "MultipleChoiceField" | "DateField"
 
 export type FormElemetInstance = {
@@ -9,21 +11,26 @@ export type FormElemetInstance = {
 export type FormElement = {
   construct: (id: string) => FormElemetInstance;
   type: ElementsType;
-  builderComponent: React.FC<{
-    elementInstance: FormElemetInstance;
-  }>;
-  propertiesComponent: React.FC<{
-    elementInstance: FormElemetInstance;
-  }>;
-  submitComponent: React.FC<{
-    elementInstance: FormElemetInstance;
-    handleValues?: submitValueType;
-    formValues?: React.RefObject<{ [key: string]: string }>;
-  }>;
+  builderComponent: React.FC<FormElementProps>;
+  propertiesComponent: React.FC<FormElementProps>;
+  submitComponent: React.FC<submitCompPropsType>;
   elementButton: {
     label: string;
   };
 };
+
+export interface FormElementProps {
+  elementInstance: FormElemetInstance;
+}
+
+export type submitCompPropsType = {
+  elementInstance: FormElemetInstance;
+    handleValues?: submitValueType;
+    formValues?: React.RefObject<{ [key: string]: string }>;
+    elementsToValidate?: Record<string, string | undefined>; 
+    setElementsToValidate?: Dispatch<SetStateAction<Record<string, string | undefined>>>
+    isFormError?: boolean;
+}
 
 export type submitValueType = (key: string, value: string) => void;
 
