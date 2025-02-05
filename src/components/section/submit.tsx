@@ -33,7 +33,6 @@ const Submit = ({ formId }: { formId: string }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [errMsg, setErrMsg] = useState<string>("");
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-
   const [isFormError, setIsFormError] = useState<boolean>(false);
 
   const handleValues = (key: string, value: string) => {
@@ -60,6 +59,7 @@ const Submit = ({ formId }: { formId: string }) => {
         setIsSubmitted(true);
       }
 
+      formValues.current = {};
       setLoading(false);
     } catch (error) {
       setErrMsg(handleAxiosError(error));
@@ -137,7 +137,6 @@ const Submit = ({ formId }: { formId: string }) => {
 
   return (
     <div className="w-full h-full flex flex-col gap-5 items-center bg-white text-black py-8 px-4">
-      <button onClick={() => console.log(isFormValid())}>check if valid or not</button>
 
       <div className="flex gap-2 mb-6">
         {Array(pageLength)
