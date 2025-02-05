@@ -2,17 +2,21 @@
 
 import { FormElement } from "@/utility/ts-types";
 import { useDraggable } from "@dnd-kit/core";
-import { LucideIcon, MousePointer2, Text, TextCursorInput, TextSelectIcon, TicketCheck, ToggleLeft } from "lucide-react";
+import { Calendar, LucideIcon, MousePointer2, Text, TextCursorInput, TextSelectIcon, TicketCheck, ToggleLeft } from "lucide-react";
+import { SlOptionsVertical } from "react-icons/sl";
+import { IconType } from "react-icons";
 
 type FormElementType = FormElement["elementButton"]["label"];
 
-export const IconMap: Record<FormElementType, LucideIcon> = {
+export const IconMap: Record<FormElementType, LucideIcon | IconType> = {
   "TextField": TextCursorInput,
   "SelectField" : TextSelectIcon,
   "CheckboxField": ToggleLeft,
   "RadioButtonField": MousePointer2,
   "TextAreaField" : Text,
-  "YesAndNoField": TicketCheck
+  "YesAndNoField": TicketCheck,
+  "MultipleChoiceField": SlOptionsVertical,
+  "DateField": Calendar
 };
 
 const SidebarBtnElement = ({ FormElement }: { FormElement: FormElement}) => {
