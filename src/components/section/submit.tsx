@@ -20,55 +20,63 @@ interface FormDataInterface {
 }
 
 const Submit = ({ formId }: { formId: string }) => {
-
   const [formData, setForm] = useState<FormDataInterface | null>(null);
+  const [elementsToValidate, setElementsToValidate] = useState<Record<string, string | undefined>>({});
   const [count, setCount] = useState<number>(0);
   const [pageLength, setPageLength] = useState<number>(0);
   const [currentPageData, setCurrentPageData] = useState<FormElemetInstance[]>(
     []
   );
 
-  
-  const formValues = useRef<{[key: string] : string}>({});
+
+  const formValues = useRef<{ [key: string]: string }>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [errMsg, setErrMsg] = useState<string>("");
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
-  
+  const [isFormError, setIsFormError] = useState<boolean>(false);
+
   const handleValues = (key: string, value: string) => {
-    formValues.current[key] = value; 
-  }
+    formValues.current[key] = value;
+  };
 
-
-
-  const handleSubmit = async() => {
+  const handleSubmit = async () => {
     try {
-        setLoading(true);
-        const response = await axios.post(`https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formId}/submissions`, {
-            content: JSON.stringify(formValues.current)
-        })
 
-        if(response.data.status === "success"){
-            setIsSubmitted(true);
+      if(!isFormValid()){
+        setIsFormError(true);
+        return; 
+      }
+
+      setLoading(true);
+      const response = await axios.post(
+        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formId}/submissions`,
+        {
+          content: JSON.stringify(formValues.current),
         }
+      );
 
-        setLoading(false)
+      if (response.data.status === "success") {
+        setIsSubmitted(true);
+      }
+
+      setLoading(false);
     } catch (error) {
-        setErrMsg(handleAxiosError(error));
-        setLoading(false);
-        setIsSubmitted(false);
+      setErrMsg(handleAxiosError(error));
+      setLoading(false);
+      setIsSubmitted(false);
     }
-  }
-
+  };
 
   useEffect(() => {
     const fetchForm = async () => {
       try {
         const response = await axios.get(
-          `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formId}`,
+          `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formId}`
         );
 
         setForm(response.data.data);
+
         setPageLength(response.data.data.pages?.length);
       } catch (error) {
         console.log(handleAxiosError(error));
@@ -88,8 +96,49 @@ const Submit = ({ formId }: { formId: string }) => {
     }
   }, [count, formData]);
 
+  useEffect(() => {
+    if (formData) {
+      const flattenArray: FormElemetInstance[] = [];
+
+      formData.pages.forEach((page) => {
+        if (typeof page.content === "string") {
+          try {
+            const convertedContent = JSON.parse(
+              page.content
+            ) as FormElemetInstance[];
+            flattenArray.push(...convertedContent);
+          } catch (error) {
+            console.error("Error parsing page content:", error);
+          }
+        }
+      });
+
+      const validationState = flattenArray
+      .filter(element => element.extraAttributes?.required)
+      .reduce((acc, element) => {
+        acc[element.id] = ""; 
+        return acc;
+      }, {} as Record<string, string>);
+  
+      setElementsToValidate(validationState);  
+    }
+  }, [formData]);
+
+
+  const isFormValid = () => {
+    return !Object.values(elementsToValidate).some(
+      value => value === ""
+    );
+  };
+
+  useEffect(() => {
+    setIsFormError(false);
+  }, [elementsToValidate])
+
   return (
     <div className="w-full h-full flex flex-col gap-5 items-center bg-white text-black py-8 px-4">
+      <button onClick={() => console.log(isFormValid())}>check if valid or not</button>
+
       <div className="flex gap-2 mb-6">
         {Array(pageLength)
           .fill(0)
@@ -106,7 +155,17 @@ const Submit = ({ formId }: { formId: string }) => {
       <div className="w-full max-w-2xl space-y-4">
         {currentPageData.map((el) => {
           const SubmitComponent = FormElemets[el.type].submitComponent;
-          return <SubmitComponent elementInstance={el} key={el.id}  handleValues={handleValues} formValues={formValues}/>;
+          return (
+            <SubmitComponent
+              elementInstance={el}
+              key={el.id}
+              handleValues={handleValues}
+              formValues={formValues}
+              elementsToValidate={elementsToValidate}
+              setElementsToValidate={setElementsToValidate}
+              isFormError={isFormError}
+            />
+          );
         })}
       </div>
 
@@ -132,17 +191,24 @@ const Submit = ({ formId }: { formId: string }) => {
         )}
 
         {count === pageLength - 1 && (
-          <button className={`px-4 py-2 border border-black rounded-lg hover:bg-black ${loading && 'opacity-50'} hover:text-white transition`}
-            onClick={handleSubmit}
-            disabled={loading}
-          >
-            {loading ? "Saving" : "Save"}
-          </button>
+         <button
+         className={`px-4 py-2 border border-black rounded-lg hover:bg-black ${
+           loading && "opacity-50"
+         } hover:text-white transition ${
+           isFormError ? "bg-red-500 hover:bg-red-500 text-white" : ""
+         }`}
+         onClick={handleSubmit}
+         disabled={loading}
+       >
+         {isFormError ? "Fill required fields" : (loading ? "Saving..." : "Submit")}
+       </button>
         )}
       </div>
 
       {errMsg && <p>{errMsg}</p>}
-      {isSubmitted && <p className="text-green-400">Form is submitted successfully</p>}
+      {isSubmitted && (
+        <p className="text-green-400">Form is submitted successfully</p>
+      )}
     </div>
   );
 };
