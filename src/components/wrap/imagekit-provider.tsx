@@ -3,19 +3,8 @@
 import React from "react";
 import { ImageKitProvider } from "imagekitio-next";
 
-const isDev = process.env.NODE_ENV === "development";
-
-const urlEndpoint = isDev
-  ? process.env.NEXT_PUBLIC_URL_ENDPOINT
-  : process.env.IMAGEKIT_PUBLIC_URL_ENDPOINT;
-
-const publicKey = isDev
-  ? process.env.NEXT_PUBLIC_PUBLIC_KEY
-  : process.env.IMAGEKIT_PUBLIC_KEY;
-
-if (!urlEndpoint || !publicKey) {
-  throw new Error("Missing required ImageKit environment variables.");
-}
+const urlEndpoint = process.env.IMAGEKIT_URL_ENDPOINT;
+const publicKey = process.env.IMAGEKIT_PUBLIC_KEY;
 
 export default function ImgKitProvider({ children }: { children: React.ReactNode }) {
   const authenticator = async () => {
