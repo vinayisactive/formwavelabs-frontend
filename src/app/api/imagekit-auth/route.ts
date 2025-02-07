@@ -1,27 +1,19 @@
 import ImageKit from "imagekit";
 import { NextResponse } from "next/server";
 
-const isDev = process.env.NODE_ENV === "development";
-
-const urlEndpoint = isDev 
-  ? process.env.NEXT_PUBLIC_URL_ENDPOINT 
-  : process.env.IMAGEKIT_PUBLIC_URL_ENDPOINT;
-
-const publicKey = isDev 
-  ? process.env.NEXT_PUBLIC_PUBLIC_KEY 
-  : process.env.IMAGEKIT_PUBLIC_KEY;
-
-const privateKey = process.env.PRIVATE_KEY;
+const urlEndpoint = process.env.IMAGEKIT_PUBLIC_URL_ENDPOINT;
+const publicKey = process.env.IMAGEKIT_PUBLIC_KEY;
+const privateKey = process.env.IMAGEKIT_PRIVATE_KEY;
 
 if (!urlEndpoint || !publicKey || !privateKey) {
-  throw new Error("Missing required ImageKit environment variables.");
+  throw new Error(`
+    Missing ImageKit environment variables. 
+    Check if IMAGEKIT_PUBLIC_URL_ENDPOINT, IMAGEKIT_PUBLIC_KEY, 
+    and IMAGEKIT_PRIVATE_KEY are set in your environment.
+  `);
 }
 
-const imagekit = new ImageKit({
-  publicKey,
-  privateKey,
-  urlEndpoint,
-});
+const imagekit = new ImageKit({ publicKey, privateKey, urlEndpoint });
 
 export async function GET() {
   try {
@@ -29,7 +21,7 @@ export async function GET() {
     return NextResponse.json(authParams);
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to generate authentication parameters", details: error },
+      { error: "Authentication failed", details: error },
       { status: 500 }
     );
   }
