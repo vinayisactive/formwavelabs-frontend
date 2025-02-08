@@ -30,17 +30,30 @@ const DateFieldSubmitComp: FC<submitCompPropsType> = ({
   }, [formValues, element.id]);
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const date = new Date(e.target.value);
-   
-    if (required) {
-      setElementsToValidate?.((prev) => ({
-        ...prev,
-        [element.id]: date.toLocaleString(),
-      }));
+    const dateValue = e.target.value;
+
+    if (dateValue === "") {
+      setInputDate("");
+      handleValues?.(element.id, "");
+
+      if (required) {
+        setElementsToValidate?.((prev) => ({
+          ...prev,
+          [element.id]: "",
+        }));
+      }
+    } else {
+      const date = new Date(dateValue);
+      setInputDate(dateValue);
+      handleValues?.(element.id, date.toLocaleString());
+
+      if (required) {
+        setElementsToValidate?.((prev) => ({
+          ...prev,
+          [element.id]: undefined,
+        }));
+      }
     }
-    
-    setInputDate(e.target.value);
-    handleValues?.(element.id, date.toLocaleString());
   };
 
   return (
@@ -57,7 +70,9 @@ const DateFieldSubmitComp: FC<submitCompPropsType> = ({
       {helperText && (
         <p className="text-xs text-muted-foreground">{helperText}</p>
       )}
-      {elementsToValidate?.[element.id] === "" && isFormError && <RequiredFieldError />}
+      {elementsToValidate?.[element.id] === "" && isFormError && (
+        <RequiredFieldError />
+      )}
     </div>
   );
 };

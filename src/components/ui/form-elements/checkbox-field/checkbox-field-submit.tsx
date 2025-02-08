@@ -25,15 +25,12 @@ const CheckBoxFieldSubmitComp: FC<submitCompPropsType> = ({
     if(required){
       setElementsToValidate?.((prev) => ({
         ...prev,
-        [id]: isChecked.toString()
-      }))
+        [id]: isChecked ? undefined : "",
+      }));
     }
 
     setChecked(isChecked);
-    if (handleValues) {
-      handleValues(id, isChecked.toString());
-      console.log(formValues?.current)
-    }
+    handleValues?.(id, isChecked.toString());
   };
 
   return (
@@ -43,7 +40,7 @@ const CheckBoxFieldSubmitComp: FC<submitCompPropsType> = ({
           type="checkbox"
           id={id}
           required={required}
-          checked={formValues?.current?.[id] === "true" || checked}
+          checked={checked}
           onChange={handleChange}
           className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
         />

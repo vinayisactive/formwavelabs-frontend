@@ -57,9 +57,12 @@ const Submit = ({ formId }: { formId: string }) => {
 
       if (response.data.status === "success") {
         setIsSubmitted(true);
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
       }
 
-      formValues.current = {};
       setLoading(false);
     } catch (error) {
       setErrMsg(handleAxiosError(error));

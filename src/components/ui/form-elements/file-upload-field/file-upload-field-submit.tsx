@@ -33,6 +33,17 @@ const FileUploadFieldSubmitComp: FC<submitCompPropsType> = ({
     handleValues?.(id, url);
   };
 
+  const handleRemoveUrl = () => {
+    setFileUrl(null)
+    if(formValues){
+      formValues.current[id] = ""
+      setElementsToValidate?.((prev) => ({
+        ...prev,
+        [id]: formValues.current[id]?.trim()  === "" ? "" : undefined
+      }))
+    }
+  }; 
+
   return (
     <div className="flex flex-col gap-2 p-2">
       <label className="text-sm font-medium text-gray-700">
@@ -50,7 +61,7 @@ const FileUploadFieldSubmitComp: FC<submitCompPropsType> = ({
       {fileUrl && (
         <p className="border px-2 border-black flex justify-between items-center">
           {fileUrl}{" "}
-          <span onClick={() => setFileUrl(null)}>
+          <span onClick={handleRemoveUrl}>
             <X />
           </span>
         </p>
