@@ -7,6 +7,7 @@ import TextAreaFormElement from "@/components/ui/form-elements/text-area-field/t
 import YesAndNoFormElement from "@/components/ui/form-elements/yes-n-no-field/yes-n-no-field";
 import MultipleChoiceFieldFormElement from "@/components/ui/form-elements/multiple-choice-field/multiple-choice-field";
 import DateFieldFormElement from "@/components/ui/form-elements/date-field/date-field";
+import FileUploadFieldFormElement from "@/components/ui/form-elements/file-upload-field/file-upload-field";
 
 export const FormElemets: FormElemetsType = {
     TextFiled: TextFiledFormElement,
@@ -16,6 +17,7 @@ export const FormElemets: FormElemetsType = {
     TextAreaField: TextAreaFormElement, 
     YesAndNoField: YesAndNoFormElement,
     MultipleChoiceField: MultipleChoiceFieldFormElement,
-    DateField: DateFieldFormElement
+    DateField: DateFieldFormElement,
+    FileUploadField: FileUploadFieldFormElement
   };
 

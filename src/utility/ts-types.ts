@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 
-export type ElementsType = "TextFiled" | "SelectField" | "CheckboxField" | "RadioButtonField"  | "TextAreaField" | "YesAndNoField" | "MultipleChoiceField" | "DateField"
+export type ElementsType = "TextFiled" | "SelectField" | "CheckboxField" | "RadioButtonField"  | "TextAreaField" | "YesAndNoField" | "MultipleChoiceField" | "DateField" | "FileUploadField"
 
 export type FormElemetInstance = {
   id: string;
