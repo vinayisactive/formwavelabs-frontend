@@ -140,3 +140,44 @@ export const RequiredFieldError = () => {
     <div className="text-[12px] py-1 text-red-400">Please fill this field</div>
   );
 };
+interface SelectTileProps {
+  icon: LucideIcon;
+  label: string;
+  value: string;
+  placeholder?: string;
+  helperText?: string;
+  options: string[];
+  onChange: (value: string) => void;
+}
+
+export const SelectTile = ({
+  icon: Icon,
+  label,
+  value,
+  placeholder = "Select an option",
+  helperText,
+  options,
+  onChange,
+}: SelectTileProps) => (
+  <div className="bg-gray-50 p-4 rounded-lg border border-gray-150">
+    <div className="flex items-center space-x-2 mb-3">
+      <Icon className="w-4 h-4 text-gray-500" />
+      <label className="text-sm font-medium text-gray-700">{label}</label>
+    </div>
+    <select
+      className="w-full p-2 rounded-md bg-white border-gray-200 focus:border-gray-400 focus:ring-1 focus:ring-gray-400 text-sm appearance-none"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+    >
+      <option value="" disabled className="text-gray-400">
+        {placeholder}
+      </option>
+      {options.map((option) => (
+        <option key={option} value={option}>
+          {option}
+        </option>
+      ))}
+    </select>
+    {helperText && <p className="mt-2 text-xs text-gray-400">{helperText}</p>}
+  </div>
+);
