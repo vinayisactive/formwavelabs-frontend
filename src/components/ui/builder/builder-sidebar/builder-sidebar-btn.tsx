@@ -5,6 +5,7 @@ import { useDraggable } from "@dnd-kit/core";
 import { Calendar, LucideIcon, MousePointer2, Text, TextCursorInput, TextSelectIcon, TicketCheck, ToggleLeft } from "lucide-react";
 import { SlOptionsVertical } from "react-icons/sl";
 import { IconType } from "react-icons";
+import { FaFileUpload } from "react-icons/fa";
 
 type FormElementType = FormElement["elementButton"]["label"];
 
@@ -16,7 +17,8 @@ export const IconMap: Record<FormElementType, LucideIcon | IconType> = {
   "TextAreaField" : Text,
   "YesAndNoField": TicketCheck,
   "MultipleChoiceField": SlOptionsVertical,
-  "DateField": Calendar
+  "DateField": Calendar,
+  "FileUploadField" : FaFileUpload
 };
 
 const SidebarBtnElement = ({ FormElement }: { FormElement: FormElement}) => {
