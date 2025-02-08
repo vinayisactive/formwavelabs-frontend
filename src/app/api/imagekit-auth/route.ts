@@ -1,9 +1,9 @@
 import ImageKit from "imagekit";
 import { NextResponse } from "next/server";
 
-const urlEndpoint = process.env.IMAGEKIT_PUBLIC_URL_ENDPOINT;
-const publicKey = process.env.IMAGEKIT_PUBLIC_KEY;
-const privateKey = process.env.IMAGEKIT_PRIVATE_KEY;
+const urlEndpoint = process.env.NEXT_PUBLIC_URL_ENDPOINT;
+const publicKey = process.env.NEXT_PUBLIC_PUBLIC_KEY;
+const privateKey = process.env.PRIVATE_KEY;
 
 if (!urlEndpoint || !publicKey || !privateKey) {
   throw new Error(`
