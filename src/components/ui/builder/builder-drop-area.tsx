@@ -116,7 +116,7 @@ const BuilderDropArea = () => {
               ))}
             </div>
           )}
-          {isOver && elements?.length === 0 && (
+          {isOver && (
             <div className="h-[100px] w-full bg-black/5 rounded-xl"></div>
           )}
         </div>

@@ -3,8 +3,7 @@
 import React, { useState } from "react";
 import { TextCustomInstance } from "./text-prop-attributes";
 import { submitCompPropsType } from "@/utility/ts-types";
-import { RequiredFieldError } from "../property-reusable-comp";
-
+import { SubmitComponentWrapper } from "../property-reusable-comp";
 
 const TextFieldSubmitComp: React.FC<submitCompPropsType> = ({
   elementInstance,
@@ -38,12 +37,14 @@ const TextFieldSubmitComp: React.FC<submitCompPropsType> = ({
   };
 
   return (
-    <div className="flex flex-col gap-2 p-2">
-      <label htmlFor={id} className="text-sm font-medium text-gray-700">
-        {label}
-        {required && <span className="text-red-500 ml-1">*</span>}
-      </label>
-
+    <SubmitComponentWrapper
+      id={id}
+      label={label}
+      required={required}
+      helperText={helperText}
+      currentElementToValidate={elementsToValidate?.[id]}
+      isFormError={isFormError}
+    >
       <input
         type="text"
         id={id}
@@ -51,15 +52,9 @@ const TextFieldSubmitComp: React.FC<submitCompPropsType> = ({
         required={required}
         value={formValues?.current[id] || inputValue}
         onChange={handleChange}
-        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+        className="w-full pb-1 border-b-2 border-gray-300 focus:outline-none text-sm mt-1"
       />
-
-      {helperText && <p className="text-xs text-gray-500">{helperText}</p>}
-    
-      {elementsToValidate?.[id] === "" && isFormError && (
-        <RequiredFieldError />
-      )}
-    </div>
+    </SubmitComponentWrapper>
   );
 };
 

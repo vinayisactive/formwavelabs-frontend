@@ -8,12 +8,14 @@ interface ImagekitFileUploadProps {
   onSuccess?: (res: IKUploadResponse) => void;
   onProgress?: (progress: number) => void;
   fileType?: "image" | "pdf" | "video";
+  className?: string
 }
 
 const ImageKitFileUpload: FC<ImagekitFileUploadProps> = ({
   onSuccess,
   onProgress,
   fileType = "image",
+  className
 }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState("");
@@ -41,7 +43,7 @@ const ImageKitFileUpload: FC<ImagekitFileUploadProps> = ({
 
   return (
     <div className="text-sm">
-      <label className="flex items-center gap-2 border p-2 cursor-pointer">
+      <label className={`flex items-center gap-2 border p-2 cursor-pointer ${className}`}>
         <IKUpload
           className="hidden"
           fileName={fileType}

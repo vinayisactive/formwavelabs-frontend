@@ -3,30 +3,32 @@
 import React, { useState } from "react";
 import { TextAreaCustomInstance } from "./text-area-prop-attributes";
 import { submitCompPropsType } from "@/utility/ts-types";
-import { RequiredFieldError } from "../property-reusable-comp";
-
+import { SubmitComponentWrapper } from "../property-reusable-comp";
 
 const TextAreaFieldSubmitComp: React.FC<submitCompPropsType> = ({
   elementInstance,
   handleValues,
-  formValues, 
+  formValues,
   elementsToValidate,
   setElementsToValidate,
-  isFormError
+  isFormError,
+  theme
 }) => {
   const { id, extraAttributes } = elementInstance as TextAreaCustomInstance;
   const { label, helperText, placeholder, required } = extraAttributes;
 
-  const [inputValue, setInputValue] = useState<string>(formValues?.current[id] || "");
+  const [inputValue, setInputValue] = useState<string>(
+    formValues?.current[id] || ""
+  );
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = e.target.value;
 
-    if(required){
+    if (required) {
       setElementsToValidate?.((prev) => ({
         ...prev,
-        [id]: newValue.trim() === "" ? "" : undefined
-      }))
+        [id]: newValue.trim() === "" ? "" : undefined,
+      }));
     }
 
     setInputValue(newValue);
@@ -36,27 +38,23 @@ const TextAreaFieldSubmitComp: React.FC<submitCompPropsType> = ({
   };
 
   return (
-    <div className="flex flex-col gap-2 p-2">
-      <label htmlFor={id} className="text-sm font-medium text-gray-700">
-       {label}
-        {required && <span className="text-red-500 ml-1">*</span>}
-      </label>
-
+    <SubmitComponentWrapper
+      id={id}
+      label={label}
+      helperText={helperText}
+      required={required}
+      currentElementToValidate={elementsToValidate?.[id]}
+      isFormError={isFormError}
+    >
       <textarea
         id={id}
         placeholder={placeholder}
         required={required}
         value={formValues?.current[id] || inputValue}
         onChange={handleChange}
-        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+        className={`w-full px-3 py-2 border-2 border-gray-300 ${theme === "BOXY" ? "" : "rounded-md"} focus:outline-none focus:ring-2 focus:ring-black focus:border-black-500 text-sm`}
       />
-
-      {helperText && <p className="text-xs text-gray-500">{helperText}</p>}
-      {
-        elementsToValidate?.[id] === "" && isFormError && <RequiredFieldError />
-      }
-
-    </div>
+    </SubmitComponentWrapper>
   );
 };
 

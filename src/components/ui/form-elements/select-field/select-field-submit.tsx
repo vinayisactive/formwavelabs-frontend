@@ -2,8 +2,7 @@
 import { submitCompPropsType } from "@/utility/ts-types";
 import { FC, useState } from "react";
 import { selectFieldCustomInstance } from "./select-prop-attributes";
-import { RequiredFieldError } from "../property-reusable-comp";
-
+import { SubmitComponentWrapper } from "../property-reusable-comp";
 
 const SelectFieldSubmitComp: FC<submitCompPropsType> = ({
   elementInstance,
@@ -11,45 +10,55 @@ const SelectFieldSubmitComp: FC<submitCompPropsType> = ({
   formValues,
   elementsToValidate,
   setElementsToValidate,
-  isFormError
+  isFormError,
+  theme,
 }) => {
   const { id, extraAttributes } = elementInstance as selectFieldCustomInstance;
-  const { label, helperText, options, required, selectPlaceHolder } = extraAttributes;
+  const { label, helperText, options, required, selectPlaceHolder } =
+    extraAttributes;
 
-  const [inputValue, setInputValue] = useState<string>(formValues?.current[id] || "");
+  const [inputValue, setInputValue] = useState<string>(
+    formValues?.current[id] || ""
+  );
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newValue = e.target.value;
 
-    if(required){
+    if (required) {
       setElementsToValidate?.((prev) => ({
         ...prev,
-        [id]: newValue.trim() === "" ? "" : undefined
-      }))
+        [id]: newValue.trim() === "" ? "" : undefined,
+      }));
     }
 
     setInputValue(newValue);
     if (handleValues) {
-        handleValues(id, newValue);
+      handleValues(id, newValue);
     }
   };
 
   return (
-    <div className="flex flex-col gap-2 p-2">
-      <label htmlFor={id} className="text-sm font-medium text-gray-700">
-        {label}
-        {required && <span className="text-red-500 ml-1">*</span>}
-      </label>
-
+    <SubmitComponentWrapper
+      id={id}
+      label={label}
+      required={required}
+      helperText={helperText}
+      currentElementToValidate={elementsToValidate?.[id]}
+      isFormError={isFormError}
+    >
       <select
         id={id}
         required={required}
         value={formValues?.current[id] || inputValue}
         onChange={handleChange}
-        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+        className={`w-full px-3 mt-2  ${
+          theme === "BOXY"
+            ? "border-r-4 border-b-4 border border-black py-2"
+            : "border-2 border-gray-300 py-2 rounded-md focus:border-2"
+        }  text-sm cursor-pointer`}
       >
         <option value="" disabled className="py-2 px-3 text-gray-500">
-       {selectPlaceHolder}
+          {selectPlaceHolder}
         </option>
         {options &&
           options.map((option) => (
@@ -62,12 +71,7 @@ const SelectFieldSubmitComp: FC<submitCompPropsType> = ({
             </option>
           ))}
       </select>
-
-      {helperText && <p className="text-xs text-gray-500">{helperText}</p>}
-      {
-        elementsToValidate?.[id] === "" && isFormError && <RequiredFieldError />
-      }
-    </div>
+    </SubmitComponentWrapper>
   );
 };
 

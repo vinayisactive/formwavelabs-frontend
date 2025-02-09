@@ -2,7 +2,7 @@
 import { submitCompPropsType } from "@/utility/ts-types";
 import { FC, useState } from "react";
 import { FileUploadCustomInstance } from "./file-upload-prop-attributes";
-import { RequiredFieldError } from "../property-reusable-comp";
+import { SubmitComponentWrapper } from "../property-reusable-comp";
 import ImageKitFileUpload from "../../imagekit-file-uploader";
 import { X } from "lucide-react";
 
@@ -13,6 +13,7 @@ const FileUploadFieldSubmitComp: FC<submitCompPropsType> = ({
   handleValues,
   formValues,
   isFormError,
+  theme,
 }) => {
   const { id, extraAttributes } = elementInstance as FileUploadCustomInstance;
   const { label, helperText, required, selectedFileType } = extraAttributes;
@@ -34,27 +35,34 @@ const FileUploadFieldSubmitComp: FC<submitCompPropsType> = ({
   };
 
   const handleRemoveUrl = () => {
-    setFileUrl(null)
-    if(formValues){
-      formValues.current[id] = ""
+    setFileUrl(null);
+    if (formValues) {
+      formValues.current[id] = "";
       setElementsToValidate?.((prev) => ({
         ...prev,
-        [id]: formValues.current[id]?.trim()  === "" ? "" : undefined
-      }))
+        [id]: formValues.current[id]?.trim() === "" ? "" : undefined,
+      }));
     }
-  }; 
+  };
 
   return (
-    <div className="flex flex-col gap-2 p-2">
-      <label className="text-sm font-medium text-gray-700">
-        {label}
-        {required && <span className="text-red-500 ml-1">*</span>}
-      </label>
-
+    <SubmitComponentWrapper
+      id={id}
+      label={label}
+      helperText={helperText}
+      required={required}
+      currentElementToValidate={elementsToValidate?.[id]}
+      isFormError={isFormError}
+    >
       {!fileUrl && (
         <ImageKitFileUpload
           fileType={selectedFileType}
           onSuccess={(res) => saveHandler(res.url)}
+          className={
+            theme === "BOXY"
+              ? "border-r-4 border-b-4 border-black"
+              : "rounded-md border-gray-300 border-2"
+          }
         />
       )}
 
@@ -66,10 +74,7 @@ const FileUploadFieldSubmitComp: FC<submitCompPropsType> = ({
           </span>
         </p>
       )}
-
-      {helperText && <p className="text-xs text-gray-500">{helperText}</p>}
-      {elementsToValidate?.[id] === "" && isFormError && <RequiredFieldError />}
-    </div>
+    </SubmitComponentWrapper>
   );
 };
 

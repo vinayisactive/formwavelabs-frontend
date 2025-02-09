@@ -1,7 +1,7 @@
 import { submitCompPropsType } from "@/utility/ts-types";
 import { DateFieldCustomElement } from "./date-prop-attributes";
 import { FC, useState, useEffect } from "react";
-import { RequiredFieldError } from "../property-reusable-comp";
+import { SubmitComponentWrapper } from "../property-reusable-comp";
 
 const DateFieldSubmitComp: FC<submitCompPropsType> = ({
   elementInstance,
@@ -57,23 +57,21 @@ const DateFieldSubmitComp: FC<submitCompPropsType> = ({
   };
 
   return (
-    <div className="flex flex-col gap-1 items-start text-black">
-      <p className="text-md">
-        {label} {required && "*"}
-      </p>
+    <SubmitComponentWrapper
+      id={element.id}
+      label={label}
+      helperText={helperText}
+      isFormError={isFormError}
+      required={required}
+      currentElementToValidate={elementsToValidate?.[element.id]}
+    >
       <input
         type="date"
         required={required}
         onChange={handleDateChange}
         value={inputDate}
       />
-      {helperText && (
-        <p className="text-xs text-muted-foreground">{helperText}</p>
-      )}
-      {elementsToValidate?.[element.id] === "" && isFormError && (
-        <RequiredFieldError />
-      )}
-    </div>
+    </SubmitComponentWrapper>
   );
 };
 

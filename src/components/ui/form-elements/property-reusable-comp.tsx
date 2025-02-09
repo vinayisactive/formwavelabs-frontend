@@ -181,3 +181,47 @@ export const SelectTile = ({
     {helperText && <p className="mt-2 text-xs text-gray-400">{helperText}</p>}
   </div>
 );
+
+interface SubmitComponentWrapperProps {
+  id: string; 
+  label: string; 
+  required?: boolean; 
+  helperText?: string; 
+  currentElementToValidate?: string; 
+  isFormError?: boolean; 
+  children: React.ReactNode; 
+  labelClass?: string; 
+  helperTextClassName?: string
+}
+
+
+export const SubmitComponentWrapper = ({
+  id,
+  label,
+  required,
+  helperText,
+  currentElementToValidate,
+  isFormError,
+  children,
+  labelClass = "text-sm text-black",
+  helperTextClassName = "text-xs text-gray-500 px-2 bg-black/5 mt-1",
+}: SubmitComponentWrapperProps) => {
+  return (
+    <div className="flex flex-col gap-1 p-2 border-black items-start">
+      <label htmlFor={id} className={labelClass}>
+        {label}
+        {required && <span className="text-red-500 ml-1">*</span>}
+      </label>
+
+      {children}
+
+      {helperText && (
+        <span className={helperTextClassName}>
+          {helperText}
+        </span>
+      )}
+
+      {currentElementToValidate === "" && isFormError && <RequiredFieldError />}
+    </div>
+  );
+};

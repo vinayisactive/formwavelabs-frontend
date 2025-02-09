@@ -11,7 +11,8 @@ const CheckBoxFieldSubmitComp: FC<submitCompPropsType> = ({
   formValues,
   elementsToValidate,
   setElementsToValidate,
-  isFormError
+  isFormError,
+  theme
 }) => {
   const { id, extraAttributes } = elementInstance as CheckboxCustomInstance;
   const { label, helperText, required } = extraAttributes;
@@ -42,7 +43,7 @@ const CheckBoxFieldSubmitComp: FC<submitCompPropsType> = ({
           required={required}
           checked={checked}
           onChange={handleChange}
-          className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+          className={`h-4 w-4 text-black border-gray-300 rounded ${theme === "BOXY" ? " accent-black checked:ring-black" : ""} `}
         />
         <label 
           htmlFor={id}
@@ -52,7 +53,7 @@ const CheckBoxFieldSubmitComp: FC<submitCompPropsType> = ({
           {required && <span className="text-red-500 ml-1">*</span>}
         </label>
       </div>
-      {helperText && <p className="text-xs text-gray-500">{helperText}</p>}
+      {helperText && <p className="text-xs text-gray-500 bg-black/5 self-start px-2">{helperText}</p>}
       {elementsToValidate?.[id] === "" && isFormError && <RequiredFieldError/>}
     </div>
   );
