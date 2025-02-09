@@ -137,8 +137,8 @@ const Submit = ({ formId }: { formId: string }) => {
   }, [elementsToValidate]);
 
   return (
-    <div className="w-full max-h-screen overflow-auto flex justify-center relative">
-      <div className=" absolute w-full max-w-3xl px-4 py-4 flex flex-col gap-4 mt-10">
+    <div className="w-full h-auto flex justify-center px-2">
+      <div className="w-full max-w-3xl px-3 md:px-5 md:py-4 py-3 flex flex-col justify-center gap-5 mt-10 mb-20 md:border rounded-md">
         <div className="flex gap-2 pl-2">
           {Array(pageLength)
             .fill(0)

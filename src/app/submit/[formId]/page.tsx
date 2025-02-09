@@ -7,7 +7,7 @@ const page = async ({ params }: { params: Promise<{ formId: string }> }) => {
 
   return (
     <ElementsContextProvider>
-      <div className="w-full h-screen absolute top-0 right-0 z-[100] flex justify-cente bg-white">
+      <div className="w-full h-auto absolute top-0 right-0 z-[100] flex justify-cente bg-white">
         <Submit formId={formId} />
       </div>
     </ElementsContextProvider>
