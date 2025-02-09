@@ -45,9 +45,9 @@ const Dashboard = async () => {
         <p>Error loading forms:</p>
         <p>{errorMsg}</p>
       </div>
-    ) : forms.length > 0 ? (
+    ) : forms?.length > 0 ? (
       <div className="flex justify-start items-start flex-wrap gap-2 md:gap-0 w-full">
-        {forms.map((form) => (
+        {forms?.map((form) => (
           <DashboardCard key={form.id} form={form} />
         ))}
       </div>

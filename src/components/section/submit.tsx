@@ -140,7 +140,7 @@ const Submit = ({ formId }: { formId: string }) => {
   }, [elementsToValidate])
 
   return (
-    <div className="max-w-3xl w-full  h-full flex flex-col gap-4 items-start my-10 bg-white text-black py-8">
+    <div className="max-w-3xl w-full  h-full flex flex-col gap-4 items-start my-10 bg-white text-black py-8 px-3">
 
       <div className="flex gap-2 pl-2">
         {Array(pageLength)
@@ -155,7 +155,7 @@ const Submit = ({ formId }: { formId: string }) => {
           ))}
       </div>
 
-      <div className={`w-full space-y-4 px-3 py-5 ${formData?.theme === "BOXY" ? "border-r-4 border-b-4 border-black border" : "border rounded-md"}`}>
+      <div className={`w-full space-y-4 px-2 py-5 ${formData?.theme === "BOXY" ? "border-r-4 border-b-4 border-black border" : "border rounded-md"}`}>
         {currentPageData.map((el) => {
           const SubmitComponent = FormElemets[el.type].submitComponent;
           return (
