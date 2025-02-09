@@ -3,17 +3,19 @@
 @tailwind utilities;
 
 
-/* Hide scrollbars globally */
 * {
-    scrollbar-width: none; /* For Firefox */
-    -ms-overflow-style: none; /* For Internet Explorer and Edge */
+    scrollbar-width: none; 
+    -ms-overflow-style: none;
   }
   
   *::-webkit-scrollbar {
-    display: none; /* For Chrome, Safari, and Opera */
+    display: none; 
   }
   
-  input, textarea, select, button {
+  input:not([type="checkbox"]):not([type="radio"]),
+  textarea,
+  select,
+  button {
     border-radius: 0;
     -webkit-appearance: none; 
     appearance: none;
