@@ -17,6 +17,7 @@ interface FormDataInterface {
   description: string;
   pages: PagesInterface[];
   id: string;
+  theme : "BOXY" | "ROUNDED"
 }
 
 const Submit = ({ formId }: { formId: string }) => {
@@ -139,9 +140,9 @@ const Submit = ({ formId }: { formId: string }) => {
   }, [elementsToValidate])
 
   return (
-    <div className="w-full h-full flex flex-col gap-5 items-center bg-white text-black py-8 px-4">
+    <div className="max-w-3xl w-full  h-full flex flex-col gap-4 items-start my-10 bg-white text-black py-8">
 
-      <div className="flex gap-2 mb-6">
+      <div className="flex gap-2 pl-2">
         {Array(pageLength)
           .fill(0)
           .map((_, index) => (
@@ -154,7 +155,7 @@ const Submit = ({ formId }: { formId: string }) => {
           ))}
       </div>
 
-      <div className="w-full max-w-2xl space-y-4">
+      <div className={`w-full space-y-4 px-3 py-5 ${formData?.theme === "BOXY" ? "border-r-4 border-b-4 border-black border" : "border rounded-md"}`}>
         {currentPageData.map((el) => {
           const SubmitComponent = FormElemets[el.type].submitComponent;
           return (
@@ -166,16 +167,17 @@ const Submit = ({ formId }: { formId: string }) => {
               elementsToValidate={elementsToValidate}
               setElementsToValidate={setElementsToValidate}
               isFormError={isFormError}
+              theme={formData?.theme}
             />
           );
         })}
       </div>
 
-      <div className="mt-8 flex gap-4">
+      <div className="mt-4 flex gap-4">
         {count > 0 && (
           <button
             onClick={() => setCount((prev) => (prev === 0 ? 0 : prev - 1))}
-            className="px-4 py-2 border border-black rounded-lg hover:bg-black hover:text-white transition"
+            className={`px-4 py-2 border border-black ${formData?.theme === "BOXY" ? "border-r-4 border-b-4" : "rounded-md"} hover:bg-black hover:text-white transition`}
           >
             Previous
           </button>
@@ -186,7 +188,7 @@ const Submit = ({ formId }: { formId: string }) => {
             onClick={() =>
               setCount((prev) => (prev === pageLength - 1 ? prev : prev + 1))
             }
-            className="px-4 py-2 border border-black rounded-lg hover:bg-black hover:text-white transition"
+            className={`px-4 py-2 border border-black ${formData?.theme === "BOXY" ? "border-r-4 border-b-4" : "rounded-md"} hover:bg-black hover:text-white transition`}
           >
             Next
           </button>
@@ -194,7 +196,7 @@ const Submit = ({ formId }: { formId: string }) => {
 
         {count === pageLength - 1 && (
          <button
-         className={`px-4 py-2 border border-black rounded-lg hover:bg-black ${
+         className={`px-4 py-2 border border-black ${formData?.theme === "BOXY" ? "border-r-4 border-b-4" : "rounded-md"} hover:bg-black ${
            loading && "opacity-50"
          } hover:text-white transition ${
            isFormError ? "bg-red-500 hover:bg-red-500 text-white" : ""

@@ -1,4 +1,3 @@
-// import axios from "axios";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import DashboardCard from "../ui/dashboard-card";
 import { getServerSession } from "next-auth";
@@ -40,22 +39,22 @@ const Dashboard = async () => {
   }
 
   return (
-    <div className="w-full h-full p-6 flex flex-col items-center">
-      {errorMsg ? (
-        <div className="text-red-500 text-center">
-          <p>Error loading forms:</p>
-          <p>{errorMsg}</p>
-        </div>
-      ) : forms.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="w-full h-full flex flex-col items-center">
+    {errorMsg ? (
+      <div className="text-red-500 text-center">
+        <p>Error loading forms:</p>
+        <p>{errorMsg}</p>
+      </div>
+    ) : forms.length > 0 ? (
+      <div className="flex justify-start items-start flex-wrap gap-2 md:gap-0 w-full">
         {forms.map((form) => (
           <DashboardCard key={form.id} form={form} />
         ))}
       </div>
-      ) : (
-        <p className="text-gray-500">No forms found.</p>
-      )}
-    </div>
+    ) : (
+      <p className="text-gray-500">No forms found.</p>
+    )}
+  </div>
   );
 };
 

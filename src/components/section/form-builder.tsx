@@ -29,6 +29,7 @@ export interface FormData {
   title: string;
   status: boolean;
   totalPages: number;
+  theme: "BOXY" | "ROUNDED"
 }
 
 interface FormBuilderProps {
@@ -103,7 +104,7 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ formId, page }) => {
           </div>
 
           <div className=" h-[94%] mt-5 md:mt-0">
-            {tab === "builder" ? <Builder /> : <BuilderPreview />}
+            {tab === "builder" ? <Builder /> : <BuilderPreview formTheme={formData?.theme}/>}
           </div>
         </div>
       )}

@@ -1,30 +1,39 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-import { handleAxiosError } from '@/utility/axios-err-handler';
-import axios from 'axios';
+import { handleAxiosError } from "@/utility/axios-err-handler";
+import axios from "axios";
 
-import { Loader, PenSquare, TextCursorInput, TextQuote, AlertTriangle } from 'lucide-react';
+import {
+  Loader,
+  PenSquare,
+  TextCursorInput,
+  TextQuote,
+  AlertTriangle,
+  LayoutGrid,
+} from "lucide-react";
 
 interface CreateFormInterface {
   title: string;
   description: string;
+  theme: "ROUNDED" | "BOXY";
 }
 
 const CreateForm = () => {
-  const session = useSession(); 
-  const token = session.data?.accessToken
+  const session = useSession();
+  const token = session.data?.accessToken;
 
   const [formDetails, setFormDetails] = useState<CreateFormInterface>({
-    title: '',
-    description: '',
+    title: "",
+    description: "",
+    theme: "ROUNDED",
   });
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [errorMsg, setErrorMsg] = useState<string>('');
+  const [errorMsg, setErrorMsg] = useState<string>("");
   const [isValid, setIsValid] = useState<boolean>(false);
 
   const router = useRouter();
@@ -35,26 +44,21 @@ const CreateForm = () => {
 
   const submitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
-
     try {
       setLoading(true);
-      
       const response = await axios.post(
-        'https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms',
+        "https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms",
         formDetails,
         {
-            headers: {
-              "Authorization" : `Bearer ${token}`
-            }
-         }
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-
       setLoading(false);
-
-      if (response.data.status === 'success') {
+      if (response.data.status === "success") {
         router.push(`/form/${response.data.data.id}/1/builder`);
       }
-
     } catch (error) {
       setErrorMsg(handleAxiosError(error));
     } finally {
@@ -62,7 +66,9 @@ const CreateForm = () => {
     }
   };
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = event.target;
     setFormDetails((prev) => ({
       ...prev,
@@ -87,17 +93,15 @@ const CreateForm = () => {
               <TextCursorInput className="w-5 h-5 text-blue-600" />
               Form Title
             </label>
-            <div className="relative">
-              <input
-                type="text"
-                id="title"
-                name="title"
-                value={formDetails.title}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 pl-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white/50 backdrop-blur-sm"
-                placeholder="Trip member details"
-              />
-            </div>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              value={formDetails.title}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+              placeholder="Trip member details"
+            />
           </div>
 
           <div className="space-y-2">
@@ -105,17 +109,32 @@ const CreateForm = () => {
               <TextQuote className="w-5 h-5 text-purple-600" />
               Description
             </label>
-            <div className="relative">
-              <input
-                type="text"
-                id="description"
-                name="description"
-                value={formDetails.description}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 pl-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all bg-white/50 backdrop-blur-sm"
-                placeholder="Optional description for your form"
-              />
-            </div>
+            <input
+              type="text"
+              id="description"
+              name="description"
+              value={formDetails.description}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none"
+              placeholder="Optional description for your form"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="theme" className="flex items-center gap-2 text-sm font-medium text-gray-700">
+              <LayoutGrid className="w-5 h-5 text-green-600" />
+              Form Theme
+            </label>
+            <select
+              id="theme"
+              name="theme"
+              value={formDetails.theme}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
+            >
+              <option value="ROUNDED">Rounded</option>
+              <option value="BOXY">Boxy</option>
+            </select>
           </div>
 
           {errorMsg && (
@@ -128,10 +147,10 @@ const CreateForm = () => {
           <button
             type="submit"
             disabled={!isValid || loading}
-            className={`w-full py-3 px-6 flex items-center justify-center gap-2 rounded-lg font-medium transition-all ${
+            className={`w-full py-3 flex items-center justify-center gap-2 rounded-lg font-medium transition-all ${
               isValid && !loading
-                ? 'bg-gradient-to-br from-blue-600 to-purple-600 text-white hover:shadow-lg hover:shadow-blue-100'
-                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                ? "bg-gradient-to-br from-blue-600 to-purple-600 text-white hover:shadow-lg hover:shadow-blue-100"
+                : "bg-gray-100 text-gray-400 cursor-not-allowed"
             }`}
           >
             {loading ? (
