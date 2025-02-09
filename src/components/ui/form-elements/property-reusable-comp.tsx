@@ -183,17 +183,16 @@ export const SelectTile = ({
 );
 
 interface SubmitComponentWrapperProps {
-  id: string; 
-  label: string; 
-  required?: boolean; 
-  helperText?: string; 
-  currentElementToValidate?: string; 
-  isFormError?: boolean; 
-  children: React.ReactNode; 
-  labelClass?: string; 
-  helperTextClassName?: string
+  id: string;
+  label: string;
+  required?: boolean;
+  helperText?: string;
+  currentElementToValidate?: string;
+  isFormError?: boolean;
+  children: React.ReactNode;
+  labelClass?: string;
+  helperTextClassName?: string;
 }
-
 
 export const SubmitComponentWrapper = ({
   id,
@@ -203,25 +202,51 @@ export const SubmitComponentWrapper = ({
   currentElementToValidate,
   isFormError,
   children,
-  labelClass = "text-sm text-black",
+  labelClass = "text-xl text-black",
   helperTextClassName = "text-xs text-gray-500 px-2 bg-black/5 mt-1",
 }: SubmitComponentWrapperProps) => {
   return (
     <div className="flex flex-col gap-1 p-2 border-black items-start">
       <label htmlFor={id} className={labelClass}>
         {label}
-        {required && <span className="text-red-500 ml-1">*</span>}
+        {required && <span className="text-red-500 ml-1"></span>}
       </label>
 
       {children}
 
-      {helperText && (
-        <span className={helperTextClassName}>
-          {helperText}
-        </span>
-      )}
+      {helperText && <span className={helperTextClassName}>{helperText}</span>}
 
       {currentElementToValidate === "" && isFormError && <RequiredFieldError />}
+    </div>
+  );
+};
+
+export const SplitSubmitComponentWrapper = ({
+  id,
+  label,
+  required,
+  helperText,
+  currentElementToValidate,
+  isFormError,
+  children,
+  labelClass = "md:text-xl text-black flex flex-col",
+  helperTextClassName = "text-xs text-gray-500 px-1 bg-black/5 mt-1 self-start",
+}: SubmitComponentWrapperProps) => {
+  return (
+    <div className="flex  gap-3 p-2 border-black items-start justify-between ">
+      <div className="flex flex-col w-1/2 pt-2">
+        <label htmlFor={id} className={labelClass}>
+          {label}
+          {helperText && (
+            <span className={helperTextClassName}>{helperText}</span>
+          )}
+          {required && <span className="text-red-500 ml-1"></span>}
+          {currentElementToValidate === "" && isFormError && (
+            <RequiredFieldError />
+          )}
+        </label>
+      </div>
+      <div className="w-1/2">{children}</div>
     </div>
   );
 };

@@ -3,7 +3,8 @@ import { submitCompPropsType } from "@/utility/ts-types";
 import { FC, useState } from "react";
 import { MultipleChoiceFieldCustomInstance } from "./multiple-choice-prop-attributes";
 import {
-  SubmitComponentWrapper,
+  SplitSubmitComponentWrapper,
+  // SubmitComponentWrapper,
 } from "../property-reusable-comp";
 
 const MultipleChoiceFieldSubmitComp: FC<submitCompPropsType> = ({
@@ -48,7 +49,7 @@ const MultipleChoiceFieldSubmitComp: FC<submitCompPropsType> = ({
   };
 
   return (
-    <SubmitComponentWrapper
+    <SplitSubmitComponentWrapper
       id={id}
       label={label}
       helperText={helperText}
@@ -56,7 +57,7 @@ const MultipleChoiceFieldSubmitComp: FC<submitCompPropsType> = ({
       currentElementToValidate={elementsToValidate?.[id]}
       isFormError={isFormError}
     >
-      <div className="space-y-2 mt-2">
+      <div className="space-y-3 mt-2">
         {options?.map((option) => (
           <div
             key={option}
@@ -67,12 +68,12 @@ const MultipleChoiceFieldSubmitComp: FC<submitCompPropsType> = ({
                   ? "border-black border-r-4 border-b-4"
                   : "border border-black"
                 : selectedOptions.includes(option)
-                  ? "rounded-md border-black border-2 shadow-md shadow-black/50"
+                  ? "rounded-md border-black border-2 shadow-md shadow-black/30"
                   : "border-2 border-gray-300 rounded-md"
               }`}
           
           >
-            <label className="flex items-center space-x-3 cursor-pointer">
+            <label className="flex items-center space-x-3 cursor-pointer overflow-hidden">
               <input
                 type="checkbox"
                 checked={selectedOptions.includes(option)}
@@ -84,7 +85,7 @@ const MultipleChoiceFieldSubmitComp: FC<submitCompPropsType> = ({
           </div>
         ))}
       </div>
-    </SubmitComponentWrapper>
+    </SplitSubmitComponentWrapper>
   );
 };
 

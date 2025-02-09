@@ -2,7 +2,7 @@
 import { submitCompPropsType } from "@/utility/ts-types";
 import { FC, useState } from "react";
 import { RadioButtonCustomInstance } from "./radio-btn-prop-attributes";
-import { SubmitComponentWrapper } from "../property-reusable-comp";
+import { SplitSubmitComponentWrapper } from "../property-reusable-comp";
 
 const RadioBtnFieldSubmitComp: FC<submitCompPropsType> = ({
   elementInstance,
@@ -35,7 +35,7 @@ const RadioBtnFieldSubmitComp: FC<submitCompPropsType> = ({
   };
 
   return (
-    <SubmitComponentWrapper
+    <SplitSubmitComponentWrapper
       id={id}
       label={label}
       helperText={helperText}
@@ -43,7 +43,7 @@ const RadioBtnFieldSubmitComp: FC<submitCompPropsType> = ({
       currentElementToValidate={elementsToValidate?.[id]}
       isFormError={isFormError}
     >
-      <div className="flex flex-col gap-2 mt-2">
+      <div className="flex flex-col gap-3 mt-2">
         {options.map((option) => (
           <label
             key={option}
@@ -62,10 +62,10 @@ const RadioBtnFieldSubmitComp: FC<submitCompPropsType> = ({
               className="peer hidden"
             />
             <div
-              className={`px-3 py-2 flex items-center justify-center shrink-0 whitespace-nowrap ${
+              className={`px-3 py-2 text-sm overflow-hidden text-gray-700 flex items-center justify-start shrink-0 whitespace-nowrap ${
                 theme === "BOXY"
-                  ? "border border-black/50 peer-checked:border-black peer-checked:border-r-4 peer-checked:border-b-4"
-                  : "border-2 rounded-md border-gray-300 peer-checked:border-2 peer-checked:border-black peer-checked:shadow-md peer-checked:shadow-black/40"
+                  ? "border border-black/50 peer-checked:border-black peer-checked:border-r-4 peer-checked:border-b-4 peer-checked:text-black"
+                  : "border-2 rounded-md border-gray-300 peer-checked:border-2 peer-checked:border-black peer-checked:shadow-md peer-checked:shadow-black/40 peer-checked:text-black"
               }`}
             >
               {option}
@@ -73,7 +73,7 @@ const RadioBtnFieldSubmitComp: FC<submitCompPropsType> = ({
           </label>
         ))}
       </div>
-    </SubmitComponentWrapper>
+    </SplitSubmitComponentWrapper>
   );
 };
 

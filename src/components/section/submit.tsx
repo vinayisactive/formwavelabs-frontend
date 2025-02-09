@@ -17,18 +17,19 @@ interface FormDataInterface {
   description: string;
   pages: PagesInterface[];
   id: string;
-  theme : "BOXY" | "ROUNDED"
+  theme: "BOXY" | "ROUNDED";
 }
 
 const Submit = ({ formId }: { formId: string }) => {
   const [formData, setForm] = useState<FormDataInterface | null>(null);
-  const [elementsToValidate, setElementsToValidate] = useState<Record<string, string | undefined>>({});
+  const [elementsToValidate, setElementsToValidate] = useState<
+    Record<string, string | undefined>
+  >({});
   const [count, setCount] = useState<number>(0);
   const [pageLength, setPageLength] = useState<number>(0);
   const [currentPageData, setCurrentPageData] = useState<FormElemetInstance[]>(
     []
   );
-
 
   const formValues = useRef<{ [key: string]: string }>({});
   const [loading, setLoading] = useState<boolean>(false);
@@ -42,10 +43,9 @@ const Submit = ({ formId }: { formId: string }) => {
 
   const handleSubmit = async () => {
     try {
-
-      if(!isFormValid()){
+      if (!isFormValid()) {
         setIsFormError(true);
-        return; 
+        return;
       }
 
       setLoading(true);
@@ -118,101 +118,121 @@ const Submit = ({ formId }: { formId: string }) => {
       });
 
       const validationState = flattenArray
-      .filter(element => element.extraAttributes?.required)
-      .reduce((acc, element) => {
-        acc[element.id] = ""; 
-        return acc;
-      }, {} as Record<string, string>);
-  
-      setElementsToValidate(validationState);  
+        .filter((element) => element.extraAttributes?.required)
+        .reduce((acc, element) => {
+          acc[element.id] = "";
+          return acc;
+        }, {} as Record<string, string>);
+
+      setElementsToValidate(validationState);
     }
   }, [formData]);
 
-
   const isFormValid = () => {
-    return !Object.values(elementsToValidate).some(
-      value => value === ""
-    );
+    return !Object.values(elementsToValidate).some((value) => value === "");
   };
 
   useEffect(() => {
     setIsFormError(false);
-  }, [elementsToValidate])
+  }, [elementsToValidate]);
 
   return (
-    <div className="max-w-3xl w-full  h-full flex flex-col gap-4 items-start my-10 bg-white text-black py-8 px-3">
+    <div className="w-full max-h-screen overflow-auto flex justify-center relative">
+      <div className=" absolute w-full max-w-3xl px-4 py-4 flex flex-col gap-4 mt-10">
+        <div className="flex gap-2 pl-2">
+          {Array(pageLength)
+            .fill(0)
+            .map((_, index) => (
+              <div
+                key={index}
+                className={`h-2 w-6 rounded-full transition-all duration-300 ${
+                  index === count ? "bg-black" : "bg-gray-300"
+                }`}
+              ></div>
+            ))}
+        </div>
 
-      <div className="flex gap-2 pl-2">
-        {Array(pageLength)
-          .fill(0)
-          .map((_, index) => (
-            <div
-              key={index}
-              className={`h-2 w-6 rounded-full transition-all duration-300 ${
-                index === count ? "bg-black" : "bg-gray-300"
+        <div
+          className={`space-y-4 px-3 py-6 bg-white shadow-lg ${
+            formData?.theme === "BOXY"
+              ? "border-r-4 border-b-4 border-black border"
+              : "border rounded-lg"
+          }`}
+        >
+          {currentPageData.map((el) => {
+            const SubmitComponent = FormElemets[el.type].submitComponent;
+            return (
+              <SubmitComponent
+                elementInstance={el}
+                key={el.id}
+                handleValues={handleValues}
+                formValues={formValues}
+                elementsToValidate={elementsToValidate}
+                setElementsToValidate={setElementsToValidate}
+                isFormError={isFormError}
+                theme={formData?.theme}
+              />
+            );
+          })}
+        </div>
+
+        <div className="flex gap-4 justify-end pr-1 w-full">
+          {count > 0 && (
+            <button
+              onClick={() => setCount((prev) => (prev === 0 ? 0 : prev - 1))}
+              className={`px-4 py-2 border border-black ${
+                formData?.theme === "BOXY"
+                  ? "border-r-4 border-b-4"
+                  : "rounded-md"
+              } hover:bg-black hover:text-white transition`}
+            >
+              Previous
+            </button>
+          )}
+
+          {count !== pageLength - 1 && (
+            <button
+              onClick={() =>
+                setCount((prev) => (prev === pageLength - 1 ? prev : prev + 1))
+              }
+              className={`px-4 py-2 border border-black ${
+                formData?.theme === "BOXY"
+                  ? "border-r-4 border-b-4"
+                  : "rounded-md"
+              } hover:bg-black hover:text-white transition`}
+            >
+              Next
+            </button>
+          )}
+
+          {count === pageLength - 1 && (
+            <button
+              className={`px-4 py-2 border border-black ${
+                formData?.theme === "BOXY"
+                  ? "border-r-4 border-b-4"
+                  : "rounded-md"
+              } hover:bg-black ${
+                loading && "opacity-50"
+              } hover:text-white transition ${
+                isFormError ? "bg-red-500 hover:bg-red-500 text-white" : ""
               }`}
-            ></div>
-          ))}
-      </div>
+              onClick={handleSubmit}
+              disabled={loading}
+            >
+              {isFormError
+                ? "Fill required fields"
+                : loading
+                ? "Saving..."
+                : "Submit"}
+            </button>
+          )}
+        </div>
 
-      <div className={`w-full space-y-4 px-2 py-5 ${formData?.theme === "BOXY" ? "border-r-4 border-b-4 border-black border" : "border rounded-md"}`}>
-        {currentPageData.map((el) => {
-          const SubmitComponent = FormElemets[el.type].submitComponent;
-          return (
-            <SubmitComponent
-              elementInstance={el}
-              key={el.id}
-              handleValues={handleValues}
-              formValues={formValues}
-              elementsToValidate={elementsToValidate}
-              setElementsToValidate={setElementsToValidate}
-              isFormError={isFormError}
-              theme={formData?.theme}
-            />
-          );
-        })}
-      </div>
-
-      <div className="mt-4 flex gap-4">
-        {count > 0 && (
-          <button
-            onClick={() => setCount((prev) => (prev === 0 ? 0 : prev - 1))}
-            className={`px-4 py-2 border border-black ${formData?.theme === "BOXY" ? "border-r-4 border-b-4" : "rounded-md"} hover:bg-black hover:text-white transition`}
-          >
-            Previous
-          </button>
-        )}
-
-        {count !== pageLength - 1 && (
-          <button
-            onClick={() =>
-              setCount((prev) => (prev === pageLength - 1 ? prev : prev + 1))
-            }
-            className={`px-4 py-2 border border-black ${formData?.theme === "BOXY" ? "border-r-4 border-b-4" : "rounded-md"} hover:bg-black hover:text-white transition`}
-          >
-            Next
-          </button>
-        )}
-
-        {count === pageLength - 1 && (
-         <button
-         className={`px-4 py-2 border border-black ${formData?.theme === "BOXY" ? "border-r-4 border-b-4" : "rounded-md"} hover:bg-black ${
-           loading && "opacity-50"
-         } hover:text-white transition ${
-           isFormError ? "bg-red-500 hover:bg-red-500 text-white" : ""
-         }`}
-         onClick={handleSubmit}
-         disabled={loading}
-       >
-         {isFormError ? "Fill required fields" : (loading ? "Saving..." : "Submit")}
-       </button>
+        {errMsg && <p>{errMsg}</p>}
+        {isSubmitted && (
+          <p className="text-green-400">Form is submitted successfully</p>
         )}
       </div>
-
-      {errMsg && <p>{errMsg}</p>}
-      {isSubmitted && (
-        <p className="text-green-400">Form is submitted successfully</p>
-      )}
     </div>
   );
 };
