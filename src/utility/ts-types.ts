@@ -30,6 +30,7 @@ export type submitCompPropsType = {
     elementsToValidate?: Record<string, string | undefined>; 
     setElementsToValidate?: Dispatch<SetStateAction<Record<string, string | undefined>>>
     isFormError?: boolean;
+    theme? : "BOXY" | "ROUNDED" | undefined
 }
 
 export type submitValueType = (key: string, value: string) => void;
