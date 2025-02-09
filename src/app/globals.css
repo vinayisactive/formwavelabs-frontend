@@ -12,7 +12,7 @@
     display: none; 
   }
   
-  input:not([type="checkbox"]):not([type="radio"]),
+  input:not([type="checkbox"]):not([type="radio"]):not([type="date"]),
   textarea,
   select,
   button {
