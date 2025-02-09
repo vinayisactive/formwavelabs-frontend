@@ -13,3 +13,8 @@
     display: none; /* For Chrome, Safari, and Opera */
   }
   
+  input, textarea, select, button {
+    border-radius: 0;
+    -webkit-appearance: none; 
+    appearance: none;
+  }
