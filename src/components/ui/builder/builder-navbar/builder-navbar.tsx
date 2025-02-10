@@ -13,19 +13,16 @@ import useElements from "@/utility/useElements-hook";
 import { FormElemetInstance } from "@/utility/ts-types";
 
 import CopyToClipboard from "../../copy-to-clipboard"
-import { BuilderTabButton, CreateNextBtn, NextBtn, PreviousBtn, PublishBtn, SaveBtn, UnPublishBtn } from "../builder-navbar/builder-navbar-btns";
+import { CreateNextBtn, NextBtn, PreviousBtn, PublishBtn, SaveBtn, UnPublishBtn } from "../builder-navbar/builder-navbar-btns";
 import { areElementsChanged } from "@/utility/compare-fns";
 
-type TabType = "builder" | "preview";
-
 interface BuilderNavbarProps {
-  setTab: React.Dispatch<React.SetStateAction<TabType>>;
   formData: FormData | undefined;
   page: number;
   totalPage: number | undefined;
 }
 
-const BuilderNavbar: React.FC<BuilderNavbarProps> = ({setTab, formData, page, totalPage}) => {
+const BuilderNavbar: React.FC<BuilderNavbarProps> = ({formData, page, totalPage}) => {
   const session = useSession();
   const token = session.data?.accessToken;
   const queryClient = useQueryClient();
@@ -156,16 +153,7 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({setTab, formData, page, to
         {formData?.title}
       </h1>
   
-      <div className="flex gap-2 items-center">
-        {["builder", "preview"].map((btn) => (
-          <BuilderTabButton
-            setTab={setTab}
-            tab={btn === "preview" ? "preview" : "builder"}
-            key={btn}
-          />
-        ))}
-        <div className="hidden md:flex h-6 w-px bg-gray-200 mx-2" />
-  
+      <div className="flex gap-2 items-center">  
         {page > 1 && (
           <PreviousBtn handlePrevious={handlePrevious} />
         )}

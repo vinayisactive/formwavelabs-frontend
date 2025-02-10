@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
@@ -14,8 +14,6 @@ import BuilderNavbar from "../ui/builder/builder-navbar/builder-navbar";
 import useElements from "@/utility/useElements-hook";
 import { handleAxiosError } from "@/utility/axios-err-handler";
 import { FormElemetInstance } from "@/utility/ts-types";
-
-type TabType = "preview" | "builder";
 
 export interface FormPageData {
   id: string;
@@ -38,7 +36,6 @@ interface FormBuilderProps {
 }
 
 const FormBuilder: React.FC<FormBuilderProps> = ({ formId, page }) => {
-  const [tab, setTab] = useState<TabType>("builder");
   const { setElements } = useElements();
   const { data: session } = useSession();
   const token = session?.accessToken;
@@ -93,18 +90,18 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ formId, page }) => {
           </Link>
         </div>
       ) : (
-        <div className="w-full h-full flex flex-col">
+        <div className="w-full h-full">
           <div className="h-[6%] ">
             <BuilderNavbar
-              setTab={setTab}
               formData={formData}
               page={page}
               totalPage={formData?.totalPages}
             />
           </div>
 
-          <div className=" h-[94%] mt-5 md:mt-0">
-            {tab === "builder" ? <Builder /> : <BuilderPreview formTheme={formData?.theme}/>}
+          <div className="h-[94%] mt-5 md:mt-0 flex pr-2 gap-2">
+            <Builder />
+            <BuilderPreview formTheme={formData?.theme}/>
           </div>
         </div>
       )}

@@ -9,7 +9,7 @@ interface ElementsSidebarProps {
 
   const ElementsLable = ({ type }: { type: string }) => {
     return (
-      <div className="text-sm px-2 py-1 border-black/10 border-2 border-dotted rounded-md">
+      <div className="text-sm py-1 border-black/10 bg-black ">
         <p>{`${type} Elements`}</p>
       </div>
     );

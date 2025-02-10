@@ -8,7 +8,6 @@ import { useDndMonitor, useDroppable } from "@dnd-kit/core";
 import DesignerSidebar from "./builder-sidebar/builder-sidebar";
 import BuilderElemetWrapper from "./builder-element-wrapper";
 import useElements from "@/utility/useElements-hook";
-import { Download } from "lucide-react";
 
 const BuilderDropArea = () => {
   const {addElement, elements, deleteElement} = useElements()
@@ -98,19 +97,26 @@ const BuilderDropArea = () => {
   });
 
   return (
-    <main className="flex h-full">
+    <main className="flex flex-col h-full justify-center">
+
+              <DesignerSidebar />
+
+                <div className="text-white py-1 px-2 bg-black w-full">
+                  <p className="text-center">Drag to Re-order</p>
+                </div>
+
     
-      <div className="min-h-0 h-full flex-grow overflow-y-auto py-4">
+      <div className="min-h-0 h-full flex-grow overflow-y-auto">
         <div
           ref={setNodeRef}
-          className={`max-w-[720px] flex flex-col gap-2 min-h-full mx-auto p-2 border-dotted border-black/20 border-2 rounded-md ${
+          className={`max-w-[720px] flex flex-col gap-2 min-h-full mx-auto border ${
             isOver ? "border-black/50" : ""
           }`}
         >
           {elements?.length === 0 && !isOver ? (
             <DropHereContainer/>
           ) : (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 p-2">
               {elements?.length>0 && elements?.map((el: FormElemetInstance) => (
                 <BuilderElemetWrapper element={el} key={el?.id} />
               ))}
@@ -122,7 +128,7 @@ const BuilderDropArea = () => {
         </div>
       </div>
   
-        <DesignerSidebar />
+
     </main>
   );
 };
@@ -134,8 +140,8 @@ export default BuilderDropArea;
 
 const DropHereContainer = () => {
   return (
-    <div className="flex flex-grow justify-center items-center gap-2 text-xl">
-    Drop here <Download/>
+    <div className="flex flex-grow justify-center items-center whitespace-nowrap">
+      drag to order
   </div>
   )
 }
