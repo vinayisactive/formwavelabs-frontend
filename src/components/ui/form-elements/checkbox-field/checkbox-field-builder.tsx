@@ -1,25 +1,20 @@
 import { FC } from "react";
 import { FormElementProps } from "@/utility/ts-types";
 import { CheckboxCustomInstance } from "./checkbox-prop-attributes";
+import { GripVertical } from "lucide-react";
 
-const CheckBoxFieldBuilderComp: FC<FormElementProps> = ({
-  elementInstance,
-}) => {
-  const { extraAttributes } = elementInstance as CheckboxCustomInstance;
-  const { label, helperText, required } = extraAttributes;
+const CheckBoxFieldBuilderComp: FC<FormElementProps> = ({ elementInstance }) => {
+  const { label } = (elementInstance as CheckboxCustomInstance).extraAttributes;
 
   return (
-    <div className="flex flex-col gap-1 justify-start items-start text-black">
+    <div className="cursor-grab hover:shadow-sm transition-all">
       <div className="flex items-center gap-2">
-        <input type="checkbox" disabled className="h-4 w-4 accent-primary" />
-        <p className="text-md">
-          {label} {required && <span className="text-red-500">*</span>}
-        </p>
+        <GripVertical className="h-4 w-4 text-muted-foreground/50" />
+        <div className="flex flex-col">
+        <span className="text-xs font-medium text-foreground/80 overflow-hidden">{label.slice(0, 10)}...</span>
+          <span className="text-[0.7rem] text-muted-foreground">Checkbox</span>
+        </div>
       </div>
-      
-      {helperText && (
-        <p className="text-xs text-muted-foreground">{helperText}</p>
-      )}
     </div>
   );
 };
