@@ -4,10 +4,9 @@ import { FC, useState } from "react";
 import { MultipleChoiceFieldCustomInstance } from "./multiple-choice-prop-attributes";
 import {
   SplitSubmitComponentWrapper,
-  // SubmitComponentWrapper,
 } from "../property-reusable-comp";
 
-const MultipleChoiceFieldSubmitComp: FC<submitCompPropsType> = ({
+const MultipleChoiceSubmit: FC<submitCompPropsType> = ({
   elementInstance,
   handleValues,
   formValues,
@@ -89,4 +88,4 @@ const MultipleChoiceFieldSubmitComp: FC<submitCompPropsType> = ({
   );
 };
 
-export default MultipleChoiceFieldSubmitComp;
+export default MultipleChoiceSubmit;

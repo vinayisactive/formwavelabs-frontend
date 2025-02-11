@@ -1,8 +1,9 @@
 import { ElementsType, FormElement } from "@/utility/ts-types";
 import { multipleChoiceFieldExtraAttributes as extraAttributes } from "./multiple-choice-prop-attributes";
-import MultipleChoicePropertiesComponent from "./multiple-choice-field-property";
-import MultipleChoiceFieldBuilderComp from "./multiple-choice-field-builder";
-import MultipleChoiceFieldSubmitComp from "./multiple-choice-field-submit";
+import MultipleChoiceFieldTile from "./multiple-choice-field-tile";
+import MultipleChoiceSetting from "./multiple-choice-field-setting";
+import MultipleChoiceSubmit from "./multiple-choice-field-submit";
+
 
 const type : ElementsType =  "MultipleChoiceField"; 
 
@@ -15,13 +16,11 @@ const MultipleChoiceFieldFormElement : FormElement = {
         extraAttributes
     }),
 
-    propertiesComponent : MultipleChoicePropertiesComponent,
-    builderComponent: MultipleChoiceFieldBuilderComp,
-    submitComponent: MultipleChoiceFieldSubmitComp,
+    tile: MultipleChoiceFieldTile,
+    setting: MultipleChoiceSetting,
+    submit: MultipleChoiceSubmit,
 
-    elementButton: {
-        label : "MultipleChoiceField"
-    }
+    elementButton: "MultipleChoiceField"
     
 }
 

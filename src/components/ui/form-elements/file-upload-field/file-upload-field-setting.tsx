@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import useElements from "@/utility/useElements-hook";
 
-const FileUploadFieldPropertyComp: FC<FormElementProps> = ({
+const FileUploadSetting: FC<FormElementProps> = ({
   elementInstance,
 }) => {
   const element = elementInstance as FileUploadCustomInstance;
@@ -95,4 +95,4 @@ const FileUploadFieldPropertyComp: FC<FormElementProps> = ({
   );
 };
 
-export default FileUploadFieldPropertyComp;
+export default FileUploadSetting;

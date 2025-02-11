@@ -5,7 +5,7 @@ import { TextAreaCustomInstance } from "./text-area-prop-attributes";
 import { submitCompPropsType } from "@/utility/ts-types";
 import { SubmitComponentWrapper } from "../property-reusable-comp";
 
-const TextAreaFieldSubmitComp: React.FC<submitCompPropsType> = ({
+const TextAreaSubmit: React.FC<submitCompPropsType> = ({
   elementInstance,
   handleValues,
   formValues,
@@ -58,4 +58,4 @@ const TextAreaFieldSubmitComp: React.FC<submitCompPropsType> = ({
   );
 };
 
-export default TextAreaFieldSubmitComp;
+export default TextAreaSubmit;

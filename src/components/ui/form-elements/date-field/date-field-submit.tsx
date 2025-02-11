@@ -3,7 +3,7 @@ import { DateFieldCustomElement } from "./date-prop-attributes";
 import { FC, useState, useEffect } from "react";
 import { SubmitComponentWrapper } from "../property-reusable-comp";
 
-const DateFieldSubmitComp: FC<submitCompPropsType> = ({
+const DateFieldSubmit: FC<submitCompPropsType> = ({
   elementInstance,
   handleValues,
   formValues,
@@ -75,4 +75,4 @@ const DateFieldSubmitComp: FC<submitCompPropsType> = ({
   );
 };
 
-export default DateFieldSubmitComp;
+export default DateFieldSubmit;

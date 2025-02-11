@@ -1,8 +1,8 @@
 import { ElementsType, FormElement } from "@/utility/ts-types";
-import TextBuilderComp from "./text-field-builder";
+import TextFieldTile from "./text-field-tile";
 import { textExtraAttributes as extraAttributes } from "./text-prop-attributes";
-import TextFieldSubmitComp from "./text-field-submit";
-import TextPropertiesComponent from "./text-field-property";
+import TextFieldSubmit from "./text-field-submit";
+import TextFieldSetting from "./text-field-setting";
 
 const type: ElementsType = "TextFiled";
 
@@ -15,11 +15,9 @@ export const TextFiledFormElement: FormElement = {
     extraAttributes,
   }),
 
-  builderComponent: TextBuilderComp,
-  submitComponent: TextFieldSubmitComp,
-  propertiesComponent: TextPropertiesComponent,
+  tile: TextFieldTile,
+  setting: TextFieldSetting,
+  submit: TextFieldSubmit,
 
-  elementButton: {
-    label: "TextField",
-  },
+  elementButton: "TextField"
 };

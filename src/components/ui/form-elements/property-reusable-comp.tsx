@@ -1,11 +1,12 @@
 import { LucideIcon, Save, X } from "lucide-react";
+import { GripVertical } from "lucide-react";
 
 interface PropertiesWrapperProps {
   children: React.ReactNode;
 }
 
 export const PropertiesWrapper = ({ children }: PropertiesWrapperProps) => (
-  <div className="w-full p-4 space-y-5">{children}</div>
+  <div className="w-full p-4 space-y-5 max-w-lg mx-auto bg-white border rounded-lg">{children}</div>
 );
 
 interface PropertiesHeaderProps {
@@ -126,7 +127,7 @@ export const PropertiesFooter = ({
       Cancel
     </button>
     <button
-      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-white bg-gray-800 hover:bg-gray-900 rounded-lg transition-colors"
+      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-white bg-black hover:bg-gray-900 rounded-lg transition-colors"
       onClick={onSave}
     >
       <Save className="w-4 h-4" />
@@ -250,3 +251,28 @@ export const SplitSubmitComponentWrapper = ({
     </div>
   );
 };
+
+
+interface ElementLayerTileProps {
+  label: string;
+  typeLabel: string;
+}
+
+const ElementLayerTile= ({ label, typeLabel }: ElementLayerTileProps) => {
+  return (
+    <div className="cursor-grab hover:shadow-sm transition-all">
+      <div className="flex items-center gap-2">
+        <GripVertical className="h-4 w-4 text-muted-foreground/50" />
+        <div className="flex flex-col">
+          <span className="text-xs font-medium text-foreground/80 overflow-hidden">
+            {label.slice(0, 10)}...
+          </span>
+          <span className="text-[0.7rem] text-muted-foreground">{typeLabel}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ElementLayerTile;
+

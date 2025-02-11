@@ -1,8 +1,9 @@
 import { ElementsType, FormElement } from "@/utility/ts-types";
 import { dateFieldExtraAttributes as extraAttributes } from "./date-prop-attributes";
-import DateFieldPropertyComp from "./date-field-property";
-import DateFieldBuilderComp from "./date-field-builder";
-import DateFieldSubmitComp from "./date-field-submit";
+import DateFieldTile from "./date-field-tile";
+import DateSetting from "./date-field-setting";
+import DateFieldSubmit from "./date-field-submit";
+
 
 const type: ElementsType = "DateField";
 
@@ -15,13 +16,11 @@ const DateFieldFormElement: FormElement = {
     extraAttributes,
   }),
 
-  propertiesComponent: DateFieldPropertyComp,
-  builderComponent: DateFieldBuilderComp,
-  submitComponent: DateFieldSubmitComp,
+  tile: DateFieldTile,
+  setting: DateSetting,
+  submit: DateFieldSubmit,
 
-  elementButton: {
-    label: "DateField",
-  },
+  elementButton: "DateField"
 };
 
 export default DateFieldFormElement;

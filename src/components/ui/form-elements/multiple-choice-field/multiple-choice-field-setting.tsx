@@ -1,7 +1,7 @@
 "use client";
 
 import { FC, useState } from "react";
-import { selectFieldCustomInstance } from "./select-prop-attributes";
+import { MultipleChoiceFieldCustomInstance } from "./multiple-choice-prop-attributes";
 import {
   InputTile,
   PropertiesFooter,
@@ -14,10 +14,10 @@ import useElements from "@/utility/useElements-hook";
 import { FormElementProps } from "@/utility/ts-types";
 
 
-const SelectPropertiesComponent: FC<FormElementProps> = ({
+const MultipleChoiceSetting: FC<FormElementProps> = ({
   elementInstance,
 }) => {
-  const element = elementInstance as selectFieldCustomInstance;
+  const element = elementInstance as MultipleChoiceFieldCustomInstance;
   const [extraAttributes, setExtraAttributes] = useState(
     element.extraAttributes
   );
@@ -64,14 +64,14 @@ const SelectPropertiesComponent: FC<FormElementProps> = ({
   return (
     <PropertiesWrapper>
       <PropertiesHeader
-        title="Select Element setting"
+        title="Multiple choice Element setting"
         description="Tune your options"
         icon={MousePointer2}
         onClose={() => setSelectedElementInstance(null)}
       />
 
       <InputTile
-        label="Enter select label"
+        label="Enter Multiple choice label"
         value={extraAttributes.label}
         placeholder="Enter label for select"
         icon={MousePointer2}
@@ -84,14 +84,6 @@ const SelectPropertiesComponent: FC<FormElementProps> = ({
         placeholder="Enter helper text"
         helperText="Clear the text to remove"
         onChange={(value) => handleInputChange("helperText", value)}
-        icon={HelpCircle}
-      />
-
-      <InputTile
-        label="Enter select placeholder"
-        value={extraAttributes.selectPlaceHolder}
-        placeholder="Enter select placeholder"
-        onChange={(value) => handleInputChange("selectPlaceHolder", value)}
         icon={HelpCircle}
       />
 
@@ -139,7 +131,7 @@ const SelectPropertiesComponent: FC<FormElementProps> = ({
   );
 };
 
-export default SelectPropertiesComponent;
+export default MultipleChoiceSetting;
 
 
 interface OptionsButtonProps{

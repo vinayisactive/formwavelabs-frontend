@@ -4,7 +4,7 @@ import { FC, useState } from "react";
 import { selectFieldCustomInstance } from "./select-prop-attributes";
 import { SubmitComponentWrapper } from "../property-reusable-comp";
 
-const SelectFieldSubmitComp: FC<submitCompPropsType> = ({
+const SelectSubmit: FC<submitCompPropsType> = ({
   elementInstance,
   handleValues,
   formValues,
@@ -75,4 +75,4 @@ const SelectFieldSubmitComp: FC<submitCompPropsType> = ({
   );
 };
 
-export default SelectFieldSubmitComp;
+export default SelectSubmit;

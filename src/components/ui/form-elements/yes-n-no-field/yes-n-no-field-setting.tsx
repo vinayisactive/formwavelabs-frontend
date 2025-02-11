@@ -16,7 +16,7 @@ import {
   import { FC, useState } from "react";
 import { FormElementProps } from "@/utility/ts-types";
   
-  const YesAndNoFieldPropertiesComp : FC<FormElementProps> = ({
+  const YesAndNoSetting : FC<FormElementProps> = ({
     elementInstance,
   }) => {
     const element = elementInstance as YesAndNoFieldCustomInstance;
@@ -89,4 +89,4 @@ import { FormElementProps } from "@/utility/ts-types";
     );
   };
   
-  export default YesAndNoFieldPropertiesComp;  
+  export default YesAndNoSetting;  

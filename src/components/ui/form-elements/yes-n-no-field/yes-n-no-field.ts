@@ -1,8 +1,8 @@
 import { FormElement, ElementsType } from "@/utility/ts-types";
-import YesAndNoFieldBuilderComp from "./yes-n-no-field-builder";
-import YesAndNoFieldSubmitComp from "./yes-n-no-field-submit";
+import YesAndNoFieldTile from "./yes-n-no-field-tile";
+import YesAndNoFieldSubmit from "./yes-n-no-field-submit";
 import { yesAndNoFieldExtraAttributes as extraAttributes } from "./yes-n-no-prop-attributes";
-import YesAndNoFieldPropertiesComp from "./yes-n-no-field-property";
+import YesAndNoSetting from "./yes-n-no-field-setting";
 
 const type: ElementsType = "YesAndNoField";
 
@@ -15,13 +15,11 @@ const YesAndNoFormElement: FormElement = {
     extraAttributes,
   }),
 
-  propertiesComponent:YesAndNoFieldPropertiesComp ,
-  builderComponent: YesAndNoFieldBuilderComp,
-  submitComponent: YesAndNoFieldSubmitComp,
+  setting:YesAndNoSetting ,
+  tile: YesAndNoFieldTile,
+  submit: YesAndNoFieldSubmit,
 
-  elementButton: {
-    label: "YesAndNoField",
-  },
+  elementButton: "YesAndNoField"
 };
 
 export default YesAndNoFormElement;

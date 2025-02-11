@@ -4,7 +4,7 @@ import { FC, useState } from "react";
 import { RadioButtonCustomInstance } from "./radio-btn-prop-attributes";
 import { SplitSubmitComponentWrapper } from "../property-reusable-comp";
 
-const RadioBtnFieldSubmitComp: FC<submitCompPropsType> = ({
+const RadioBtnSubmit: FC<submitCompPropsType> = ({
   elementInstance,
   handleValues,
   formValues,
@@ -77,4 +77,4 @@ const RadioBtnFieldSubmitComp: FC<submitCompPropsType> = ({
   );
 };
 
-export default RadioBtnFieldSubmitComp;
+export default RadioBtnSubmit;

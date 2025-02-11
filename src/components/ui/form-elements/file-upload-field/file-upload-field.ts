@@ -1,8 +1,8 @@
 import { ElementsType, FormElement } from "@/utility/ts-types";
 import { fileUploadExtraAttributes as extraAttributes } from "./file-upload-prop-attributes";
-import FileUploadFieldPropertyComp from "./file-upload-field-property";
-import FileUploadFieldBuilderComp from "./file-upload-field-builder";
-import FileUploadFieldSubmitComp from "./file-upload-field-submit";
+import FileUploadFieldTile from "./file-upload-field-tile";
+import FileUploadSetting from "./file-upload-field-setting";
+import FileUploadSubmit from "./file-upload-field-submit";
 
 const type: ElementsType  = "FileUploadField"
 
@@ -13,12 +13,12 @@ const FileUploadFieldFormElement : FormElement = {
         type,
         extraAttributes
     }),
-    propertiesComponent:  FileUploadFieldPropertyComp,
-    builderComponent: FileUploadFieldBuilderComp,
-    submitComponent: FileUploadFieldSubmitComp,
-    elementButton: {
-        label: "FileUploadField"
-    }
+
+    tile: FileUploadFieldTile,
+    setting: FileUploadSetting,
+    submit: FileUploadSubmit,
+
+    elementButton: "FileUploadField"
 }
 
 export default FileUploadFieldFormElement; 

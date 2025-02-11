@@ -1,7 +1,7 @@
 "use client";
 
 import { FC, useState } from "react";
-import { MultipleChoiceFieldCustomInstance } from "./multiple-choice-prop-attributes";
+import { selectFieldCustomInstance } from "./select-prop-attributes";
 import {
   InputTile,
   PropertiesFooter,
@@ -14,10 +14,10 @@ import useElements from "@/utility/useElements-hook";
 import { FormElementProps } from "@/utility/ts-types";
 
 
-const MultipleChoicePropertiesComponent: FC<FormElementProps> = ({
+const SelectSetting: FC<FormElementProps> = ({
   elementInstance,
 }) => {
-  const element = elementInstance as MultipleChoiceFieldCustomInstance;
+  const element = elementInstance as selectFieldCustomInstance;
   const [extraAttributes, setExtraAttributes] = useState(
     element.extraAttributes
   );
@@ -64,14 +64,14 @@ const MultipleChoicePropertiesComponent: FC<FormElementProps> = ({
   return (
     <PropertiesWrapper>
       <PropertiesHeader
-        title="Multiple choice Element setting"
+        title="Select Element setting"
         description="Tune your options"
         icon={MousePointer2}
         onClose={() => setSelectedElementInstance(null)}
       />
 
       <InputTile
-        label="Enter Multiple choice label"
+        label="Enter select label"
         value={extraAttributes.label}
         placeholder="Enter label for select"
         icon={MousePointer2}
@@ -84,6 +84,14 @@ const MultipleChoicePropertiesComponent: FC<FormElementProps> = ({
         placeholder="Enter helper text"
         helperText="Clear the text to remove"
         onChange={(value) => handleInputChange("helperText", value)}
+        icon={HelpCircle}
+      />
+
+      <InputTile
+        label="Enter select placeholder"
+        value={extraAttributes.selectPlaceHolder}
+        placeholder="Enter select placeholder"
+        onChange={(value) => handleInputChange("selectPlaceHolder", value)}
         icon={HelpCircle}
       />
 
@@ -131,7 +139,7 @@ const MultipleChoicePropertiesComponent: FC<FormElementProps> = ({
   );
 };
 
-export default MultipleChoicePropertiesComponent;
+export default SelectSetting;
 
 
 interface OptionsButtonProps{

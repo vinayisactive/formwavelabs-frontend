@@ -4,7 +4,7 @@ import { FC, useState } from "react";
 import { YesAndNoFieldCustomInstance } from "./yes-n-no-prop-attributes";
 import { SubmitComponentWrapper } from "../property-reusable-comp";
 
-const YesAndNoFieldSubmitComp: FC<submitCompPropsType> = ({
+const YesAndNoFieldSubmit: FC<submitCompPropsType> = ({
   elementInstance,
   handleValues,
   formValues,
@@ -70,4 +70,4 @@ const YesAndNoFieldSubmitComp: FC<submitCompPropsType> = ({
   );
 };
 
-export default YesAndNoFieldSubmitComp;
+export default YesAndNoFieldSubmit;

@@ -1,9 +1,7 @@
-import {
-  HelpCircle,
-  ListCheck,
-  TextCursorInputIcon,
-  ToggleLeft,
-} from "lucide-react";
+"use client"
+
+import { FC, useState } from "react";
+import { DateFieldCustomElement } from "./date-prop-attributes";
 import {
   InputTile,
   PropertiesFooter,
@@ -11,23 +9,25 @@ import {
   PropertiesWrapper,
   RequiredCheckTile,
 } from "../property-reusable-comp";
+import { Calendar, HelpCircle, ListCheck, TextCursorInputIcon } from "lucide-react";
 import useElements from "@/utility/useElements-hook";
-import { CheckboxCustomInstance } from "./checkbox-prop-attributes";
-import { FC, useState } from "react";
 import { FormElementProps } from "@/utility/ts-types";
 
-const CheckBoxPropertiesComponent: FC<FormElementProps> = ({
+
+
+const DateSetting: FC<FormElementProps> = ({
   elementInstance,
 }) => {
-  const { setSelectedElementInstance, updateElementInstance } = useElements();
-  const element = elementInstance as CheckboxCustomInstance;
+  const element = elementInstance as DateFieldCustomElement;
   const [extraAttributes, setExtraAttributes] = useState(
     element.extraAttributes
   );
 
-  const handleChange = (
+  const { setSelectedElementInstance, updateElementInstance } = useElements();
+
+  const changeHandler = (
     key: keyof typeof element.extraAttributes,
-    value: boolean | string
+    value: string | boolean
   ) => {
     setExtraAttributes((prev) => ({
       ...prev,
@@ -35,7 +35,7 @@ const CheckBoxPropertiesComponent: FC<FormElementProps> = ({
     }));
   };
 
-  const handleSave = () => {
+  const saveHandler = () => {
     const updatedElement = {
       ...element,
       extraAttributes,
@@ -48,40 +48,44 @@ const CheckBoxPropertiesComponent: FC<FormElementProps> = ({
   return (
     <PropertiesWrapper>
       <PropertiesHeader
-        title="Checkbox setting"
-        description="Tune the settings"
-        icon={ToggleLeft}
+        title="Date field setting"
+        description="Edit on your own"
+        icon={Calendar}
         onClose={() => setSelectedElementInstance(null)}
       />
 
       <InputTile
         icon={TextCursorInputIcon}
-        label="label"
+        label="Date label"
+        helperText="Edit on your own"
         value={extraAttributes.label}
-        onChange={(value) => handleChange("label", value)}
+        placeholder="label"
+        onChange={(value) => changeHandler("label", value)}
       />
 
       <InputTile
         icon={HelpCircle}
-        label="helper text"
+        label="edit helper text"
+        helperText="Edit on your own"
         value={extraAttributes.helperText}
-        onChange={(value) => handleChange("helperText", value)}
+        placeholder="helper text"
+        onChange={(value) => changeHandler("helperText", value)}
       />
 
       <RequiredCheckTile
-        label="Required"
-        helperText="Must be check before submiting"
-        onChange={(value) => handleChange("required", value)}
         icon={ListCheck}
+        label="Required Field"
         checked={extraAttributes.required}
+        onChange={(checked) => changeHandler("required", checked)}
+        helperText="User must provide value to submit form"
       />
 
       <PropertiesFooter
         onCancel={() => setSelectedElementInstance(null)}
-        onSave={handleSave}
+        onSave={saveHandler}
       />
     </PropertiesWrapper>
   );
 };
 
-export default CheckBoxPropertiesComponent;
+export default DateSetting;

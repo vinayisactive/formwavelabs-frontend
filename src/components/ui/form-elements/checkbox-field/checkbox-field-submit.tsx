@@ -5,7 +5,7 @@ import { CheckboxCustomInstance } from "./checkbox-prop-attributes";
 import { RequiredFieldError } from "../property-reusable-comp";
 
 
-const CheckBoxFieldSubmitComp: FC<submitCompPropsType> = ({
+const CheckBoxFieldSubmit: FC<submitCompPropsType> = ({
   elementInstance,
   handleValues,
   formValues,
@@ -59,4 +59,4 @@ const CheckBoxFieldSubmitComp: FC<submitCompPropsType> = ({
   );
 };
 
-export default CheckBoxFieldSubmitComp;
+export default CheckBoxFieldSubmit;

@@ -6,7 +6,7 @@ import { SubmitComponentWrapper } from "../property-reusable-comp";
 import ImageKitFileUpload from "../../imagekit-file-uploader";
 import { X } from "lucide-react";
 
-const FileUploadFieldSubmitComp: FC<submitCompPropsType> = ({
+const FileUploadSubmit: FC<submitCompPropsType> = ({
   elementInstance,
   elementsToValidate,
   setElementsToValidate,
@@ -78,4 +78,4 @@ const FileUploadFieldSubmitComp: FC<submitCompPropsType> = ({
   );
 };
 
-export default FileUploadFieldSubmitComp;
+export default FileUploadSubmit;

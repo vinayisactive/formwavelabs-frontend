@@ -18,7 +18,7 @@ import { RadioButtonCustomInstance } from "./radio-btn-prop-attributes";
 import { FC, useState } from "react";
 import { FormElementProps } from "@/utility/ts-types";
 
-const RadioBtnFieldPropertiesComp: FC<FormElementProps> = ({
+const RadioBtnSetting: FC<FormElementProps> = ({
   elementInstance,
 }) => {
   const element = elementInstance as RadioButtonCustomInstance;
@@ -135,7 +135,7 @@ const RadioBtnFieldPropertiesComp: FC<FormElementProps> = ({
   );
 };
 
-export default RadioBtnFieldPropertiesComp;
+export default RadioBtnSetting;
 
 
 interface OptionsButtonProps{

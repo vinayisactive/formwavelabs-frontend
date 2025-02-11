@@ -13,7 +13,7 @@ import {
 import { FormElementProps } from "@/utility/ts-types";
 
 
-const TextAreaPropertiesComponent: FC<FormElementProps> = ({
+const TextAreaSetting: FC<FormElementProps> = ({
   elementInstance,
 }) => {
   const currentElement = elementInstance as TextAreaCustomInstance;
@@ -94,4 +94,4 @@ const TextAreaPropertiesComponent: FC<FormElementProps> = ({
   );
 };
 
-export default TextAreaPropertiesComponent;
+export default TextAreaSetting;

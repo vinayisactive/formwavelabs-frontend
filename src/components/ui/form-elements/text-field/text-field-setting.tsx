@@ -15,7 +15,7 @@ import {
 import { FormElementProps } from "@/utility/ts-types";
 
 
-const TextPropertiesComponent: FC<FormElementProps> = ({
+const TextFieldSetting: FC<FormElementProps> = ({
   elementInstance,
 }) => {
   const currentElement = elementInstance as TextCustomInstance;
@@ -96,4 +96,4 @@ const TextPropertiesComponent: FC<FormElementProps> = ({
   );
 };
 
-export default TextPropertiesComponent;
+export default TextFieldSetting;
