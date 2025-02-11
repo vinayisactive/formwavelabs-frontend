@@ -11,12 +11,10 @@ export type FormElemetInstance = {
 export type FormElement = {
   construct: (id: string) => FormElemetInstance;
   type: ElementsType;
-  builderComponent: React.FC<FormElementProps>;
-  propertiesComponent: React.FC<FormElementProps>;
-  submitComponent: React.FC<submitCompPropsType>;
-  elementButton: {
-    label: string;
-  };
+  tile: React.FC<FormElementProps>;
+  setting: React.FC<FormElementProps>;
+  submit: React.FC<submitCompPropsType>;
+  elementButton: string;
 };
 
 export interface FormElementProps {
