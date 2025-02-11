@@ -7,13 +7,13 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { Loader } from "lucide-react";
 
-import Builder from "../ui/builder/builder";
 import BuilderPreview from "../ui/builder/builder-preview";
 import BuilderNavbar from "../ui/builder/builder-navbar/builder-navbar";
 
 import useElements from "@/utility/useElements-hook";
 import { handleAxiosError } from "@/utility/axios-err-handler";
 import { FormElemetInstance } from "@/utility/ts-types";
+import BuilderSidebarDnd from "../ui/builder/builder-sidebar/builder-sidebar-dnd";
 
 export interface FormPageData {
   id: string;
@@ -99,8 +99,8 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ formId, page }) => {
             />
           </div>
 
-          <div className="h-[94%] mt-5 md:mt-0 flex pr-2 gap-2">
-            <Builder />
+          <div className="h-[94%] flex pr-2 gap-2">
+            <BuilderSidebarDnd />
             <BuilderPreview formTheme={formData?.theme}/>
           </div>
         </div>
