@@ -160,7 +160,7 @@ const Submit = ({ formId }: { formId: string }) => {
           }`}
         >
           {currentPageData.map((el) => {
-            const SubmitComponent = FormElemets[el.type].submitComponent;
+            const SubmitComponent = FormElemets[el.type].submit;
             return (
               <SubmitComponent
                 elementInstance={el}
