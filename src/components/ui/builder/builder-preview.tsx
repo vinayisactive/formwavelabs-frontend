@@ -11,7 +11,7 @@ const BuilderPreview = ({formTheme}: {formTheme: "BOXY" | "ROUNDED" | undefined}
     <div className="w-full h-full overflow-y-scroll py-4 scroll-smooth">
       <div className={`flex flex-col max-w-3xl gap-5 p-2 mx-auto shadow-md ${formTheme === "BOXY" ? "border-r-4 border-b-4 border-black border" : "border rounded-md"}`}>
         {elements.map((el: FormElemetInstance) => {
-          const SubmitComponent = FormElemets[el.type].submitComponent;
+          const SubmitComponent = FormElemets[el.type].submit;
           return (
             <div key={el.id}>
               <SubmitComponent elementInstance={el}  theme={formTheme}/>

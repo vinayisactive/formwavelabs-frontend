@@ -8,7 +8,6 @@ import {
   MoveLeft,
   MoveRightIcon,
   Save,
-  StepForward,
 } from "lucide-react";
 
 interface BuilderTabButtonProps {
@@ -73,8 +72,9 @@ export const PreviousBtn = ({ handlePrevious }: PreviousBtnProps) => {
         bg-black text-white hover:bg-black/70`}
     >
       <span className="hidden md:flex">Previous</span>
-      <span className="flex md:hidden">
-        <MoveLeft />
+   
+      <span className="flex md:hidden py-1">
+        <MoveLeft size={15} />
       </span>
     </button>
   );
@@ -101,8 +101,9 @@ export const NextBtn = ({ handleNextPage, isNextFetching }: NextBtnProps) => {
       <span className="hidden md:flex gap-1">
         Next {isNextFetching && <Loader />}
       </span>
-      <span className="flex md:hidden">
-        <MoveRightIcon />
+      
+      <span className="flex md:hidden py-1">
+        <MoveRightIcon size={15}/>
       </span>
     </button>
   );
@@ -124,13 +125,13 @@ export const CreateNextBtn = ({ createNextMutation }: CreateNextBtnProps) => {
             : "bg-black text-white hover:bg-black/70"
         }`}
     >
-      <span className="md:flex hidden whitespace-nowrap">
+      <span className="flex whitespace-nowrap">
         Create Next {createNextMutation.isPending && <Loader />}
       </span>
 
-      <span className="flex md:hidden">
+      {/* <span className="flex md:hidden">
         <StepForward />
-      </span>
+      </span> */}
     </button>
   );
 };
