@@ -52,16 +52,12 @@ const Submit = ({ formId }: { formId: string }) => {
       const response = await axios.post(
         `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formId}/submissions`,
         {
-          content: JSON.stringify(formValues.current),
+          content: JSON.stringify(formValues),
         }
       );
 
       if (response.data.status === "success") {
         setIsSubmitted(true);
-
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
       }
 
       setLoading(false);
