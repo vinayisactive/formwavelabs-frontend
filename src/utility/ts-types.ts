@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 
-export type ElementsType = "TextFiled" | "SelectField" | "CheckboxField" | "RadioButtonField"  | "TextAreaField" | "YesAndNoField" | "MultipleChoiceField" | "DateField" | "FileUploadField"
+export type ElementsType = "TextFiled" | "SelectField" | "CheckboxField" | "RadioButtonField"  | "TextAreaField" | "YesAndNoField" | "MultipleChoiceField" | "DateField" | "FileUploadField" | "EmailField"
 
 export type FormElemetInstance = {
   id: string;
@@ -24,7 +24,8 @@ export interface FormElementProps {
 export type submitCompPropsType = {
   elementInstance: FormElemetInstance;
     handleValues?: submitValueType;
-    formValues?: React.RefObject<{ [key: string]: string }>;
+    formValues?: { [key: string]: string };
+    setFormValues?: Dispatch<SetStateAction<{ [key: string]: string }>>;
     elementsToValidate?: Record<string, string | undefined>; 
     setElementsToValidate?: Dispatch<SetStateAction<Record<string, string | undefined>>>
     isFormError?: boolean;
