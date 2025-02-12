@@ -8,6 +8,7 @@ import ElementButton from "./element-btn";
 const formElementTypes: ElementsType[] = [
   "TextFiled",
   "SelectField",
+  "EmailField",
   "CheckboxField",
   "RadioButtonField",
   "TextAreaField",

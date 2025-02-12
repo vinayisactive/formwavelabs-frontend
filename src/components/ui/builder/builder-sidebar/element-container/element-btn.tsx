@@ -4,6 +4,7 @@ import { ElementsType, FormElement } from "@/utility/ts-types";
 import {
   Calendar,
   LucideIcon,
+  Mail,
   MousePointer2,
   Text,
   TextCursorInput,
@@ -32,6 +33,7 @@ const ElementButtonIBetterLabels: Record<ElementButtonLabel, string> = {
   MultipleChoiceField: "Multiple choice",
   DateField: "Date",
   FileUploadField: "Upload file",
+  EmailField: "Email"
 };
 
 export const IconMap: Record<ElementButtonLabel, LucideIcon | IconType> = {
@@ -43,7 +45,8 @@ export const IconMap: Record<ElementButtonLabel, LucideIcon | IconType> = {
   "YesAndNoField": TicketCheck,
   "MultipleChoiceField": SlOptionsVertical,
   "DateField": Calendar,
-  "FileUploadField" : FaFileUpload
+  "FileUploadField" : FaFileUpload,
+  "EmailField": Mail
 };
 
 
