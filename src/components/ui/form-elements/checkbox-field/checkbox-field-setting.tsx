@@ -6,34 +6,23 @@ import {
 } from "lucide-react";
 import {
   InputTile,
-  PropertiesFooter,
-  PropertiesHeader,
-  PropertiesWrapper,
   RequiredCheckTile,
-} from "../property-reusable-comp";
+  SettingFooter,
+  SettingHeader,
+  SettingWrapper,
+} from "../elements-reusable-comp";
 import useElements from "@/utility/useElements-hook";
 import { CheckboxCustomInstance } from "./checkbox-prop-attributes";
 import { FC, useState } from "react";
 import { FormElementProps } from "@/utility/ts-types";
+import createUpdateSettingHandler from "@/utility/generic-update-setting-fn";
 
-const CheckBoxSetting: FC<FormElementProps> = ({
-  elementInstance,
-}) => {
+const CheckBoxSetting: FC<FormElementProps> = ({elementInstance}) => {
   const { setSelectedElementInstance, updateElementInstance } = useElements();
   const element = elementInstance as CheckboxCustomInstance;
-  const [extraAttributes, setExtraAttributes] = useState(
-    element.extraAttributes
-  );
+  const [extraAttributes, setExtraAttributes] = useState(element.extraAttributes);
 
-  const handleChange = (
-    key: keyof typeof element.extraAttributes,
-    value: boolean | string
-  ) => {
-    setExtraAttributes((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-  };
+  const handleChange = createUpdateSettingHandler(setExtraAttributes); 
 
   const handleSave = () => {
     const updatedElement = {
@@ -46,8 +35,8 @@ const CheckBoxSetting: FC<FormElementProps> = ({
   };
 
   return (
-    <PropertiesWrapper>
-      <PropertiesHeader
+    <SettingWrapper>
+      <SettingHeader
         title="Checkbox setting"
         description="Tune the settings"
         icon={ToggleLeft}
@@ -76,11 +65,11 @@ const CheckBoxSetting: FC<FormElementProps> = ({
         checked={extraAttributes.required}
       />
 
-      <PropertiesFooter
+      <SettingFooter
         onCancel={() => setSelectedElementInstance(null)}
         onSave={handleSave}
       />
-    </PropertiesWrapper>
+    </SettingWrapper>
   );
 };
 

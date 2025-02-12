@@ -3,12 +3,12 @@ import { FC, useState } from "react";
 import { FileUploadCustomInstance } from "./file-upload-prop-attributes";
 import {
   InputTile,
-  PropertiesFooter,
-  PropertiesHeader,
-  PropertiesWrapper,
   RequiredCheckTile,
   SelectTile,
-} from "../property-reusable-comp";
+  SettingFooter,
+  SettingHeader,
+  SettingWrapper,
+} from "../elements-reusable-comp";
 import {
   FileCogIcon,
   FileDownIcon,
@@ -17,6 +17,7 @@ import {
   TextCursorInput,
 } from "lucide-react";
 import useElements from "@/utility/useElements-hook";
+import createUpdateSettingHandler from "@/utility/generic-update-setting-fn";
 
 const FileUploadSetting: FC<FormElementProps> = ({
   elementInstance,
@@ -27,12 +28,7 @@ const FileUploadSetting: FC<FormElementProps> = ({
   );
   const { setSelectedElementInstance, updateElementInstance } = useElements();
 
-  const handleChange = (key: string, value: string | boolean) => {
-    setExtraAttributes((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-  };
+  const handleChange = createUpdateSettingHandler(setExtraAttributes); 
 
   const handleSave = () => {
     const updatedElement = {
@@ -45,8 +41,8 @@ const FileUploadSetting: FC<FormElementProps> = ({
   };
 
   return (
-    <PropertiesWrapper>
-      <PropertiesHeader
+    <SettingWrapper>
+      <SettingHeader
         title="File uplaod element setting"
         icon={FileDownIcon}
         description="Tune up your uplaod element"
@@ -87,11 +83,11 @@ const FileUploadSetting: FC<FormElementProps> = ({
         helperText="User must provide value to submit form"
       />
 
-      <PropertiesFooter
+      <SettingFooter
         onCancel={() => setSelectedElementInstance(null)}
         onSave={handleSave}
       />
-    </PropertiesWrapper>
+    </SettingWrapper>
   );
 };
 

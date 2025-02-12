@@ -4,14 +4,15 @@ import { FC, useState } from "react";
 import { MultipleChoiceFieldCustomInstance } from "./multiple-choice-prop-attributes";
 import {
   InputTile,
-  PropertiesFooter,
-  PropertiesHeader,
-  PropertiesWrapper,
   RequiredCheckTile,
-} from "../property-reusable-comp";
+  SettingFooter,
+  SettingHeader,
+  SettingWrapper,
+} from "../elements-reusable-comp";
 import { HelpCircle, ListCheck, MousePointer2, PenBoxIcon, X } from "lucide-react";
 import useElements from "@/utility/useElements-hook";
 import { FormElementProps } from "@/utility/ts-types";
+import createUpdateSettingHandler from "@/utility/generic-update-setting-fn";
 
 
 const MultipleChoiceSetting: FC<FormElementProps> = ({
@@ -24,15 +25,7 @@ const MultipleChoiceSetting: FC<FormElementProps> = ({
   const { setSelectedElementInstance, updateElementInstance } = useElements();
   const [optionValue, setOptionValue] = useState<string>("");
 
-  const handleInputChange = (
-    key: keyof typeof element.extraAttributes,
-    value: string | boolean
-  ) => {
-    setExtraAttributes((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-  };
+  const handleChange = createUpdateSettingHandler(setExtraAttributes); 
 
   const handleOptionAdd = () => {
     if (!optionValue.trim()) return;
@@ -62,8 +55,8 @@ const MultipleChoiceSetting: FC<FormElementProps> = ({
   };
 
   return (
-    <PropertiesWrapper>
-      <PropertiesHeader
+    <SettingWrapper>
+      <SettingHeader
         title="Multiple choice Element setting"
         description="Tune your options"
         icon={MousePointer2}
@@ -75,7 +68,7 @@ const MultipleChoiceSetting: FC<FormElementProps> = ({
         value={extraAttributes.label}
         placeholder="Enter label for select"
         icon={MousePointer2}
-        onChange={(value) => handleInputChange("label", value)}
+        onChange={(value) => handleChange("label", value)}
       />
 
       <InputTile
@@ -83,7 +76,7 @@ const MultipleChoiceSetting: FC<FormElementProps> = ({
         value={extraAttributes.helperText || ""}
         placeholder="Enter helper text"
         helperText="Clear the text to remove"
-        onChange={(value) => handleInputChange("helperText", value)}
+        onChange={(value) => handleChange("helperText", value)}
         icon={HelpCircle}
       />
 
@@ -117,17 +110,17 @@ const MultipleChoiceSetting: FC<FormElementProps> = ({
           icon={ListCheck}
           label="Required Field"
           checked={extraAttributes.required}
-          onChange={(checked) => handleInputChange("required", checked)}
+          onChange={(checked) => handleChange("required", checked)}
           helperText="User must provide value to submit form"
         />
 
 
-          <PropertiesFooter
+          <SettingFooter
           onCancel={() => setSelectedElementInstance(null)}
           onSave={handleSave}
           />
 
-    </PropertiesWrapper>
+    </SettingWrapper>
   );
 };
 

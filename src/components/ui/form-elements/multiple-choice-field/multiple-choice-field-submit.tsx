@@ -4,7 +4,7 @@ import { FC, useState } from "react";
 import { MultipleChoiceFieldCustomInstance } from "./multiple-choice-prop-attributes";
 import {
   SplitSubmitComponentWrapper,
-} from "../property-reusable-comp";
+} from "../elements-reusable-comp";
 
 const MultipleChoiceSubmit: FC<submitCompPropsType> = ({
   elementInstance,
@@ -20,31 +20,30 @@ const MultipleChoiceSubmit: FC<submitCompPropsType> = ({
   const { label, helperText, options, required } = extraAttributes;
 
   const [selectedOptions, setSelectedOptions] = useState<string[]>(() => {
-    const storedValue = formValues?.current?.[id];
-    return typeof storedValue === "string" ? storedValue.split(", ") : [];
+    const storedValue = formValues?.[id];
+    return typeof storedValue === "string" ? storedValue.split(",") : [];
   });
 
-  const selectOptionHandler = (option: string) => {
+  const handleChange = (option: string) => {
     setSelectedOptions((prev) => {
       const newOptions = prev.includes(option)
         ? prev.filter((opt) => opt !== option)
         : [...prev, option];
 
-      if (handleValues) {
-        handleValues(id, newOptions.join(", "));
-      }
+        handleValues?.(id, newOptions.join(", "));
+
+        if (required) {
+          const isValid = newOptions.length > 0;
+          setElementsToValidate?.((prev) => ({
+            ...prev,
+            [id]: isValid ? undefined : "",
+          }));
+        }
+
       return newOptions;
     });
 
-    if (required) {
-      const isExists =
-        formValues?.current?.[id] && formValues.current?.[id].split(", ");
-      const isValid = isExists && isExists?.length > 0;
-      setElementsToValidate?.((prev) => ({
-        ...prev,
-        [id]: isValid ? undefined : "",
-      }));
-    }
+    
   };
 
   return (
@@ -60,7 +59,7 @@ const MultipleChoiceSubmit: FC<submitCompPropsType> = ({
         {options?.map((option) => (
           <div
             key={option}
-            onClick={() => selectOptionHandler(option)}
+            onClick={() => handleChange(option)}
             className={`cursor-pointer p-2 border bg-white transition-all 
               ${theme === "BOXY"
                 ? selectedOptions.includes(option)
@@ -79,7 +78,7 @@ const MultipleChoiceSubmit: FC<submitCompPropsType> = ({
                 readOnly
                  className="h-4 w-4 text-black accent-black focus:ring-black checked:rounded-none"
               />
-              <span className="text-sm text-gray-700 w-full" onClick={() => selectOptionHandler(option)}>{option}</span>
+              <span className="text-sm text-gray-700 w-full" onClick={() => handleChange(option)}>{option}</span>
             </label>
           </div>
         ))}

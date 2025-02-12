@@ -8,15 +8,16 @@ import {
 } from "lucide-react";
 import {
   InputTile,
-  PropertiesFooter,
-  PropertiesHeader,
-  PropertiesWrapper,
   RequiredCheckTile,
-} from "../property-reusable-comp";
+  SettingFooter,
+  SettingHeader,
+  SettingWrapper,
+} from "../elements-reusable-comp";
 import useElements from "@/utility/useElements-hook";
 import { RadioButtonCustomInstance } from "./radio-btn-prop-attributes";
 import { FC, useState } from "react";
 import { FormElementProps } from "@/utility/ts-types";
+import createUpdateSettingHandler from "@/utility/generic-update-setting-fn";
 
 const RadioBtnSetting: FC<FormElementProps> = ({
   elementInstance,
@@ -29,15 +30,7 @@ const RadioBtnSetting: FC<FormElementProps> = ({
   const { setSelectedElementInstance, updateElementInstance } = useElements();
   const [optionValue, setOptionValue] = useState<string>("");
 
-  const changeHandler = (
-    key: keyof typeof extraAttributes,
-    value: string | boolean
-  ) => {
-    setExtraAttributes((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-  };
+  const handleChange = createUpdateSettingHandler(setExtraAttributes); 
 
   const handleOptionAdd = () => {
     if (!optionValue.trim()) return;
@@ -67,8 +60,8 @@ const RadioBtnSetting: FC<FormElementProps> = ({
   };
 
   return (
-    <PropertiesWrapper>
-      <PropertiesHeader
+    <SettingWrapper>
+      <SettingHeader
         title="Radio Button setting"
         description="Set Radio button setting"
         icon={MousePointer2}
@@ -81,7 +74,7 @@ const RadioBtnSetting: FC<FormElementProps> = ({
         helperText="enter label"
         value={extraAttributes.label}
         icon={TextCursorInputIcon}
-        onChange={(value) => changeHandler("label", value)}
+        onChange={(value) => handleChange("label", value)}
       />
 
       <InputTile
@@ -90,7 +83,7 @@ const RadioBtnSetting: FC<FormElementProps> = ({
         helperText="Helper text here "
         value={extraAttributes.helperText ?? ""}
         icon={HelpCircle}
-        onChange={(value) => changeHandler("helperText", value)}
+        onChange={(value) => handleChange("helperText", value)}
       />
 
 <div className="flex flex-col justify-center gap-2">
@@ -122,16 +115,16 @@ const RadioBtnSetting: FC<FormElementProps> = ({
       <RequiredCheckTile
         label="Required"
         helperText="Must be check before submiting"
-        onChange={(value) => changeHandler("required", value)}
+        onChange={(value) => handleChange("required", value)}
         icon={ListCheck}
         checked={extraAttributes.required}
       />
 
-      <PropertiesFooter
+      <SettingFooter
         onCancel={() => setSelectedElementInstance(null)}
         onSave={handleSave}
       />
-    </PropertiesWrapper>
+    </SettingWrapper>
   );
 };
 

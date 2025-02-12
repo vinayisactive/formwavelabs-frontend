@@ -6,15 +6,16 @@ import {
   } from "lucide-react";
   import {
     InputTile,
-    PropertiesFooter,
-    PropertiesHeader,
-    PropertiesWrapper,
     RequiredCheckTile,
-  } from "../property-reusable-comp";
+    SettingFooter,
+    SettingHeader,
+    SettingWrapper,
+  } from "../elements-reusable-comp";
   import useElements from "@/utility/useElements-hook";
   import { YesAndNoFieldCustomInstance } from "./yes-n-no-prop-attributes";
   import { FC, useState } from "react";
 import { FormElementProps } from "@/utility/ts-types";
+import createUpdateSettingHandler from "@/utility/generic-update-setting-fn";
   
   const YesAndNoSetting : FC<FormElementProps> = ({
     elementInstance,
@@ -25,16 +26,7 @@ import { FormElementProps } from "@/utility/ts-types";
     });
     const { setSelectedElementInstance, updateElementInstance } = useElements();
   
-    const changeHandler = (
-      key: keyof typeof extraAttributes,
-      value: string | boolean
-    ) => {
-      setExtraAttributes((prev) => ({
-        ...prev,
-        [key]: value,
-      }));
-    };
-  
+    const handleChange = createUpdateSettingHandler(setExtraAttributes);
   
     const handleSave = () => {
       const updatedElement = {
@@ -47,8 +39,8 @@ import { FormElementProps } from "@/utility/ts-types";
     };
   
     return (
-      <PropertiesWrapper>
-        <PropertiesHeader
+      <SettingWrapper>
+        <SettingHeader
           title="Yes and No setting"
           description="Set Yes and No setting"
           icon={MousePointer2}
@@ -61,7 +53,7 @@ import { FormElementProps } from "@/utility/ts-types";
           helperText="enter label"
           value={extraAttributes.label}
           icon={TextCursorInputIcon}
-          onChange={(value) => changeHandler("label", value)}
+          onChange={(value) => handleChange("label", value)}
         />
   
         <InputTile
@@ -70,22 +62,22 @@ import { FormElementProps } from "@/utility/ts-types";
           helperText="Helper text here "
           value={extraAttributes.helperText ?? ""}
           icon={HelpCircle}
-          onChange={(value) => changeHandler("helperText", value)}
+          onChange={(value) => handleChange("helperText", value)}
         />
     
         <RequiredCheckTile
           label="Required"
           helperText="Must be check before submiting"
-          onChange={(value) => changeHandler("required", value)}
+          onChange={(value) => handleChange("required", value)}
           icon={ListCheck}
           checked={extraAttributes.required}
         />
   
-        <PropertiesFooter
+        <SettingFooter
           onCancel={() => setSelectedElementInstance(null)}
           onSave={handleSave}
         />
-      </PropertiesWrapper>
+      </SettingWrapper>
     );
   };
   

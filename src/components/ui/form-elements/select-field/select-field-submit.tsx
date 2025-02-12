@@ -2,7 +2,7 @@
 import { submitCompPropsType } from "@/utility/ts-types";
 import { FC, useState } from "react";
 import { selectFieldCustomInstance } from "./select-prop-attributes";
-import { SubmitComponentWrapper } from "../property-reusable-comp";
+import { SubmitComponentWrapper } from "../elements-reusable-comp";
 
 const SelectSubmit: FC<submitCompPropsType> = ({
   elementInstance,
@@ -18,7 +18,7 @@ const SelectSubmit: FC<submitCompPropsType> = ({
     extraAttributes;
 
   const [inputValue, setInputValue] = useState<string>(
-    formValues?.current[id] || ""
+    formValues?.[id] || ""
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -32,9 +32,7 @@ const SelectSubmit: FC<submitCompPropsType> = ({
     }
 
     setInputValue(newValue);
-    if (handleValues) {
-      handleValues(id, newValue);
-    }
+    handleValues?.(id, newValue);
   };
 
   return (
@@ -49,7 +47,7 @@ const SelectSubmit: FC<submitCompPropsType> = ({
       <select
         id={id}
         required={required}
-        value={formValues?.current[id] || inputValue}
+        value={formValues?.[id] || inputValue}
         onChange={handleChange}
         className={`w-full px-3 mt-2  ${
           theme === "BOXY"

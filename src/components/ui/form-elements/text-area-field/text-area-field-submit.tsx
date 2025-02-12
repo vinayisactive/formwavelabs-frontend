@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { TextAreaCustomInstance } from "./text-area-prop-attributes";
 import { submitCompPropsType } from "@/utility/ts-types";
-import { SubmitComponentWrapper } from "../property-reusable-comp";
+import { SubmitComponentWrapper } from "../elements-reusable-comp";
 
 const TextAreaSubmit: React.FC<submitCompPropsType> = ({
   elementInstance,
@@ -18,7 +18,7 @@ const TextAreaSubmit: React.FC<submitCompPropsType> = ({
   const { label, helperText, placeholder, required } = extraAttributes;
 
   const [inputValue, setInputValue] = useState<string>(
-    formValues?.current[id] || ""
+    formValues?.[id] || ""
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -50,7 +50,7 @@ const TextAreaSubmit: React.FC<submitCompPropsType> = ({
         id={id}
         placeholder={placeholder}
         required={required}
-        value={formValues?.current[id] || inputValue}
+        value={formValues?.[id] || inputValue}
         onChange={handleChange}
         className={`w-full px-3 py-2 border-2 border-gray-300 ${theme === "BOXY" ? "" : "rounded-md"} focus:outline-none focus:ring-2 focus:ring-black focus:border-black-500 text-sm`}
       />

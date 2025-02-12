@@ -2,7 +2,7 @@
 import { FC, useState } from "react";
 import { submitCompPropsType } from "@/utility/ts-types";
 import { CheckboxCustomInstance } from "./checkbox-prop-attributes";
-import { RequiredFieldError } from "../property-reusable-comp";
+import { RequiredFieldError } from "../elements-reusable-comp";
 
 
 const CheckBoxFieldSubmit: FC<submitCompPropsType> = ({
@@ -17,7 +17,7 @@ const CheckBoxFieldSubmit: FC<submitCompPropsType> = ({
   const { id, extraAttributes } = elementInstance as CheckboxCustomInstance;
   const { label, helperText, required } = extraAttributes;
   const [checked, setChecked] = useState<boolean>(
-    formValues?.current?.[id] === "true"
+    formValues?.[id] === "true"
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

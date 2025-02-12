@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { FormElementProps } from "@/utility/ts-types";
 import { TextAreaCustomInstance } from "./text-area-prop-attributes";
-import ElementLayerTile from "../property-reusable-comp";
+import { ElementLayerTile } from "../elements-reusable-comp";
 
 const TextAreaTile: FC<FormElementProps> = ({ elementInstance }) => {
   const { label } = (elementInstance as TextAreaCustomInstance).extraAttributes;

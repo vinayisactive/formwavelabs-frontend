@@ -2,7 +2,7 @@
 import { submitCompPropsType } from "@/utility/ts-types";
 import { FC, useState } from "react";
 import { FileUploadCustomInstance } from "./file-upload-prop-attributes";
-import { SubmitComponentWrapper } from "../property-reusable-comp";
+import { SubmitComponentWrapper } from "../elements-reusable-comp";
 import ImageKitFileUpload from "../../imagekit-file-uploader";
 import { X } from "lucide-react";
 
@@ -18,10 +18,10 @@ const FileUploadSubmit: FC<submitCompPropsType> = ({
   const { id, extraAttributes } = elementInstance as FileUploadCustomInstance;
   const { label, helperText, required, selectedFileType } = extraAttributes;
   const [fileUrl, setFileUrl] = useState<string | null>(
-    formValues?.current[id] || null
+    formValues?.[id] || null
   );
 
-  const saveHandler = (url: string) => {
+  const handleChange = (url: string) => {
     setFileUrl(url);
 
     if (required) {
@@ -36,11 +36,12 @@ const FileUploadSubmit: FC<submitCompPropsType> = ({
 
   const handleRemoveUrl = () => {
     setFileUrl(null);
-    if (formValues) {
-      formValues.current[id] = "";
+    handleValues?.(id, "")
+
+    if (required) {
       setElementsToValidate?.((prev) => ({
         ...prev,
-        [id]: formValues.current[id]?.trim() === "" ? "" : undefined,
+        [id]: ""
       }));
     }
   };
@@ -57,7 +58,7 @@ const FileUploadSubmit: FC<submitCompPropsType> = ({
       {!fileUrl && (
         <ImageKitFileUpload
           fileType={selectedFileType}
-          onSuccess={(res) => saveHandler(res.url)}
+          onSuccess={(res) => handleChange(res.url)}
           className={
             theme === "BOXY"
               ? "border-r-4 border-b-4 border-black"
@@ -67,8 +68,8 @@ const FileUploadSubmit: FC<submitCompPropsType> = ({
       )}
 
       {fileUrl && (
-        <p className="border px-2 border-black flex justify-between items-center">
-          {fileUrl}{" "}
+        <p className="border px-2 border-black flex justify-between items-center overflow-hidden">
+          {fileUrl}
           <span onClick={handleRemoveUrl}>
             <X />
           </span>

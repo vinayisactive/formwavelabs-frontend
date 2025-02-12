@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { TextCustomInstance } from "./text-prop-attributes";
 import { submitCompPropsType } from "@/utility/ts-types";
-import { SubmitComponentWrapper } from "../property-reusable-comp";
+import { SubmitComponentWrapper } from "../elements-reusable-comp";
 
 const TextFieldSubmit: React.FC<submitCompPropsType> = ({
   elementInstance,
@@ -17,7 +17,7 @@ const TextFieldSubmit: React.FC<submitCompPropsType> = ({
   const { label, helperText, placeholder, required } = extraAttributes;
 
   const [inputValue, setInputValue] = useState<string>(
-    formValues?.current[id] || ""
+    formValues?.[id] || ""
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,9 +31,7 @@ const TextFieldSubmit: React.FC<submitCompPropsType> = ({
     }
 
     setInputValue(newValue);
-    if (handleValues) {
-      handleValues(id, newValue);
-    }
+    handleValues?.(id, newValue); 
   };
 
   return (
@@ -50,7 +48,7 @@ const TextFieldSubmit: React.FC<submitCompPropsType> = ({
         id={id}
         placeholder={placeholder}
         required={required}
-        value={formValues?.current[id] || inputValue}
+        value={formValues?.[id] || inputValue}
         onChange={handleChange}
         className="w-full pb-1 border-b-2 border-gray-300 focus:outline-none text-sm mt-1"
       />

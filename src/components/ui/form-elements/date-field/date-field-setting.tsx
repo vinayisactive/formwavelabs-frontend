@@ -4,36 +4,25 @@ import { FC, useState } from "react";
 import { DateFieldCustomElement } from "./date-prop-attributes";
 import {
   InputTile,
-  PropertiesFooter,
-  PropertiesHeader,
-  PropertiesWrapper,
   RequiredCheckTile,
-} from "../property-reusable-comp";
+  SettingFooter,
+  SettingHeader,
+  SettingWrapper,
+} from "../elements-reusable-comp";
 import { Calendar, HelpCircle, ListCheck, TextCursorInputIcon } from "lucide-react";
 import useElements from "@/utility/useElements-hook";
 import { FormElementProps } from "@/utility/ts-types";
+import createUpdateSettingHandler from "@/utility/generic-update-setting-fn";
 
 
 
-const DateSetting: FC<FormElementProps> = ({
-  elementInstance,
-}) => {
+const DateSetting: FC<FormElementProps> = ({elementInstance}) => {
   const element = elementInstance as DateFieldCustomElement;
-  const [extraAttributes, setExtraAttributes] = useState(
-    element.extraAttributes
-  );
+  const [extraAttributes, setExtraAttributes] = useState(element.extraAttributes);
 
   const { setSelectedElementInstance, updateElementInstance } = useElements();
 
-  const changeHandler = (
-    key: keyof typeof element.extraAttributes,
-    value: string | boolean
-  ) => {
-    setExtraAttributes((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-  };
+  const handleChange = createUpdateSettingHandler(setExtraAttributes); 
 
   const saveHandler = () => {
     const updatedElement = {
@@ -46,8 +35,8 @@ const DateSetting: FC<FormElementProps> = ({
   };
 
   return (
-    <PropertiesWrapper>
-      <PropertiesHeader
+    <SettingWrapper>
+      <SettingHeader
         title="Date field setting"
         description="Edit on your own"
         icon={Calendar}
@@ -60,7 +49,7 @@ const DateSetting: FC<FormElementProps> = ({
         helperText="Edit on your own"
         value={extraAttributes.label}
         placeholder="label"
-        onChange={(value) => changeHandler("label", value)}
+        onChange={(value) => handleChange("label", value)}
       />
 
       <InputTile
@@ -69,22 +58,22 @@ const DateSetting: FC<FormElementProps> = ({
         helperText="Edit on your own"
         value={extraAttributes.helperText}
         placeholder="helper text"
-        onChange={(value) => changeHandler("helperText", value)}
+        onChange={(value) => handleChange("helperText", value)}
       />
 
       <RequiredCheckTile
         icon={ListCheck}
         label="Required Field"
         checked={extraAttributes.required}
-        onChange={(checked) => changeHandler("required", checked)}
+        onChange={(checked) => handleChange("required", checked)}
         helperText="User must provide value to submit form"
       />
 
-      <PropertiesFooter
+      <SettingFooter
         onCancel={() => setSelectedElementInstance(null)}
         onSave={saveHandler}
       />
-    </PropertiesWrapper>
+    </SettingWrapper>
   );
 };
 

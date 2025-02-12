@@ -5,12 +5,13 @@ import useElements from "@/utility/useElements-hook";
 import { TextCursorInput, HelpCircle, ListChecks } from "lucide-react";
 import {
   InputTile,
-  PropertiesFooter,
-  PropertiesHeader,
-  PropertiesWrapper,
   RequiredCheckTile,
-} from "../property-reusable-comp";
+  SettingFooter,
+  SettingHeader,
+  SettingWrapper,
+} from "../elements-reusable-comp";
 import { FormElementProps } from "@/utility/ts-types";
+import createUpdateSettingHandler from "@/utility/generic-update-setting-fn";
 
 
 const TextAreaSetting: FC<FormElementProps> = ({
@@ -22,15 +23,7 @@ const TextAreaSetting: FC<FormElementProps> = ({
   );
   const { updateElementInstance, setSelectedElementInstance } = useElements();
 
-  const handleInputChange = (
-    key: keyof typeof currentElement.extraAttributes,
-    value: string | boolean
-  ) => {
-    setExtraAttributes((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-  };
+  const handleChange = createUpdateSettingHandler(setExtraAttributes); 
 
   const handleSave = () => {
     const updatedElement = {
@@ -43,8 +36,8 @@ const TextAreaSetting: FC<FormElementProps> = ({
   };
 
   return (
-    <PropertiesWrapper>
-      <PropertiesHeader
+    <SettingWrapper>
+      <SettingHeader
         title="TextArea Field Settings"
         description="Configure text area properties"
         onClose={() => setSelectedElementInstance(null)}
@@ -56,7 +49,7 @@ const TextAreaSetting: FC<FormElementProps> = ({
           icon={TextCursorInput}
           label="Field Label"
           value={extraAttributes.label}
-          onChange={(value) => handleInputChange("label", value)}
+          onChange={(value) => handleChange("label", value)}
           placeholder="Enter field label"
         />
 
@@ -64,7 +57,7 @@ const TextAreaSetting: FC<FormElementProps> = ({
           icon={HelpCircle}
           label="Helper Text"
           value={extraAttributes.helperText}
-          onChange={(value) => handleInputChange("helperText", value)}
+          onChange={(value) => handleChange("helperText", value)}
           placeholder="Enter helper text"
           helperText="Appears below the input field"
         />
@@ -73,7 +66,7 @@ const TextAreaSetting: FC<FormElementProps> = ({
           icon={TextCursorInput}
           label="Placeholder Text"
           value={extraAttributes.placeholder}
-          onChange={(value) => handleInputChange("placeholder", value)}
+          onChange={(value) => handleChange("placeholder", value)}
           placeholder="Enter placeholder text"
         />
 
@@ -81,16 +74,16 @@ const TextAreaSetting: FC<FormElementProps> = ({
           icon={ListChecks}
           label="Required Field"
           checked={extraAttributes.required}
-          onChange={(checked) => handleInputChange("required", checked)}
+          onChange={(checked) => handleChange("required", checked)}
           helperText="User must provide value to submit form"
         />
       </div>
 
-      <PropertiesFooter
+      <SettingFooter
         onCancel={() => setSelectedElementInstance(null)}
         onSave={handleSave}
       />
-    </PropertiesWrapper>
+    </SettingWrapper>
   );
 };
 

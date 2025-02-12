@@ -2,7 +2,7 @@
 import { submitCompPropsType } from "@/utility/ts-types";
 import { FC, useState } from "react";
 import { RadioButtonCustomInstance } from "./radio-btn-prop-attributes";
-import { SplitSubmitComponentWrapper } from "../property-reusable-comp";
+import { SplitSubmitComponentWrapper } from "../elements-reusable-comp";
 
 const RadioBtnSubmit: FC<submitCompPropsType> = ({
   elementInstance,
@@ -16,7 +16,7 @@ const RadioBtnSubmit: FC<submitCompPropsType> = ({
   const { id, extraAttributes } = elementInstance as RadioButtonCustomInstance;
   const { label, helperText, options, required } = extraAttributes;
   const [inputValue, setInputValue] = useState<string>(
-    formValues?.current?.[id] || ""
+    formValues?.[id] || ""
   );
 
   const handleChange = (value: string) => {
@@ -29,9 +29,7 @@ const RadioBtnSubmit: FC<submitCompPropsType> = ({
       }));
     }
 
-    if (handleValues) {
-      handleValues(id, value);
-    }
+    handleValues?.(id, value);
   };
 
   return (
@@ -56,7 +54,7 @@ const RadioBtnSubmit: FC<submitCompPropsType> = ({
               name={id}
               value={option}
               checked={
-                formValues?.current?.[id] === option || inputValue === option
+                formValues?.[id] === option || inputValue === option
               }
               onChange={(e) => handleChange(e.target.value)}
               className="peer hidden"

@@ -1,7 +1,7 @@
 import { submitCompPropsType } from "@/utility/ts-types";
 import { DateFieldCustomElement } from "./date-prop-attributes";
 import { FC, useState, useEffect } from "react";
-import { SubmitComponentWrapper } from "../property-reusable-comp";
+import { SubmitComponentWrapper } from "../elements-reusable-comp";
 
 const DateFieldSubmit: FC<submitCompPropsType> = ({
   elementInstance,
@@ -22,11 +22,11 @@ const DateFieldSubmit: FC<submitCompPropsType> = ({
   };
 
   const [inputDate, setInputDate] = useState(() =>
-    formatDate(formValues?.current?.[element.id])
+    formatDate(formValues?.[element.id])
   );
 
   useEffect(() => {
-    setInputDate(formatDate(formValues?.current?.[element.id]));
+    setInputDate(formatDate(formValues?.[element.id]));
   }, [formValues, element.id]);
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
