@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { handleAxiosError } from "@/utility/axios-err-handler";
 import { FormElemets } from "@/utility/static-data";
 import { FormElemetInstance } from "@/utility/ts-types";
@@ -31,14 +31,14 @@ const Submit = ({ formId }: { formId: string }) => {
     []
   );
 
-  const formValues = useRef<{ [key: string]: string }>({});
+  const [formValues, setFormValues] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [errMsg, setErrMsg] = useState<string>("");
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [isFormError, setIsFormError] = useState<boolean>(false);
 
   const handleValues = (key: string, value: string) => {
-    formValues.current[key] = value;
+    setFormValues((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleSubmit = async () => {
@@ -167,6 +167,7 @@ const Submit = ({ formId }: { formId: string }) => {
                 key={el.id}
                 handleValues={handleValues}
                 formValues={formValues}
+                setFormValues={setFormValues}
                 elementsToValidate={elementsToValidate}
                 setElementsToValidate={setElementsToValidate}
                 isFormError={isFormError}
