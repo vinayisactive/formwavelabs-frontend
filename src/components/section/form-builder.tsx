@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
@@ -32,23 +32,24 @@ export interface FormData {
 
 interface FormBuilderProps {
   formId: string;
-  page: number;
 }
 
-const FormBuilder: React.FC<FormBuilderProps> = ({ formId, page }) => {
+const FormBuilder: React.FC<FormBuilderProps> = ({ formId }) => {
   const { setElements } = useElements();
   const { data: session } = useSession();
   const token = session?.accessToken;
+
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const {
     data: formData,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["formData", formId, page],
+    queryKey: ["formData", formId, currentPage],
     queryFn: async () => {
       const response = await axios.get(
-        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formId}/page?p=${page}`,
+        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formId}/page?p=${currentPage}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       return response.data.data as FormData;
@@ -94,7 +95,8 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ formId, page }) => {
           <div className="h-[6%] ">
             <BuilderNavbar
               formData={formData}
-              page={page}
+              page={currentPage}
+              setCurrentPage={setCurrentPage}
               totalPage={formData?.totalPages}
             />
           </div>

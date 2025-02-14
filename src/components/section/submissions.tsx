@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import SubmissionTable from '../ui/submission/submission-table';
 interface FormElement {
   id: string;
+  type: string;
   extraAttributes: {
     label: string;
   };
@@ -106,7 +107,7 @@ const createFieldMap = (formData: FormData['data']) => {
     try {
       const elements: FormElement[] = JSON.parse(page.content);
       elements?.forEach(element => {
-        if (element.extraAttributes?.label) {
+        if (element.extraAttributes?.label && (element.type !== "FormHeader" && element.type !== "LayoutImage")){
           map.set(element.id, element.extraAttributes.label);
         }
       });

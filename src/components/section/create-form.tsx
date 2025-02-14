@@ -7,14 +7,6 @@ import { useRouter } from "next/navigation";
 import { handleAxiosError } from "@/utility/axios-err-handler";
 import axios from "axios";
 
-import {
-  Loader,
-  PenSquare,
-  TextCursorInput,
-  TextQuote,
-  AlertTriangle,
-  LayoutGrid,
-} from "lucide-react";
 
 interface CreateFormInterface {
   title: string;
@@ -57,7 +49,7 @@ const CreateForm = () => {
       );
       setLoading(false);
       if (response.data.status === "success") {
-        router.push(`/form/${response.data.data.id}/1/builder`);
+        router.push(`/form/${response.data.data.id}/builder`);
       }
     } catch (error) {
       setErrorMsg(handleAxiosError(error));
@@ -77,96 +69,93 @@ const CreateForm = () => {
   };
 
   return (
-    <div className="h-full flex items-center justify-center bg-gradient-to-br from-blue-50/20 to-purple-50/20 p-4">
-      <form
-        onSubmit={submitHandler}
-        className="w-full max-w-md space-y-6 bg-white rounded-2xl shadow-xl p-8 border border-gray-100/80 backdrop-blur-sm"
-      >
-        <div className="space-y-2 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mt-2">Create New Form</h2>
-          <p className="text-gray-500">Start collecting data with a beautiful new form</p>
-        </div>
-
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <label htmlFor="title" className="flex items-center gap-2 text-sm font-medium text-gray-700">
-              <TextCursorInput className="w-5 h-5 text-blue-600" />
-              Form Title
-            </label>
-            <input
-              type="text"
-              id="title"
-              name="title"
-              value={formDetails.title}
-              onChange={handleInputChange}
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-              placeholder="Trip member details"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label htmlFor="description" className="flex items-center gap-2 text-sm font-medium text-gray-700">
-              <TextQuote className="w-5 h-5 text-purple-600" />
-              Description
-            </label>
-            <input
-              type="text"
-              id="description"
-              name="description"
-              value={formDetails.description}
-              onChange={handleInputChange}
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none"
-              placeholder="Optional description for your form"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label htmlFor="theme" className="flex items-center gap-2 text-sm font-medium text-gray-700">
-              <LayoutGrid className="w-5 h-5 text-green-600" />
-              Form Theme
-            </label>
-            <select
-              id="theme"
-              name="theme"
-              value={formDetails.theme}
-              onChange={handleInputChange}
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
-            >
-              <option value="ROUNDED">Rounded</option>
-              <option value="BOXY">Boxy</option>
-            </select>
-          </div>
-
-          {errorMsg && (
-            <div className="flex items-center gap-3 p-3 bg-red-50/80 border border-red-200 rounded-lg">
-              <AlertTriangle className="w-5 h-5 text-red-600 flex-shrink-0" />
-              <p className="text-red-600 text-sm">{errorMsg}</p>
+    <div className="h-full w-full flex flex-col md:flex-row bg-white">
+      <div className="w-full md:w-1/2 flex items-center justify-center md:justify-end p-4 lg:p-8">
+        <form onSubmit={submitHandler} className="w-full max-w-md space-y-6">
+          <div className="space-y-4">
+            <h1 className="text-3xl font-bold text-gray-900 mb-6">Create New Form</h1>
+            
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Form Title
+              </label>
+              <input
+                type="text"
+                name="title"
+                value={formDetails.title}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                placeholder="Enter form title"
+              />
             </div>
-          )}
-
-          <button
-            type="submit"
-            disabled={!isValid || loading}
-            className={`w-full py-3 flex items-center justify-center gap-2 rounded-lg font-medium transition-all ${
-              isValid && !loading
-                ? "bg-gradient-to-br from-blue-600 to-purple-600 text-white hover:shadow-lg hover:shadow-blue-100"
-                : "bg-gray-100 text-gray-400 cursor-not-allowed"
-            }`}
-          >
-            {loading ? (
-              <>
-                <Loader className="w-5 h-5 animate-spin" />
-                <span>Creating...</span>
-              </>
-            ) : (
-              <>
-                <PenSquare className="w-5 h-5" />
-                <span>Create Form</span>
-              </>
+  
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Description (optional)
+              </label>
+              <input
+                type="text"
+                name="description"
+                value={formDetails.description}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                placeholder="Form description"
+              />
+            </div>
+  
+            {errorMsg && (
+              <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-red-600 text-sm">{errorMsg}</p>
+              </div>
             )}
-          </button>
+  
+            <button
+              type="submit"
+              disabled={!isValid || loading}
+              className={`w-full py-3 mt-6 text-white font-medium rounded-lg transition-colors ${
+                isValid && !loading ? "bg-black hover:bg-gray-800" : "bg-gray-300 cursor-not-allowed"
+              }`}
+            >
+              {loading ? "Creating..." : "Create Form"}
+            </button>
+          </div>
+        </form>
+      </div>
+  
+      <div className="w-full md:w-1/2 bg-gray-50 flex items-center justify-center md:justify-start p-4 lg:p-8">
+        <div className="w-full max-w-md broder">
+          <h2 className="text-lg font-medium text-gray-900 mb-4">Select Theme</h2>
+          <div className="flex flex-row gap-4">
+            <button
+              type="button"
+              onClick={() => setFormDetails(prev => ({ ...prev, theme: "ROUNDED" }))}
+              className={`flex-1 p-6 border-2 ${
+                formDetails.theme === "ROUNDED" ? "border-black" : "border-gray-200"
+              } bg-white rounded-xl transition-all`}
+            >
+              <div className="space-y-2">
+                <div className="h-24 bg-gray-100 rounded-xl mb-3" />
+                <span className="text-sm font-medium">Rounded</span>
+                <p className="text-xs text-gray-500">Soft rounded corners</p>
+              </div>
+            </button>
+  
+            <button
+              type="button"
+              onClick={() => setFormDetails(prev => ({ ...prev, theme: "BOXY" }))}
+              className={`flex-1 p-6 border-2 ${
+                formDetails.theme === "BOXY" ? "border-black" : "border-gray-200"
+              } bg-white rounded-xl transition-all`}
+            >
+              <div className="space-y-2">
+                <div className="h-24 bg-gray-100 rounded-none mb-3" />
+                <span className="text-sm font-medium">Boxy</span>
+                <p className="text-xs text-gray-500">Sharp rectangular edges</p>
+              </div>
+            </button>
+          </div>
         </div>
-      </form>
+      </div>
     </div>
   );
 };
