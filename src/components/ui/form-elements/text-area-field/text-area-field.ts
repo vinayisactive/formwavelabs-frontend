@@ -4,7 +4,7 @@ import TextAreaTile from "./text-area-field-tile";
 import TextAreaSetting from "./text-area-field-setting";
 import TextAreaSubmit from "./text-area-field-submit";
 
-const type: ElementsType = "TextAreaField";
+const type: ElementsType = "TextField";
 
 const TextAreaFormElement: FormElement = {
   type,

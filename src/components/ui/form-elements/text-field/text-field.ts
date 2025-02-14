@@ -4,7 +4,7 @@ import { textExtraAttributes as extraAttributes } from "./text-prop-attributes";
 import TextFieldSubmit from "./text-field-submit";
 import TextFieldSetting from "./text-field-setting";
 
-const type: ElementsType = "TextFiled";
+const type: ElementsType = "TextField";
 
 export const TextFiledFormElement: FormElement = {
   type,
