@@ -1,12 +1,12 @@
 "use client";
 
 import { Dispatch, FC, SetStateAction } from "react";
-import { ElementsType } from "@/utility/ts-types";
+import { ElementsType, LayoutElementsType } from "@/utility/ts-types";
 import { FormElemets } from "@/utility/static-data";
 import ElementButton from "./element-btn";
 
-const formElementTypes: ElementsType[] = [
-  "TextFiled",
+const formElementTypes: (ElementsType | LayoutElementsType)[] = [
+  "TextField",
   "SelectField",
   "EmailField",
   "CheckboxField",
@@ -16,6 +16,8 @@ const formElementTypes: ElementsType[] = [
   "MultipleChoiceField",
   "DateField",
   "FileUploadField",
+  "FormHeader",
+  "LayoutImage"
 ];
 
 const SectionLabel: FC<{ label: string }> = ({ label }) => (

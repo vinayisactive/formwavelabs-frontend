@@ -39,7 +39,7 @@ const BuilderSideBar = () => {
 
 
       {selectedElementInstance && ElementEditSetting && (
-        <div className="h-full w-screen bg-black/10 px-2 py-5 backdrop-blur-sm border absolute overflow-y-auto scroll-smooth">
+        <div className="h-full w-screen bg-black/10 px-2 py-5 backdrop-blur-sm border absolute overflow-y-auto scroll-smooth z-[10]">
           <ElementEditSetting elementInstance={selectedElementInstance} />
         </div>
       )}

@@ -1,8 +1,10 @@
 "use client";
 
-import { ElementsType, FormElement } from "@/utility/ts-types";
+import { ElementsType, FormElement, LayoutElementsType } from "@/utility/ts-types";
 import {
   Calendar,
+  Heading1Icon,
+  Layout,
   LucideIcon,
   Mail,
   MousePointer2,
@@ -21,7 +23,7 @@ import useElements from "@/utility/useElements-hook";
 import { Dispatch, SetStateAction } from "react";
 
 
-type ElementButtonLabel = FormElement["elementButton"];
+type ElementButtonLabel = FormElement["elementButton"]
 
 const ElementButtonIBetterLabels: Record<ElementButtonLabel, string> = {
   TextField: "Input",
@@ -33,7 +35,9 @@ const ElementButtonIBetterLabels: Record<ElementButtonLabel, string> = {
   MultipleChoiceField: "Multiple choice",
   DateField: "Date",
   FileUploadField: "Upload file",
-  EmailField: "Email"
+  EmailField: "Email",
+  FormHeader: "Form header",
+  LayoutImage: "Layout Image"
 };
 
 export const IconMap: Record<ElementButtonLabel, LucideIcon | IconType> = {
@@ -46,7 +50,9 @@ export const IconMap: Record<ElementButtonLabel, LucideIcon | IconType> = {
   "MultipleChoiceField": SlOptionsVertical,
   "DateField": Calendar,
   "FileUploadField" : FaFileUpload,
-  "EmailField": Mail
+  "EmailField": Mail,
+  "FormHeader" : Heading1Icon,
+  "LayoutImage" : Layout
 };
 
 
@@ -59,7 +65,7 @@ const ElementButton = ({ element, setElementModalActive }: { element: FormElemen
   const { elements, addElement } = useElements();
 
   const addElementHandler = () => {
-    const newElement = FormElemets[element?.type as ElementsType].construct(
+    const newElement = FormElemets[element?.type as ElementsType | LayoutElementsType]?.construct(
       randomID()
     );
 
