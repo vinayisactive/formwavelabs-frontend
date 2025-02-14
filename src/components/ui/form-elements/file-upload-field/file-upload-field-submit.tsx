@@ -4,7 +4,9 @@ import { FC, useState } from "react";
 import { FileUploadCustomInstance } from "./file-upload-prop-attributes";
 import { SubmitComponentWrapper } from "../elements-reusable-comp";
 import ImageKitFileUpload from "../../imagekit-file-uploader";
-import { X } from "lucide-react";
+import { Loader, X } from "lucide-react";
+import { handleAxiosError } from "@/utility/axios-err-handler";
+import axios from "axios";
 
 const FileUploadSubmit: FC<submitCompPropsType> = ({
   elementInstance,
@@ -17,9 +19,10 @@ const FileUploadSubmit: FC<submitCompPropsType> = ({
 }) => {
   const { id, extraAttributes } = elementInstance as FileUploadCustomInstance;
   const { label, helperText, required, selectedFileType } = extraAttributes;
-  const [fileUrl, setFileUrl] = useState<string | null>(
-    formValues?.[id] || null
-  );
+  const [fileUrl, setFileUrl] = useState<string | null>(formValues?.[id] || null);
+
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleChange = (url: string) => {
     setFileUrl(url);
@@ -34,14 +37,31 @@ const FileUploadSubmit: FC<submitCompPropsType> = ({
     handleValues?.(id, url);
   };
 
-  const handleRemoveUrl = () => {
-    setFileUrl(null);
-    handleValues?.(id, "")
+  const handleRemoveUrl = async () => {
+    const [, fileId] = fileUrl?.split("::") as [string, string];
+
+    try {
+      setErrorMsg(null);
+      setIsLoading(true);
+
+      await axios.delete("/api/imagekit-auth", {
+        data: {
+          fileId,
+        },
+      });
+
+      setIsLoading(false);
+      setFileUrl(null);
+      handleValues?.(id, "");
+    } catch (error) {
+      setErrorMsg(handleAxiosError(error));
+      setIsLoading(false);
+    }
 
     if (required) {
       setElementsToValidate?.((prev) => ({
         ...prev,
-        [id]: ""
+        [id]: "",
       }));
     }
   };
@@ -58,7 +78,7 @@ const FileUploadSubmit: FC<submitCompPropsType> = ({
       {!fileUrl && (
         <ImageKitFileUpload
           fileType={selectedFileType}
-          onSuccess={(res) => handleChange(res.url)}
+          onSuccess={(res) => handleChange(`${res.url}::${res.fileId}`)}
           className={
             theme === "BOXY"
               ? "border-r-4 border-b-4 border-black"
@@ -69,12 +89,14 @@ const FileUploadSubmit: FC<submitCompPropsType> = ({
 
       {fileUrl && (
         <p className="border px-2 border-black flex justify-between items-center overflow-hidden">
-          {fileUrl}
+          {fileUrl?.split("::")[0]}
           <span onClick={handleRemoveUrl}>
-            <X />
+           { isLoading ? <Loader className="animate-spin"/> :  <X />}
           </span>
         </p>
       )}
+
+      {errorMsg && <p>{errorMsg}</p>}
     </SubmitComponentWrapper>
   );
 };
