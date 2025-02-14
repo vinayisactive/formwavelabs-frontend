@@ -1,5 +1,5 @@
 import ImageKit from "imagekit";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const urlEndpoint = process.env.NEXT_PUBLIC_URL_ENDPOINT;
 const publicKey = process.env.NEXT_PUBLIC_PUBLIC_KEY;
@@ -26,3 +26,22 @@ export async function GET() {
     );
   }
 }
+
+export const DELETE = async (req: NextRequest) => {
+  const { fileId } = await req.json();
+
+  try {
+    await imagekit.deleteFile(fileId);
+    return NextResponse.json(
+      {
+        message: "Image deleted Successfully",
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to delete image", details: error },
+      { status: 500 }
+    );
+  }
+};
