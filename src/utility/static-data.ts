@@ -9,9 +9,11 @@ import MultipleChoiceFieldFormElement from "@/components/ui/form-elements/multip
 import DateFieldFormElement from "@/components/ui/form-elements/date-field/date-field";
 import FileUploadFieldFormElement from "@/components/ui/form-elements/file-upload-field/file-upload-field";
 import EmailFieldFormElement from "@/components/ui/form-elements/email-field/email-field";
+import FormHeaderLayoutElement from "@/components/ui/form-elements/layout-elements/form-header/form-header-element";
+import LayoutImageFormElement from "@/components/ui/form-elements/layout-elements/layout-image/layout-image-element";
 
 export const FormElemets: FormElemetsType = {
-    TextFiled: TextFiledFormElement,
+    TextField: TextFiledFormElement,
     SelectField: SelectFieldFormElement,
     CheckboxField : CheckBoxFieldElement,
     RadioButtonField: RadioBtnFormElement,
@@ -20,6 +22,8 @@ export const FormElemets: FormElemetsType = {
     MultipleChoiceField: MultipleChoiceFieldFormElement,
     DateField: DateFieldFormElement,
     FileUploadField: FileUploadFieldFormElement,
-    EmailField: EmailFieldFormElement
+    EmailField: EmailFieldFormElement,
+    FormHeader: FormHeaderLayoutElement,
+    LayoutImage: LayoutImageFormElement
   };
 

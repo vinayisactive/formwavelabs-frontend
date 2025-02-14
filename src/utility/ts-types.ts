@@ -1,16 +1,18 @@
 import { Dispatch, SetStateAction } from "react";
 
-export type ElementsType = "TextFiled" | "SelectField" | "CheckboxField" | "RadioButtonField"  | "TextAreaField" | "YesAndNoField" | "MultipleChoiceField" | "DateField" | "FileUploadField" | "EmailField"
+export type ElementsType = "TextField" | "SelectField" | "CheckboxField" | "RadioButtonField"  | "TextAreaField" | "YesAndNoField" | "MultipleChoiceField" | "DateField" | "FileUploadField" | "EmailField"
+export type LayoutElementsType = "FormHeader" | "LayoutImage"
+
 
 export type FormElemetInstance = {
   id: string;
-  type: ElementsType;
+  type: ElementsType | LayoutElementsType; 
   extraAttributes?: Record<string, unknown>;
 };
 
 export type FormElement = {
   construct: (id: string) => FormElemetInstance;
-  type: ElementsType;
+  type: ElementsType | LayoutElementsType; 
   tile: React.FC<FormElementProps>;
   setting: React.FC<FormElementProps>;
   submit: React.FC<submitCompPropsType>;
@@ -35,6 +37,6 @@ export type submitCompPropsType = {
 export type submitValueType = (key: string, value: string) => void;
 
 export type FormElemetsType = {
-    [key in ElementsType]: FormElement;
+    [key in (ElementsType | LayoutElementsType)]: FormElement;
   };
 
