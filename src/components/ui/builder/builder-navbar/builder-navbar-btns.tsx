@@ -59,17 +59,17 @@ export const SaveBtn = ({ savePageMutation, isSaveAllowed }: SaveBtnProps) => {
   );
 };
 
-// PreviousBtn component
 interface PreviousBtnProps {
   handlePrevious: () => void;
+  isSaveAllowed: boolean
 }
 
-export const PreviousBtn = ({ handlePrevious }: PreviousBtnProps) => {
+export const PreviousBtn = ({ handlePrevious, isSaveAllowed }: PreviousBtnProps) => {
   return (
     <button
       onClick={handlePrevious}
       className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors 
-        bg-black text-white hover:bg-black/70`}
+       text-white hover:bg-black/70 ${isSaveAllowed ? "bg-gray-100 text-gray-300 cursor-not-allowed" : "bg-black cursor-pointer "}`}
     >
       <span className="hidden md:flex">Previous</span>
    
@@ -80,20 +80,20 @@ export const PreviousBtn = ({ handlePrevious }: PreviousBtnProps) => {
   );
 };
 
-// NextBtn component
 interface NextBtnProps {
   handleNextPage: () => void;
   isNextFetching: boolean;
+  isSaveAllowed: boolean
 }
 
-export const NextBtn = ({ handleNextPage, isNextFetching }: NextBtnProps) => {
+export const NextBtn = ({ handleNextPage, isNextFetching, isSaveAllowed }: NextBtnProps) => {
   return (
     <button
       onClick={handleNextPage}
-      disabled={isNextFetching}
+      disabled={isNextFetching || isSaveAllowed}
       className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors flex gap-2 
         ${
-          isNextFetching
+          isNextFetching || isSaveAllowed
             ? "bg-gray-100 text-gray-400 cursor-not-allowed"
             : "bg-black text-white hover:bg-black/70"
         }`}
@@ -109,18 +109,20 @@ export const NextBtn = ({ handleNextPage, isNextFetching }: NextBtnProps) => {
   );
 };
 
-// CreateNextBtn component
+
 interface CreateNextBtnProps {
   createNextMutation: UseMutationResult<void, AxiosError, void, unknown>;
+  isSaveAllowed: boolean;
 }
 
-export const CreateNextBtn = ({ createNextMutation }: CreateNextBtnProps) => {
+export const CreateNextBtn = ({ createNextMutation, isSaveAllowed }: CreateNextBtnProps) => {
   return (
     <button
       onClick={() => createNextMutation.mutate()}
+      disabled={isSaveAllowed}
       className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors flex gap-2 
         ${
-          createNextMutation.isPending
+          createNextMutation.isPending || isSaveAllowed
             ? "bg-gray-100 text-gray-400 cursor-not-allowed"
             : "bg-black text-white hover:bg-black/70"
         }`}
@@ -128,23 +130,21 @@ export const CreateNextBtn = ({ createNextMutation }: CreateNextBtnProps) => {
       <span className="flex whitespace-nowrap">
         Create Next {createNextMutation.isPending && <Loader />}
       </span>
-
-      {/* <span className="flex md:hidden">
-        <StepForward />
-      </span> */}
     </button>
   );
 };
 
-// PublishBtn component
+
 interface PublishBtnProps {
   savePublishMutation: UseMutationResult<void, AxiosError, void, unknown>;
   isNextAvailable: boolean;
+  isSaveAllowed: boolean
 }
 
 export const PublishBtn = ({
   savePublishMutation,
   isNextAvailable,
+  isSaveAllowed
 }: PublishBtnProps) => {
   return (
     <button
@@ -152,7 +152,7 @@ export const PublishBtn = ({
       disabled={isNextAvailable}
       className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors 
         ${
-          isNextAvailable
+          isNextAvailable || isSaveAllowed
             ? "bg-gray-100 text-gray-400 cursor-not-allowed"
             : "bg-green-100 text-green-700 hover:bg-green-200"
         }`}
@@ -176,7 +176,6 @@ export const PublishBtn = ({
   );
 };
 
-// UnPublishBtn component
 interface UnPublishBtnProps {
   savePublishMutation: UseMutationResult<void, AxiosError, void, unknown>;
 }

@@ -1,8 +1,7 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, Dispatch, SetStateAction } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 import axios, { AxiosError } from "axios";
@@ -19,14 +18,14 @@ import { areElementsChanged } from "@/utility/compare-fns";
 interface BuilderNavbarProps {
   formData: FormData | undefined;
   page: number;
+  setCurrentPage: Dispatch<SetStateAction<number>>
   totalPage: number | undefined;
 }
 
-const BuilderNavbar: React.FC<BuilderNavbarProps> = ({formData, page, totalPage}) => {
+const BuilderNavbar: React.FC<BuilderNavbarProps> = ({formData, page, totalPage, setCurrentPage}) => {
   const session = useSession();
   const token = session.data?.accessToken;
   const queryClient = useQueryClient();
-  const router = useRouter();
   const { elements } = useElements();
   const initialElements = useRef<FormElemetInstance[] | null>(null);
   const [isNextAvailable, setIsNextAvailable] = useState<boolean>(false);
@@ -69,7 +68,6 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({formData, page, totalPage}
     }
   }, [elements]);
 
-
   const savePageMutation = useMutation<void, AxiosError, void>({
     mutationFn: async () => {
        await axios.patch(`https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formData?.id}/page?p=${formData?.pages[0].page}`,
@@ -103,7 +101,6 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({formData, page, totalPage}
     onError: (error) => console.error(handleAxiosError(error))
   });
 
-
   const createNextMutation = useMutation<void, AxiosError, void>({
         mutationFn: async() => {
             const response = await axios.post(`https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formData?.id}/page/next?p=${page}`,null,
@@ -115,7 +112,7 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({formData, page, totalPage}
                 );
 
                 if(response.data.status  === "success"){
-                  router.push(`/form/${formData?.id}/${response.data.data.page}/builder`)
+                  setCurrentPage(response.data.data.page)
                 }
         },
         onSuccess: () => queryClient.invalidateQueries({queryKey: ["formData"]}),
@@ -135,7 +132,7 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({formData, page, totalPage}
   
         setIsNextFetching(false);
         if (response.data.status === "success") {
-          router.push(`/form/${formData?.id}/${response.data.data.page}/builder`);
+          setCurrentPage(response.data.data.page)
         }
       } catch (error) {
         console.error(handleAxiosError(error));
@@ -144,49 +141,69 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({formData, page, totalPage}
     };
 
   const handlePrevious = () => {
-    router.push(`/form/${formData?.id}/${page - 1}/builder`);
+    setCurrentPage((prev) => prev === 0 ? 0 : prev-1);
   };
 
   return (
-    <div className="flex flex-row justify-between items-center border-b gap-2 px-2 h-full md:px-4 bg-white shadow-sm">
+    <div className={`
+      flex flex-row justify-between items-center
+      h-full gap-2 px-2 md:px-4
+      border-b bg-white shadow-sm
+    `}>
       <h1 className="w-full text-sm text-black text-left">
         {formData?.title}
       </h1>
   
-      <div className="flex gap-2 items-center">  
-        {page > 1 && (
-          <PreviousBtn handlePrevious={handlePrevious} />
-        )}
+      <div className="flex gap-2 items-center">
+        <div className="bg-black p-1.5 text-sm rounded-md text-white">
+          {page}/{totalPage}
+        </div>
   
-        <SaveBtn 
-          savePageMutation={savePageMutation} 
-          isSaveAllowed={isSaveAllowed}
-        />
+        <div className="flex gap-2 items-center">
+          {page > 1 && (
+            <PreviousBtn
+              handlePrevious={handlePrevious}
+              isSaveAllowed={isSaveAllowed}
+            />
+          )}
   
-        {isNextAvailable && (
-          <NextBtn 
-            handleNextPage={handleNextPage} 
-            isNextFetching={isNextFetching}
+          <SaveBtn
+            savePageMutation={savePageMutation}
+            isSaveAllowed={isSaveAllowed}
           />
-        )}
   
-        {!isNextAvailable && elements?.length > 0 && (
-          <CreateNextBtn createNextMutation={createNextMutation} />
-        )}
-  
-        <div className="hidden md:flex h-6 w-px bg-gray-200 mx-2" />
-  
-        {formData?.status ? (
-          <div className="flex gap-2 items-center">
-            <UnPublishBtn savePublishMutation={savePublishMutation} />
-            <CopyToClipboard textToCopy={copyToClipboardText} />
-          </div>
-        ) : (
-          <PublishBtn 
-            isNextAvailable={isNextAvailable} 
-            savePublishMutation={savePublishMutation}
-          />
-        )}
+          {isNextAvailable ? (
+            <NextBtn
+              handleNextPage={handleNextPage}
+              isNextFetching={isNextFetching}
+              isSaveAllowed={isSaveAllowed}
+            />
+          ) : (
+            ( initialElements.current && initialElements.current?.length > 0 ) && (
+              <CreateNextBtn
+                createNextMutation={createNextMutation}
+                isSaveAllowed={isSaveAllowed}
+              />
+            )
+          )}
+        </div>
+
+        <div className="flex gap-2 items-center">
+          {formData?.status ? (
+            <>
+              <UnPublishBtn savePublishMutation={savePublishMutation} />
+              <CopyToClipboard textToCopy={copyToClipboardText} />
+            </>
+          ) : (
+          ( initialElements.current && initialElements.current?.length > 0 ) && (
+              <PublishBtn
+                isNextAvailable={isNextAvailable}
+                savePublishMutation={savePublishMutation}
+                isSaveAllowed={isSaveAllowed}
+              />
+            )
+          )}
+        </div>
       </div>
     </div>
   );
