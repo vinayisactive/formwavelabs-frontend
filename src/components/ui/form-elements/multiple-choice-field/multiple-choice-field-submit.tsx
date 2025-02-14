@@ -15,35 +15,36 @@ const MultipleChoiceSubmit: FC<submitCompPropsType> = ({
   isFormError,
   theme,
 }) => {
-  const { id, extraAttributes } =
+  const { id, extraAttributes } = 
     elementInstance as MultipleChoiceFieldCustomInstance;
   const { label, helperText, options, required } = extraAttributes;
 
   const [selectedOptions, setSelectedOptions] = useState<string[]>(() => {
     const storedValue = formValues?.[id];
-    return typeof storedValue === "string" ? storedValue.split(",") : [];
+    return typeof storedValue === "string" && storedValue !== "" 
+      ? storedValue.split(",") 
+      : [];
   });
 
   const handleChange = (option: string) => {
     setSelectedOptions((prev) => {
-      const newOptions = prev.includes(option)
-        ? prev.filter((opt) => opt !== option)
-        : [...prev, option];
+      const cleanPrev = prev.filter(Boolean);
+      const newOptions = cleanPrev.includes(option)
+        ? cleanPrev.filter((opt) => opt !== option)
+        : [...cleanPrev, option];
 
-        handleValues?.(id, newOptions.join(", "));
+      handleValues?.(id, newOptions.join(","));
 
-        if (required) {
-          const isValid = newOptions.length > 0;
-          setElementsToValidate?.((prev) => ({
-            ...prev,
-            [id]: isValid ? undefined : "",
-          }));
-        }
+      if (required) {
+        const isValid = newOptions.length > 0;
+        setElementsToValidate?.((prev) => ({
+          ...prev,
+          [id]: isValid ? undefined : "",
+        }));
+      }
 
       return newOptions;
     });
-
-    
   };
 
   return (
@@ -69,16 +70,16 @@ const MultipleChoiceSubmit: FC<submitCompPropsType> = ({
                   ? "rounded-md border-black border-2 shadow-md shadow-black/30"
                   : "border-2 border-gray-300 rounded-md"
               }`}
-          
           >
             <label className="flex items-center space-x-3 cursor-pointer overflow-hidden">
               <input
                 type="checkbox"
                 checked={selectedOptions.includes(option)}
                 readOnly
-                 className="h-4 w-4 text-black accent-black focus:ring-black checked:rounded-none"
+                className="h-4 w-4 text-black accent-black focus:ring-black checked:rounded-none"
               />
-              <span className="text-sm text-gray-700 w-full" onClick={() => handleChange(option)}>{option}</span>
+              {/* Removed redundant onClick from span */}
+              <span className="text-sm text-gray-700 w-full">{option}</span>
             </label>
           </div>
         ))}
