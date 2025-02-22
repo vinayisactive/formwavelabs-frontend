@@ -65,10 +65,10 @@ interface SubmitComponentWrapperProps {
 
 export const ElementLayerTile= ({ label, typeLabel }: ElementLayerTileProps) => {
   return (
-    <div className="cursor-grab hover:shadow-sm transition-all">
+    <div className="cursor-grab hover:shadow-sm transition-all p-2 rounded-md">
       <div className="flex items-center gap-2">
         <GripVertical className="h-4 w-4 text-muted-foreground/50" />
-        <div className="flex flex-col">
+        <div className="flex flex-col  w-full rounded-md">
           <span className="text-xs font-medium text-foreground/80 overflow-hidden">
             {label.slice(0, 10)}...
           </span>
