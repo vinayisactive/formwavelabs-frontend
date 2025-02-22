@@ -40,7 +40,7 @@ const DndOverlayWrapper = () => {
     } else {
       const ElementTileComponent = FormElemets[element.type].tile;
       node = (
-        <div className="bg-gray-600 p-3 rounded-md opacity-40 pointer-events-none">
+        <div className="bg-white p-2 rounded-md opacity-70 pointer-events-none border-2 border-black">
           <ElementTileComponent elementInstance={element} />
         </div>
       );
