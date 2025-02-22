@@ -13,7 +13,10 @@ import BuilderNavbar from "../ui/builder/builder-navbar/builder-navbar";
 import useElements from "@/utility/useElements-hook";
 import { handleAxiosError } from "@/utility/axios-err-handler";
 import { FormElemetInstance } from "@/utility/ts-types";
-import BuilderSidebarDnd from "../ui/builder/builder-sidebar/builder-sidebar-dnd";
+
+import ElementsContainer from "../ui/builder/elements-container/elements-container";
+import ElementsReOrder from "../ui/builder/elements-reorder/elements-reorder";
+import { FormElemets } from "@/utility/static-data";
 
 export interface FormPageData {
   id: string;
@@ -27,19 +30,24 @@ export interface FormData {
   title: string;
   status: boolean;
   totalPages: number;
-  theme: "BOXY" | "ROUNDED"
+  theme: "BOXY" | "ROUNDED";
 }
 
-interface FormBuilderProps {
-  formId: string;
-}
-
-const FormBuilder: React.FC<FormBuilderProps> = ({ formId }) => {
+const FormBuilder = ({ formId }: { formId: string }) => {
   const { setElements } = useElements();
   const { data: session } = useSession();
   const token = session?.accessToken;
 
   const [currentPage, setCurrentPage] = useState<number>(1);
+
+  // const [isElementModalActive, setElementModalActive] = useState<boolean>(false);
+
+  const { selectedElementInstance } = useElements();
+
+  let ElementEditSetting = null;
+  if (selectedElementInstance) {
+    ElementEditSetting = FormElemets[selectedElementInstance?.type].setting;
+  }
 
   const {
     data: formData,
@@ -62,53 +70,98 @@ const FormBuilder: React.FC<FormBuilderProps> = ({ formId }) => {
   });
 
   useEffect(() => {
-    if (formData?.pages[0]?.content) {
-      try {
-        const parsedData = JSON.parse(
-          formData.pages[0].content
-        ) as FormElemetInstance[];
-        setElements(parsedData);
-      } catch {
-        setElements([]);
-      }
-    } else {
+    if (!formData?.pages[0]?.content) {
+      setElements([]);
+      return;
+    }
+
+    try {
+      const parsedData = JSON.parse(
+        formData.pages[0].content
+      ) as FormElemetInstance[];
+      setElements(parsedData);
+    } catch {
       setElements([]);
     }
   }, [formData, setElements]);
 
-  return (
-    <div className="w-full h-full flex flex-col justify-center items-center">
-      {isLoading ? (
+  if (isLoading) {
+    return (
+      <div className="w-full h-full bg-white flex items-center justify-center">
         <Loader className="animate-spin text-gray-500 w-10 h-10" />
-      ) : error ? (
-        <div className="flex flex-col items-center text-center space-y-4">
-          <p className="text-red-500 font-medium">{handleAxiosError(error)}</p>
-          <Link
-            href={`/form/${formId}/1/builder`}
-            className="border p-2 rounded-lg bg-gray-100 hover:bg-gray-200"
-          >
-            Go back to form
-          </Link>
-        </div>
-      ) : (
-        <div className="w-full h-full">
-          <div className="h-[6%] ">
-            <BuilderNavbar
-              formData={formData}
-              page={currentPage}
-              setCurrentPage={setCurrentPage}
-              totalPage={formData?.totalPages}
-            />
-          </div>
+      </div>
+    );
+  }
 
-          <div className="h-[94%] flex pr-2 gap-2">
-            <BuilderSidebarDnd />
-            <BuilderPreview formTheme={formData?.theme}/>
-          </div>
+  if (error) {
+    return <ErrorScreen error={error} formId={formId} />;
+  }
+
+  return (
+    <div className="w-full h-full px-2 md:px-0 bg-white">
+      {selectedElementInstance && ElementEditSetting && (
+        <div className="h-screen w-screen bg-black/50 px-2 py-5 flex justify-center items-center backdrop-blur-sm absolute overflow-y-auto scroll-smooth z-[10]">
+          <ElementEditSetting elementInstance={selectedElementInstance} />
         </div>
       )}
+
+      <div className="h-[7%]">
+        <BuilderNavbar
+          formData={formData}
+          page={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPage={formData?.totalPages}
+        />
+      </div>
+
+      <div className="h-[93%] w-full flex gap-2">
+        <aside className="w-1/5 hidden md:flex">
+          <ElementsContainer />
+        </aside>
+
+        <div
+          className=" w-full md:w-3/5 rounded-tr-md  rounded-tl-md shadow-inner shadow-black/20 px-4"
+          style={{
+            backgroundColor: "#ffffff",
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23aaaaaa' fill-opacity='0.45' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E")`,
+            backgroundPosition: "center",
+          }}
+        >
+          <BuilderPreview formTheme={formData?.theme} />
+        </div>
+
+        <aside className="w-1/5 hidden md:flex">
+          <ElementsReOrder />
+        </aside>
+      </div>
+    </div>
+  );
+};
+
+const ErrorScreen = ({ error, formId }: { error: unknown; formId: string }) => {
+  return (
+    <div className="flex flex-col items-center text-center space-y-4">
+      <p className="text-red-500 font-medium">{handleAxiosError(error)}</p>
+      <Link
+        href={`/form/${formId}/1/builder`}
+        className="border p-2 rounded-lg bg-gray-100 hover:bg-gray-200"
+      >
+        Go back to form
+      </Link>
     </div>
   );
 };
 
 export default FormBuilder;
+
+{
+  /* 
+
+          {isElementModalActive && (
+            <div className="h-screen w-screen pt-10 bg-black/10 px-2 py-5 backdrop-blur-sm border absolute overflow-y-auto scroll-smooth"
+              onClick={() => setElementModalActive(!isElementModalActive)}
+            >
+              <FormElementsContainer setElementModalActive={setElementModalActive}/>
+            </div>
+          )} */
+}
