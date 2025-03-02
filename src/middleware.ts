@@ -6,7 +6,7 @@ const sessionTokenName =
     ? "next-auth.session-token"
     : "__Secure-next-auth.session-token";
 
-const protectedPaths = ["/dashboard", "/form"];
+const protectedPaths = ["/workspaces", "/form"];
 
 const isRouteProtected = (pathname: string) => {
   return protectedPaths.some((p) => pathname.startsWith(p)); 
@@ -17,7 +17,7 @@ export async function middleware(request: NextRequest) {
   const hasToken = request.cookies.has(sessionTokenName);
 
   if (hasToken && (pathname === "/sign-in" || pathname === "/sign-up")) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    return NextResponse.redirect(new URL("/workspaces", request.url));
   }
 
   if (!hasToken && isRouteProtected(pathname)) {
@@ -31,7 +31,7 @@ export const config = {
   matcher: [
     "/sign-in",
     "/sign-up",
-    "/dashboard",
+    "/workspaces",
     "/form/:path*",
     "/submit/:path*",
   ],
