@@ -5,7 +5,6 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { Loader } from "lucide-react";
 
 import BuilderPreview from "../ui/builder/builder-preview";
 import BuilderNavbar from "../ui/builder/builder-navbar/builder-navbar";
@@ -17,6 +16,7 @@ import { FormElemetInstance } from "@/utility/ts-types";
 import ElementsContainer from "../ui/builder/elements-container/elements-container";
 import ElementsReOrder from "../ui/builder/elements-reorder/elements-reorder";
 import { FormElemets } from "@/utility/static-data";
+import BuilderLoading from "../ui/builder/builder-loading";
 
 export interface FormPageData {
   id: string;
@@ -33,15 +33,12 @@ export interface FormData {
   theme: "BOXY" | "ROUNDED";
 }
 
-const FormBuilder = ({ formId }: { formId: string }) => {
+const FormBuilder = ({ formId, workspaceId }: { formId: string, workspaceId: string}) => {
   const { setElements } = useElements();
   const { data: session } = useSession();
   const token = session?.accessToken;
 
   const [currentPage, setCurrentPage] = useState<number>(1);
-
-  // const [isElementModalActive, setElementModalActive] = useState<boolean>(false);
-
   const { selectedElementInstance } = useElements();
 
   let ElementEditSetting = null;
@@ -57,7 +54,7 @@ const FormBuilder = ({ formId }: { formId: string }) => {
     queryKey: ["formData", formId, currentPage],
     queryFn: async () => {
       const response = await axios.get(
-        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formId}/page?p=${currentPage}`,
+        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/workspaces/${workspaceId}/forms/${formId}/pages?p=${currentPage}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       return response.data.data as FormData;
@@ -68,6 +65,10 @@ const FormBuilder = ({ formId }: { formId: string }) => {
     refetchOnMount: false,
     retry: 5,
   });
+
+
+  console.log(formData);
+
 
   useEffect(() => {
     if (!formData?.pages[0]?.content) {
@@ -87,14 +88,12 @@ const FormBuilder = ({ formId }: { formId: string }) => {
 
   if (isLoading) {
     return (
-      <div className="w-full h-full bg-white flex items-center justify-center">
-        <Loader className="animate-spin text-gray-500 w-10 h-10" />
-      </div>
+      <BuilderLoading/>
     );
   }
 
   if (error) {
-    return <ErrorScreen error={error} formId={formId} />;
+    return <ErrorScreen error={error} workspaceId={workspaceId} />;
   }
 
   return (
@@ -108,6 +107,7 @@ const FormBuilder = ({ formId }: { formId: string }) => {
       <div className="h-[7%]">
         <BuilderNavbar
           formData={formData}
+          workspaceId={workspaceId}
           page={currentPage}
           setCurrentPage={setCurrentPage}
           totalPage={formData?.totalPages}
@@ -138,12 +138,12 @@ const FormBuilder = ({ formId }: { formId: string }) => {
   );
 };
 
-const ErrorScreen = ({ error, formId }: { error: unknown; formId: string }) => {
+const ErrorScreen = ({ error, workspaceId }: { error: unknown; workspaceId: string }) => {
   return (
     <div className="flex flex-col items-center text-center space-y-4">
       <p className="text-red-500 font-medium">{handleAxiosError(error)}</p>
       <Link
-        href={`/form/${formId}/1/builder`}
+        href={`/workspaces/${workspaceId}`}
         className="border p-2 rounded-lg bg-gray-100 hover:bg-gray-200"
       >
         Go back to form
@@ -153,15 +153,3 @@ const ErrorScreen = ({ error, formId }: { error: unknown; formId: string }) => {
 };
 
 export default FormBuilder;
-
-{
-  /* 
-
-          {isElementModalActive && (
-            <div className="h-screen w-screen pt-10 bg-black/10 px-2 py-5 backdrop-blur-sm border absolute overflow-y-auto scroll-smooth"
-              onClick={() => setElementModalActive(!isElementModalActive)}
-            >
-              <FormElementsContainer setElementModalActive={setElementModalActive}/>
-            </div>
-          )} */
-}

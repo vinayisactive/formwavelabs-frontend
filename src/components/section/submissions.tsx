@@ -33,7 +33,7 @@ interface SubmissionsData {
   };
 }
 
-const Submissions = async ({ formId }: { formId: string }) => {
+const Submissions = async ({ formId, workspaceId }: { formId: string, workspaceId: string }) => {
   const session = await getServerSession(authOptions);
   const token = session?.accessToken;
 
@@ -47,7 +47,7 @@ const Submissions = async ({ formId }: { formId: string }) => {
 
     const [submissionsRes, formRes] = await Promise.all([
       fetch(
-        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formId}/submissions`,
+        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/workspaces/${workspaceId}/forms/${formId}/responses`,
         {
           method: "GET",
           headers: {
@@ -57,7 +57,7 @@ const Submissions = async ({ formId }: { formId: string }) => {
         }
       ),
       fetch(
-        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formId}`,
+        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/workspaces${workspaceId}/forms/${formId}`,
         {
           method: "GET",
           headers: {
@@ -67,6 +67,8 @@ const Submissions = async ({ formId }: { formId: string }) => {
         }
       ),
     ]);
+
+    console.log(submissionsRes)
 
     if (!submissionsRes.ok) {
       const errorData = await submissionsRes.text();
@@ -92,6 +94,8 @@ const Submissions = async ({ formId }: { formId: string }) => {
     errMsg = error instanceof Error ? error.message : 'An unknown error occurred';
     console.error('Error in Submissions component:', error);
   }
+
+  // console.log(submissions);
 
   return (
     <SubmissionTable submissions={submissions} errMsg={errMsg} />

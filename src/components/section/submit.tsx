@@ -50,7 +50,7 @@ const Submit = ({ formId }: { formId: string }) => {
 
       setLoading(true);
       const response = await axios.post(
-        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formId}/submissions`,
+        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formId}/responses`,
         {
           content: JSON.stringify(formValues),
         }
