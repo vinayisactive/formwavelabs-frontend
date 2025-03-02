@@ -19,7 +19,7 @@ const WorkspaceLayout = async ({ children }: { children: ReactNode }) => {
   const workspaces = await data.json();
 
   return (
-    <div className="w-screen h-full border flex justify-center items-center bg-white relative">
+    <div className="w-screen h-full border flex justify-center items-center bg-white">
       <div className="hidden w-[20%] md:flex border h-full">
         <WorkspaceSidebar workspaces={workspaces.data} />
       </div>

@@ -1,54 +1,86 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 const Workspaces = () => {
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const token = session?.accessToken;
+  const [loading, setLoading] = useState(true);
+  const [hasWorkspace, setHasWorkspace] = useState<boolean | null>(null);
+  const controllerRef = useRef<AbortController>(null);
 
   useEffect(() => {
-    const fetchWorkspaces = async () => {
-      if (!token) {
-        setLoading(false);
-        return;
-      }
+    if (status === "loading") return;
 
+    controllerRef.current?.abort();
+    const controller = new AbortController();
+    controllerRef.current = controller;
+
+    const fetchWorkspaces = async () => {
       try {
-        const controller = new AbortController();
+        setLoading(true);
+        setHasWorkspace(null);
+
+        if (!token) {
+          setHasWorkspace(false);
+          return;
+        }
+
         const res = await fetch(
           "https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/workspaces",
           {
             headers: { Authorization: `Bearer ${token}` },
-            signal: controller.signal
+            signal: controller.signal,
+            cache: "no-store"
           }
         );
 
-        if (!res.ok) throw new Error("Failed to fetch workspaces");
+        if (!res.ok) throw new Error(res.statusText);
 
         const workspaces = await res.json();
         const firstOwnerWorkspace = workspaces?.data?.ownedWorkspaces?.[0]?.id;
 
         if (firstOwnerWorkspace) {
-          router.push(`/workspaces/${firstOwnerWorkspace}`);
+          router.replace(`/workspaces/${firstOwnerWorkspace}`);
+        } else {
+          setHasWorkspace(false);
         }
       } catch (error) {
-        console.error("Error fetching workspaces:", error);
+        if ((error as Error).name !== "AbortError") {
+          console.error("Fetch error:", error);
+          setHasWorkspace(false);
+        }
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     };
 
     fetchWorkspaces();
 
-    return () => setLoading(false); 
-  }, [token, router]);
+    return () => controller.abort();
+  }, [token, router, status]);
 
-  if (loading) return <div className="w-full h-full flex justify-center items-center">Loading...</div>;
+  if (loading) {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        Loading...
+      </div>
+    );
+  }
 
-  return <div className="w-full h-full flex justify-center items-center">No workspaces found.</div>;
+  if (hasWorkspace === false) {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        No workspaces found.
+      </div>
+    );
+  }
+
+  return null;
 };
 
 export default Workspaces;
