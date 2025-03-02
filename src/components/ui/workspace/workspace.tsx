@@ -26,7 +26,7 @@ interface WorkspaceInterface {
 
 
 const Workspace = ({ workspace }: { workspace: WorkspaceInterface }) => {
-  const { forms, id } = workspace.data;
+  const { forms, id } = workspace?.data;
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
