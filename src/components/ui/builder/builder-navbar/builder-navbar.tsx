@@ -26,6 +26,7 @@ import { HiOutlineSquare3Stack3D } from "react-icons/hi2";
 
 interface BuilderNavbarProps {
   formData: FormData | undefined;
+  workspaceId: string;
   page: number;
   setCurrentPage: Dispatch<SetStateAction<number>>;
   totalPage: number | undefined;
@@ -33,6 +34,7 @@ interface BuilderNavbarProps {
 
 const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
   formData,
+  workspaceId,
   page,
   totalPage,
   setCurrentPage,
@@ -82,7 +84,7 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
   const savePageMutation = useMutation<void, AxiosError, void>({
     mutationFn: async () => {
       await axios.patch(
-        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formData?.id}/page?p=${formData?.pages[0].page}`,
+        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/workspaces/${workspaceId}/forms/${formData?.id}/pages?p=${formData?.pages[0].page}`,
         {
           pageId: formData?.pages[0].id,
           content: elements,
@@ -101,7 +103,7 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
   const savePublishMutation = useMutation<void, AxiosError, void>({
     mutationFn: async () => {
       await axios.patch(
-        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formData?.id}/status`,
+        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/workspaces/${workspaceId}/forms/${formData?.id}/status`,
         null,
         {
           headers: {
@@ -117,7 +119,7 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
   const createNextMutation = useMutation<void, AxiosError, void>({
     mutationFn: async () => {
       const response = await axios.post(
-        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formData?.id}/page/next?p=${page}`,
+        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/workspaces/${workspaceId}/forms/${formData?.id}/pages/next?p=${page}`,
         null,
         {
           headers: {
@@ -137,19 +139,20 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
   const handleNextPage = async () => {
     try {
       setIsNextFetching(true);
-      const response = await axios.get(
-        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formData?.id}/page/next?p=${page}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      // const response = await axios.get(
+      //   `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formData?.id}/page/next?p=${page}`,
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${token}`,
+      //     },
+      //   }
+      // );
+      setCurrentPage((prev) => prev+1);
 
       setIsNextFetching(false);
-      if (response.data.status === "success") {
-        setCurrentPage(response.data.data.page);
-      }
+      // if (response.data.status === "success") {
+
+      // }
     } catch (error) {
       console.error(handleAxiosError(error));
       setIsNextFetching(false);
