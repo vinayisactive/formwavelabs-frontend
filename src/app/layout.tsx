@@ -20,7 +20,7 @@ export default async function RootLayout({
         <LayoutProvider>
           <div className="w-screen h-screen flex flex-col justify-center items-center">
             <Navbar />
-            <div className="h-[94vh]">{children}</div>
+            <div className="h-[94vh] w-full">{children}</div>
           </div>
         </LayoutProvider>
       </body>
