@@ -30,10 +30,10 @@ const NavItems = ({ isAuth }: { isAuth: boolean }) => {
 
       {isAuth && (
         <Link
-          href={"/dashboard"}
+          href={"/workspaces"}
           className=" hidden md:flex text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors px-2 py-1 rounded-lg hover:bg-blue-50/50"
         >
-          Dashbaord
+          Workspaces
         </Link>
       )}
     </div>
@@ -77,10 +77,10 @@ const AccountDetails = () => {
   );
 };
 
-const DashboardBtn = () => {
+const WorkspacesBtn = () => {
   return (
-    <Link  href="/dashboard" className="md:hidden w-full py-1 text-sm rounded-md text-gray-700 hover:text-black flex justify-center items-center">
-      Dashboard
+    <Link  href="/workspaces" className="md:hidden w-full py-1 text-sm rounded-md text-gray-700 hover:text-black flex justify-center items-center">
+      Workspaces
     </Link>
   );
 };
@@ -113,7 +113,7 @@ const UserProfile = ({ name }: { name: string }) => {
       {isOpen && (
         <div className="w-full absolute top-12 left-0 rounded-md flex flex-col gap-2 justify-center items-center border-2 p-1 z-50 bg-white">
           <AccountDetails />
-          <DashboardBtn />
+          <WorkspacesBtn />
           <LogoutButton />
         </div>
       )}
@@ -127,7 +127,7 @@ const Navbar = () => {
   const name = session?.user?.name || null;
 
   return (
-    <nav className="w-full h-[6vh] flex items-center justify-between px-4 border-b">
+    <nav className="w-full h-[6vh] flex items-center justify-between px-4">
       <Link href="/" className="flex items-center gap-2">
         <span className="text-xl font-bold text-black/50 hidden md:flex">Formwavelabs</span>
         <span className="text-xl font-bold text-black/50 flex md:hidden">FWLabs</span>

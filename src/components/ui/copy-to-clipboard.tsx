@@ -22,12 +22,12 @@ const CopyToClipboard: React.FC<CopyToClipboardProps> = ({ textToCopy }) => {
 
   return (
     <button
-      className={`border rounded-md p-1.5 ${
-        isCopied ? "bg-green-300" : "bg-transparent"
+      className={`border rounded-md p-[5px] hover:bg-gray-200 ${
+        isCopied ? "bg-green-300 hover:bg-green-300" : "bg-white"
       }`}
       onClick={handleCopy}
     >
-      <LinkIcon size={17} />
+      <LinkIcon size={16} />
     </button>
   );
 };
