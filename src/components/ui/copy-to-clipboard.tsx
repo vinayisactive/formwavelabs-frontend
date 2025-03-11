@@ -5,9 +5,10 @@ import { LinkIcon } from "lucide-react";
 
 interface CopyToClipboardProps {
   textToCopy: string;
+  className?: string
 }
 
-const CopyToClipboard: React.FC<CopyToClipboardProps> = ({ textToCopy }) => {
+const CopyToClipboard: React.FC<CopyToClipboardProps> = ({ textToCopy, className = "" }) => {
   const [isCopied, setIsCopied] = useState<boolean>(false);
 
   const handleCopy = async () => {
@@ -24,7 +25,7 @@ const CopyToClipboard: React.FC<CopyToClipboardProps> = ({ textToCopy }) => {
     <button
       className={`border rounded-md p-[5px] hover:bg-gray-200 ${
         isCopied ? "bg-green-300 hover:bg-green-300" : "bg-white"
-      }`}
+      } ${className}`}
       onClick={handleCopy}
     >
       <LinkIcon size={16} />
