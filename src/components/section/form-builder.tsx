@@ -66,10 +66,7 @@ const FormBuilder = ({ formId, workspaceId }: { formId: string, workspaceId: str
     retry: 5,
   });
 
-
-  console.log(formData);
-
-
+  
   useEffect(() => {
     if (!formData?.pages[0]?.content) {
       setElements([]);
