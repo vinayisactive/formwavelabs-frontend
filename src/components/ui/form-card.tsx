@@ -16,13 +16,13 @@ const FormCard: FC<FormCardProps> = ({formId, workspaceId, title, status, submis
   return (
     <div className="w-full flex gap-3">
   
-    <div className="hidden md:flex text-gray-500 font-bold justify-center items-center w-4">
+    <div className="hidden lg:flex text-gray-500 font-bold justify-center items-center w-4">
         {index + 1}
     </div>
 
 
 
-    <div className=' w-full flex flex-col md:flex-row  justify-between items-center gap-2 border text-sm py-3 px-4 rounded-lg bg-white shadow-sm hover:shadow-md transition-all'>
+    <div className=' w-full flex flex-col lg:flex-row  justify-between items-center gap-2 border text-sm py-3 px-4 rounded-lg bg-white shadow-sm hover:shadow-md transition-all'>
     <p className="font-medium text-gray-800">
         {title}
     </p>
