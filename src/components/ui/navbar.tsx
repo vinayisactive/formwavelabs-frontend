@@ -12,7 +12,6 @@ import { useState } from "react";
 
 const navItems = [
   { label: "Home", routeTo: "/" },
-  { label: "Create", routeTo: "/form" },
 ];
 
 const NavItems = ({ isAuth }: { isAuth: boolean }) => {
@@ -42,7 +41,11 @@ const NavItems = ({ isAuth }: { isAuth: boolean }) => {
 
 const LogoutButton = () => {
   const logoutHandler = () => {
-    signOut({ callbackUrl: "/" }).then(() => window.location.reload());
+    signOut({ callbackUrl: "/" }).then(() =>{
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
+    });
   };
 
   return (
