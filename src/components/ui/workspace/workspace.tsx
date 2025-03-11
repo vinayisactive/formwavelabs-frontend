@@ -90,12 +90,11 @@ const Workspace = ({ wsId }: { wsId: string }) => {
         />
       </div>
 
-      <div className="h-[94%] p-4 flex flex-col gap-3 rounded-tl-md rounded-tr-md border bg-white shadow-md">
+      <div className="h-[94%] w-full p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 rounded-tl-md rounded-tr-md overflow-y-scroll bg-white/50 border">
         {workspaceData?.data.forms ? (
-          workspaceData.data.forms?.map((form, index) => (
+          workspaceData.data.forms?.map((form) => (
             <FormCard
               key={form.id}
-              index={index}
               formId={form.id}
               workspaceId={workspaceData.data.id}
               title={form.title}
