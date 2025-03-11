@@ -48,7 +48,7 @@ export const SaveBtn = ({ savePageMutation, isSaveAllowed }: SaveBtnProps) => {
         }`}
     >
       <Save className="w-4 h-4 stroke-[1.5]" />
-      <span className="hidden md:inline">
+      <span className="hidden md:inline whitespace-nowrap">
         {savePageMutation.isPending ? "Saving..." : "Save Changes"}
       </span>
     </button>
@@ -77,29 +77,24 @@ export const PreviousBtn = ({ handlePrevious, isSaveAllowed }: PreviousBtnProps)
 
 interface NextBtnProps {
   handleNextPage: () => void;
-  isNextFetching: boolean;
   isSaveAllowed: boolean;
 }
 
-export const NextBtn = ({ handleNextPage, isNextFetching, isSaveAllowed }: NextBtnProps) => {
+export const NextBtn = ({ handleNextPage, isSaveAllowed }: NextBtnProps) => {
   return (
     <button
       onClick={handleNextPage}
-      disabled={isNextFetching || isSaveAllowed}
+      disabled={isSaveAllowed}
       className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-all
         shadow-inner border border-gray-200
         ${
-          isNextFetching || isSaveAllowed
+           isSaveAllowed
             ? "text-gray-400 cursor-not-allowed bg-gray-100"
             : "text-gray-900 hover:bg-gray-50 bg-white"
         }`}
     >
       <span className="hidden md:inline">Next</span>
-      {isNextFetching ? (
-        <Loader className="w-4 h-4 stroke-[1.5] animate-spin" />
-      ) : (
-        <ArrowRightIcon className="w-4 h-4 stroke-[1.5]" />
-      )}
+      <ArrowRightIcon className="w-4 h-4 stroke-[1.5]" />
     </button>
   );
 };
@@ -125,7 +120,7 @@ export const CreateNextBtn = ({ createNextMutation, isSaveAllowed }: CreateNextB
       {createNextMutation.isPending ? (
         <Loader className="w-4 h-4 stroke-[1.5] animate-spin" />
       ) : (
-        <span>Create Next</span>
+        <span className=" whitespace-nowrap">Create Next</span>
       )}
     </button>
   );
@@ -149,8 +144,8 @@ export const PublishBtn = ({ savePublishMutation, isSaveAllowed }: PublishBtnPro
             : "text-gray-900 hover:bg-gray-50 bg-white"
         }`}
     >
-      <Earth className="w-4 h-4 stroke-[1.5]" />
-      <span className="hidden md:inline">
+      <Earth className="w-4 h-4 stroke-[1.5] text-green-400" />
+      <span className="hidden md:inline whitespace-nowrap">
         {savePublishMutation.isPending ? "Publishing..." : "Publish Form"}
       </span>
     </button>
@@ -174,7 +169,7 @@ export const UnPublishBtn = ({ savePublishMutation }: UnPublishBtnProps) => {
             : "text-gray-900 hover:bg-gray-50 bg-white"
         }`}
     >
-      <Earth className="w-4 h-4 stroke-[1.5]" />
+      <Earth className="w-4 h-4 stroke-[1.5] text-red-500" />
       <span className="hidden md:inline">
         {savePublishMutation.isPending ? "Unpublishing..." : "Unpublish Form"}
       </span>

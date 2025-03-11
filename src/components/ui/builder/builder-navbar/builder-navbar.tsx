@@ -21,8 +21,9 @@ import {
   UnPublishBtn,
 } from "./btns";
 import { areElementsChanged } from "@/utility/compare-fns";
-import { ChevronsRight } from "lucide-react";
 import { HiOutlineSquare3Stack3D } from "react-icons/hi2";
+import Link from "next/link";
+import { ChevronsRight } from "lucide-react";
 
 interface BuilderNavbarProps {
   formData: FormData | undefined;
@@ -46,7 +47,7 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
   const initialElements = useRef<FormElemetInstance[] | null>(null);
   const [isNextAvailable, setIsNextAvailable] = useState<boolean>(false);
   const [isSaveAllowed, setIsSaveAllowed] = useState<boolean>(false);
-  const [isNextFetching, setIsNextFetching] = useState<boolean>(false);
+  const [workspaceName, setWorkspaceName] = useState<null | string>(null);
   const copyToClipboardText = `https://formwavelabs-frontend.vercel.app/submit/${formData?.id}`;
 
   useEffect(() => {
@@ -73,6 +74,29 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
       initialElements.current = null;
     }
   }, [formData]);
+
+  useEffect(() => {
+    const fetchWorkspace = async () => {
+      try {
+        const data = await fetch(
+          `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/workspaces/${workspaceId}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const response = await data.json();
+        setWorkspaceName(response.data.name);
+      } catch (error) {
+        console.log(handleAxiosError(error));
+      }
+    };
+
+    fetchWorkspace();
+  });
 
   useEffect(() => {
     if (elements) {
@@ -136,48 +160,34 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
     onError: (error) => console.error(handleAxiosError(error)),
   });
 
-  const handleNextPage = async () => {
-    try {
-      setIsNextFetching(true);
-      // const response = await axios.get(
-      //   `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formData?.id}/page/next?p=${page}`,
-      //   {
-      //     headers: {
-      //       Authorization: `Bearer ${token}`,
-      //     },
-      //   }
-      // );
-      setCurrentPage((prev) => prev+1);
-
-      setIsNextFetching(false);
-      // if (response.data.status === "success") {
-
-      // }
-    } catch (error) {
-      console.error(handleAxiosError(error));
-      setIsNextFetching(false);
-    }
+  const handleNextPage = () => {
+    setCurrentPage((prev) => prev + 1);
   };
 
   const handlePrevious = () => {
     setCurrentPage((prev) => (prev === 0 ? 0 : prev - 1));
   };
 
-  const workspace = "workspace";
-
   return (
     <div
-      className={`flex flex-row justify-between items-center h-full w-full gap-2 px-2`}
+      className={`flex flex-row justify-between items-center h-full w-full gap-2 md:px-2`}
     >
       <div className="text-sm w-1/3 text-black text-left md:flex justify-start items-center gap-1 hidden">
         <HiOutlineSquare3Stack3D />{" "}
-        <span className="font-bold text-sm text-gray-500 hover:underline cursor-pointer">
-          {workspace}
-        </span>{" "}
-        <ChevronsRight size={15} /> {formData?.title}
+        <Link
+          href={`/workspaces/${workspaceId}`}
+          className="font-bold text-sm text-gray-500 hover:underline cursor-pointer whitespace-nowrap"
+        >
+          {workspaceName ? workspaceName : "loading..."}
+        </Link>
+        <ChevronsRight size={15} />
+        {formData && formData?.title?.length > 15
+          ? formData?.title.slice(0, 15)
+          : formData?.title}
+        ...
       </div>
 
-      <div className="flex gap-2 items-center w-1/3 justify-center pl-2 md:pl-0">
+      <div className="flex gap-2 items-center md:w-1/3 justify-center">
         {page > 1 && (
           <PreviousBtn
             handlePrevious={handlePrevious}
@@ -192,7 +202,6 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
         {isNextAvailable ? (
           <NextBtn
             handleNextPage={handleNextPage}
-            isNextFetching={isNextFetching}
             isSaveAllowed={isSaveAllowed}
           />
         ) : (
@@ -215,7 +224,10 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
         {formData?.status ? (
           <>
             <UnPublishBtn savePublishMutation={savePublishMutation} />
-            <CopyToClipboard textToCopy={copyToClipboardText} />
+            <CopyToClipboard
+              textToCopy={copyToClipboardText}
+              className="py-2 px-2"
+            />
           </>
         ) : (
           initialElements.current &&
