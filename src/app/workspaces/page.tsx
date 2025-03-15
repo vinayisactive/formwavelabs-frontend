@@ -43,7 +43,7 @@ const Workspaces = () => {
         const firstOwnerWorkspace = workspaces?.data?.ownedWorkspaces?.[0]?.id;
 
         if (firstOwnerWorkspace) {
-          router.replace(`/workspaces/${firstOwnerWorkspace}`);
+          router.push(`/workspaces/${firstOwnerWorkspace}`);
         } else {
           setHasWorkspace(false);
         }
@@ -64,23 +64,11 @@ const Workspaces = () => {
     return () => controller.abort();
   }, [token, router, status]);
 
-  if (loading) {
     return (
       <div className="w-full h-full flex justify-center items-center">
-        Loading...
+ {      loading ? "Loading..." : hasWorkspace === false ? "No workspaces found." : null}
       </div>
     );
   }
-
-  if (hasWorkspace === false) {
-    return (
-      <div className="w-full h-full flex justify-center items-center">
-        No workspaces found.
-      </div>
-    );
-  }
-
-  return null;
-};
 
 export default Workspaces;
