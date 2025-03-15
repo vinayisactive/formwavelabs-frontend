@@ -7,6 +7,7 @@ import WorkspaceSidebarMobile from "./workspace-sidebar-mobile";
 import { useQuery } from "@tanstack/react-query";
 import WorkSpaceInviteModal from "./workspace-invite-modal";
 import WorkspaceCreateForm from "./workspace-create-form";
+import { Loader2 } from "lucide-react";
 
 export interface MemberInterface {
   role: string;
@@ -39,15 +40,12 @@ interface WorkspaceDataInterface {
 
 const Workspace = ({ wsId }: { wsId: string }) => {
   const currentUserData = useSession().data;
-  const [workspaceData, setWorkspaceData] =
-    useState<WorkspaceDataInterface | null>(null);
-
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isInviteModalOpen, setInviteModalOpen] = useState<boolean>(false);
   const [isCreateFormModal, setCreateFormModal] = useState<boolean>(false);
   const [userRole, setRole] = useState<string | null>(null);
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["workspace", wsId],
     queryFn: async () => {
       const res = await fetch(
@@ -60,29 +58,28 @@ const Workspace = ({ wsId }: { wsId: string }) => {
       );
 
       if (!res.ok) throw new Error(res.statusText);
-      const data = await res.json();
-      setWorkspaceData(data);
+      const data = await res.json() as WorkspaceDataInterface
       return data;
     },
     enabled: Boolean(wsId),
+    refetchOnWindowFocus: true
   });
 
   useEffect(() => {
-    const currentUser = workspaceData?.data.members?.find(
+    const currentUser = data?.data.members?.find(
       (member) => member?.user?.id === currentUserData?.user.id
     );
 
     setRole(currentUser ? currentUser.role : null);
-  }, [workspaceData, data]);
+  }, [currentUserData?.user.id, data]);
 
   return (
     <div className="w-full h-full overflow-auto bg-gray-100 px-2 md:px-4 shadow-inner">
       <div className="h-[6%] flex items-center gap-2">
         <WorkspaceNavbar
-          workspaceName={workspaceData?.data.name}
+          workspaceName={data?.data.name}
           userRole={userRole}
-          members={workspaceData?.data.members}
-          membersCount={workspaceData?.data?.members?.length}
+          membersCount={data?.data?.members?.length}
           setIsSidebarOpen={setIsSidebarOpen}
           wsId={wsId}
           setInviteModalOpen={setInviteModalOpen}
@@ -90,47 +87,58 @@ const Workspace = ({ wsId }: { wsId: string }) => {
         />
       </div>
 
-      <div className="h-[94%] w-full p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 rounded-tl-md rounded-tr-md overflow-y-scroll bg-white/50 border">
-        {workspaceData?.data.forms ? (
-          workspaceData.data.forms?.map((form) => (
-            <FormCard
-              key={form.id}
-              formId={form.id}
-              workspaceId={workspaceData.data.id}
-              title={form.title}
-              status={form.status}
-              submissions={form._count.submissions}
-            />
-          ))
-        ) : (
+      <div className="h-[94%] w-full rounded-tl-md rounded-tr-md  bg-white/50 border">
+        {isLoading ? (
           <div className="w-full h-full flex justify-center items-center">
-            No Forms in this workspace.
+            <Loader2 className=" animate-spin" />
+          </div>
+        ) : (
+          <div className="w-full h-full">
+            { data?.data.forms.length ? (
+              <div className="h-full w-full p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-scroll">
+                {data?.data.forms &&
+                  data.data.forms?.map((form) => (
+                    <FormCard
+                      key={form.id}
+                      formId={form.id}
+                      workspaceId={data.data.id}
+                      title={form.title}
+                      status={form.status}
+                      submissions={form._count.submissions}
+                    />
+                  ))}
+              </div>
+            ) : (
+              <div className="w-full h-full flex justify-center items-center">
+                No Forms in this workspace.
+              </div>
+            )}
           </div>
         )}
+
+        <WorkspaceSidebarMobile
+          setIsSidebarOpen={setIsSidebarOpen}
+          isSidebarOpen={isSidebarOpen}
+        />
+
+        {isInviteModalOpen && (
+          <WorkSpaceInviteModal
+            wsId={wsId}
+            workspaceName={data?.data.name}
+            isInviteModalOpen={isInviteModalOpen}
+            setInviteModalOpen={setInviteModalOpen}
+          />
+        )}
+
+        {isCreateFormModal && (
+          <WorkspaceCreateForm
+            wsId={wsId}
+            workspaceName={data?.data.name}
+            isCreateFormModal={isCreateFormModal}
+            setCreateFormModal={setCreateFormModal}
+          />
+        )}
       </div>
-
-      <WorkspaceSidebarMobile
-        setIsSidebarOpen={setIsSidebarOpen}
-        isSidebarOpen={isSidebarOpen}
-      />
-
-      {isInviteModalOpen && (
-        <WorkSpaceInviteModal
-          wsId={wsId}
-          workspaceName={workspaceData?.data.name}
-          isInviteModalOpen={isInviteModalOpen}
-          setInviteModalOpen={setInviteModalOpen}
-        />
-      )}
-
-      {isCreateFormModal && (
-        <WorkspaceCreateForm
-          wsId={wsId}
-          workspaceName={workspaceData?.data.name}
-          isCreateFormModal={isCreateFormModal}
-          setCreateFormModal={setCreateFormModal}
-        />
-      )}
     </div>
   );
 };
