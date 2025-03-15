@@ -55,12 +55,10 @@ const FormCard: FC<FormCardProps> = ({formId, workspaceId, title, status, submis
   }, [])
 
   return (
-    <div className="w-full p-4 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all">
-      {/* Card Header */}
-      <div className="flex justify-between items-start mb-4">
+    <div className="w-full h-[150px] max-h-[150px] flex flex-col justify-center p-4 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all">
+      <div className="h-[40%] flex justify-between items-start mb-3">
         <div className="flex items-center gap-2">
-          {/* <span className="text-gray-500 font-medium">{index + 1}.</span> */}
-          <h3 className="font-medium text-gray-800 text-base">
+          <h3 className="font-medium text-gray-800 text-sm">
             {title}
           </h3>
         </div>
@@ -72,7 +70,6 @@ const FormCard: FC<FormCardProps> = ({formId, workspaceId, title, status, submis
             <MoreVertical size={20} className="text-gray-600" />
           </button>
 
-          {/* Dropdown menu */}
           {isMenuOpen && (
             <div 
               className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 z-10"
@@ -103,8 +100,7 @@ const FormCard: FC<FormCardProps> = ({formId, workspaceId, title, status, submis
         </div>
       </div>
 
-      {/* Card Content */}
-      <div className="flex flex-col gap-3">
+      <div className=" h-[60%] flex flex-col justify-center gap-3">
         <div className="flex items-center justify-between">
           <span className="text-sm text-gray-500">Status</span>
           <div className="flex items-center gap-2">
