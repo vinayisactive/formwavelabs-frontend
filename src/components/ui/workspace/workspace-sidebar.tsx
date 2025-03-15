@@ -1,9 +1,11 @@
 import React from "react";
+import Workspaces from "./workspaces";
 
-const WorkspaceSidebar = ({ workspaces }: { workspaces: unknown }) => {
-  console.log(workspaces);
+const WorkspaceSidebar = () => {
   return (
-    <div className="w-full h-full flex justify-center items-start py-2"></div>
+    <div className="w-full h-full flex justify-center items-start">
+          <Workspaces />
+    </div>
   );
 };
 

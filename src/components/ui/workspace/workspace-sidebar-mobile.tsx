@@ -1,5 +1,6 @@
 import { PanelLeft } from 'lucide-react'
 import React, { Dispatch, SetStateAction } from 'react'
+import Workspaces from './workspaces'
 
 const WorkspaceSidebarMobile = ({isSidebarOpen, setIsSidebarOpen}: {
     isSidebarOpen: boolean,
@@ -17,7 +18,9 @@ const WorkspaceSidebarMobile = ({isSidebarOpen, setIsSidebarOpen}: {
          </button>
        </div>
 
-       <div className="p-4"> </div>
+       <div className="p-4"> 
+        <Workspaces />
+       </div>
      </div>
    </div>
   )
