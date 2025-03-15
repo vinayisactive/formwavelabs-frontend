@@ -54,7 +54,10 @@ const WorkspaceCreateForm = ({
 
       console.log(response);
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["workspace"] }),
+    onSuccess: async() => {
+       await queryClient.invalidateQueries({ queryKey: ["workspace"] })
+       onClose()
+    },
     onError: (error) => setErrorMsg(handleAxiosError(error)),
   });
 
