@@ -146,7 +146,7 @@ const ErrorScreen = ({
   error,
   workspaceId,
 }: {
-  error: unknown;.
+  error: unknown;
   workspaceId: string;
 }) => {
   return (
