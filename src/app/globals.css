@@ -2,16 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-* {
-    scrollbar-width: none; 
-    -ms-overflow-style: none;
-  }
-  
-  *::-webkit-scrollbar {
-    display: none; 
-  }
-  
   input:not([type="checkbox"]):not([type="radio"]):not([type="date"]),
   textarea,
   select,
