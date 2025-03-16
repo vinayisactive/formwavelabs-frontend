@@ -105,6 +105,7 @@ const Workspace = ({ wsId }: { wsId: string }) => {
                       title={form.title}
                       status={form.status}
                       submissions={form._count.submissions}
+                      userRole={userRole}
                     />
                   ))}
               </div>

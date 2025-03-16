@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { ChevronDown, ChevronUp, Users, Loader2, Box } from "lucide-react";
 import { HiOutlineSquare3Stack3D } from "react-icons/hi2";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 interface Workspace {
   id: string;
@@ -22,8 +23,10 @@ interface WorkspacesData {
 
 const Workspaces = () => {
   const { data: session } = useSession();
+  const s = useSearchParams().get("s")
+
   const [activeSection, setActiveSection] = useState<"owned" | "joined" | null>(
-    "owned"
+    s === "owned" || s=== "joined" ? s :  "owned"
   );
 
   const { data, isLoading, error } = useQuery<WorkspacesData>({
@@ -82,7 +85,7 @@ const Workspaces = () => {
           <div className="ml-7 mt-1 space-y-1 animate-in fade-in">
             {data?.data.ownedWorkspaces.map((workspace) => (
               <Link
-                href={`/workspaces/${workspace.id}`}
+                href={`/workspaces/${workspace.id}?s=owned`}
                 key={workspace.id}
                 className="flex items-center gap-2 p-2 rounded-md transition-colors
                 hover:bg-gray-50"
@@ -122,7 +125,7 @@ const Workspaces = () => {
           <div className="ml-7 mt-1 space-y-1 animate-in fade-in">
             {data?.data.joinedWorkspaces.map((workspace) => (
               <Link
-                href={`/workspaces/${workspace.id}`}
+                href={`/workspaces/${workspace.id}?s=joined`}
                 key={workspace.id}
                 className="flex items-center gap-2 p-2 rounded-md transition-colors
                 hover:bg-gray-50"

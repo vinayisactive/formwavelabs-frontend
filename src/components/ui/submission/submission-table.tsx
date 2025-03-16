@@ -10,9 +10,10 @@ import EmptyDataState from "./empty-data-state";
 interface SubmissionTableProps{
   submissions: ProcessedSubmission[];
   errMsg: string;
+  formTitle: string;
 }
 
-const SubmissionTable: FC<SubmissionTableProps> = ({submissions, errMsg}) => {
+const SubmissionTable: FC<SubmissionTableProps> = ({submissions, errMsg, formTitle}) => {
   const [selectedRow, setSelectedRow] = useState<string | null>(null);
   const [copiedColumn, setCopiedColumn] = useState<string | null>(null);
 
@@ -28,6 +29,8 @@ const SubmissionTable: FC<SubmissionTableProps> = ({submissions, errMsg}) => {
 
   return (
     <div className="w-full space-y-5 px-4 py-2">
+
+
       <h1 className="text-xl font-bold text-gray-900 flex items-center gap-3">
         <span>Submissions</span>
         {submissions.length > 0 && (
@@ -36,6 +39,10 @@ const SubmissionTable: FC<SubmissionTableProps> = ({submissions, errMsg}) => {
             {submissions.length} responses
           </span>
         )}
+      </h1>
+
+      <h1 className="text-lg">
+        {formTitle}
       </h1>
 
       {submissions.length > 0 ? (
