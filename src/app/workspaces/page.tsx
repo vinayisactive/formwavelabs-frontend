@@ -43,7 +43,7 @@ const Workspaces = () => {
         const firstOwnerWorkspace = workspaces?.data?.ownedWorkspaces?.[0]?.id;
 
         if (firstOwnerWorkspace) {
-          router.push(`/workspaces/${firstOwnerWorkspace}`);
+          router.push(`/workspaces/${firstOwnerWorkspace}?s=${"owned"}`);
         } else {
           setHasWorkspace(false);
         }
