@@ -33,7 +33,13 @@ export interface FormData {
   theme: "BOXY" | "ROUNDED";
 }
 
-const FormBuilder = ({ formId, workspaceId }: { formId: string, workspaceId: string}) => {
+const FormBuilder = ({
+  formId,
+  workspaceId,
+}: {
+  formId: string;
+  workspaceId: string;
+}) => {
   const { setElements } = useElements();
   const { data: session } = useSession();
   const token = session?.accessToken;
@@ -66,7 +72,6 @@ const FormBuilder = ({ formId, workspaceId }: { formId: string, workspaceId: str
     retry: 5,
   });
 
-  
   useEffect(() => {
     if (!formData?.pages[0]?.content) {
       setElements([]);
@@ -84,9 +89,7 @@ const FormBuilder = ({ formId, workspaceId }: { formId: string, workspaceId: str
   }, [formData, setElements]);
 
   if (isLoading) {
-    return (
-      <BuilderLoading/>
-    );
+    return <BuilderLoading />;
   }
 
   if (error) {
@@ -95,11 +98,15 @@ const FormBuilder = ({ formId, workspaceId }: { formId: string, workspaceId: str
 
   return (
     <div className="w-full h-full px-2 md:px-0 bg-white">
-      {selectedElementInstance && ElementEditSetting && (
-        <div className="h-screen w-screen bg-black/50 px-2 py-5 flex justify-center items-center backdrop-blur-sm absolute overflow-y-auto scroll-smooth z-[10]">
-          <ElementEditSetting elementInstance={selectedElementInstance} />
-        </div>
-      )}
+{selectedElementInstance && ElementEditSetting && (
+  <div className="h-screen w-full fixed inset-0 bg-black/50 backdrop-blur-sm z-[10] flex">
+    <div className="py-10 w-full overflow-y-auto">
+      <div className="min-h-[calc(100vh-2rem)] flex items-start justify-center mx-auto">
+        <ElementEditSetting elementInstance={selectedElementInstance} />
+      </div>
+    </div>
+  </div>
+)}
 
       <div className="h-[7%]">
         <BuilderNavbar
@@ -117,7 +124,7 @@ const FormBuilder = ({ formId, workspaceId }: { formId: string, workspaceId: str
         </aside>
 
         <div
-          className=" w-full md:w-3/5 rounded-tr-md  rounded-tl-md shadow-inner shadow-black/20 px-4"
+          className=" w-full md:w-3/5 rounded-tr-md  rounded-tl-md shadow-inner shadow-black/20"
           style={{
             backgroundColor: "#ffffff",
             backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23aaaaaa' fill-opacity='0.45' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E")`,
@@ -135,7 +142,13 @@ const FormBuilder = ({ formId, workspaceId }: { formId: string, workspaceId: str
   );
 };
 
-const ErrorScreen = ({ error, workspaceId }: { error: unknown; workspaceId: string }) => {
+const ErrorScreen = ({
+  error,
+  workspaceId,
+}: {
+  error: unknown;.
+  workspaceId: string;
+}) => {
   return (
     <div className="flex flex-col items-center text-center space-y-4">
       <p className="text-red-500 font-medium">{handleAxiosError(error)}</p>
