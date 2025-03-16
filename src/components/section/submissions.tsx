@@ -1,6 +1,6 @@
-import { authOptions } from '@/app/api/auth/[...nextauth]/options';
-import { getServerSession } from 'next-auth';
-import SubmissionTable from '../ui/submission/submission-table';
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import { getServerSession } from "next-auth";
+import SubmissionTable from "../ui/submission/submission-table";
 interface FormElement {
   id: string;
   type: string;
@@ -17,6 +17,7 @@ export interface ProcessedSubmission {
 
 interface FormData {
   data: {
+    title: string; 
     pages: {
       content: string;
     }[];
@@ -25,24 +26,33 @@ interface FormData {
 
 interface SubmissionsData {
   data: {
-    responses: {
+    submissions: {
       content: string;
       id: string;
       createdAt: string;
     }[];
   };
+  status: boolean;
+  message: string;
 }
 
-const Submissions = async ({ formId, workspaceId }: { formId: string, workspaceId: string }) => {
+const Submissions = async ({
+  formId,
+  workspaceId,
+}: {
+  formId: string;
+  workspaceId: string;
+}) => {
   const session = await getServerSession(authOptions);
   const token = session?.accessToken;
 
   let submissions: ProcessedSubmission[] = [];
+  let formTitle = ""; 
   let errMsg = "";
 
   try {
     if (!token) {
-      throw new Error('No authentication token available');
+      throw new Error("No authentication token available");
     }
 
     const [submissionsRes, formRes] = await Promise.all([
@@ -51,28 +61,28 @@ const Submissions = async ({ formId, workspaceId }: { formId: string, workspaceI
         {
           method: "GET",
           headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
-          }
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         }
       ),
       fetch(
-        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/workspaces${workspaceId}/forms/${formId}`,
+        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formId}`,
         {
           method: "GET",
           headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
-          }
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         }
       ),
     ]);
 
-    console.log(submissionsRes)
-
     if (!submissionsRes.ok) {
       const errorData = await submissionsRes.text();
-      throw new Error(`Submissions fetch failed: ${submissionsRes.status} - ${errorData}`);
+      throw new Error(
+        `Submissions fetch failed: ${submissionsRes.status} - ${errorData}`
+      );
     }
 
     if (!formRes.ok) {
@@ -83,70 +93,74 @@ const Submissions = async ({ formId, workspaceId }: { formId: string, workspaceI
     const submissionsData: SubmissionsData = await submissionsRes.json();
     const formData: FormData = await formRes.json();
 
-    if (!submissionsData?.data?.responses || !formData?.data?.pages) {
-      throw new Error('Invalid response data structure');
+    if (!submissionsData?.data?.submissions || !formData?.data?.pages) {
+      throw new Error("Invalid response data structure");
     }
 
-    const fieldMap = createFieldMap(formData.data);
-    submissions = transformSubmissions(submissionsData.data.responses, fieldMap);
-
+    formTitle = formData.data.title;
+    const fieldMap = createFieldMap(formData.data); 
+    submissions = transformSubmissions(submissionsData.data.submissions, fieldMap);
   } catch (error) {
-    errMsg = error instanceof Error ? error.message : 'An unknown error occurred';
-    console.error('Error in Submissions component:', error);
+    errMsg =
+      error instanceof Error ? error.message : "An unknown error occurred";
+    console.error("Error in Submissions component:", error);
   }
 
-  // console.log(submissions);
-
-  return (
-    <SubmissionTable submissions={submissions} errMsg={errMsg} />
-  );
+  return <SubmissionTable submissions={submissions} errMsg={errMsg} formTitle={formTitle} />;
 };
 
 export default Submissions;
 
-const createFieldMap = (formData: FormData['data']) => {
+const createFieldMap = (formData: FormData["data"]) => {
   const map = new Map<string, string>();
-  
+
   formData.pages?.forEach((page) => {
     try {
       const elements: FormElement[] = JSON.parse(page.content);
-      elements?.forEach(element => {
-        if (element.extraAttributes?.label && (element.type !== "FormHeader" && element.type !== "LayoutImage")){
+      elements?.forEach((element) => {
+        if (
+          element.extraAttributes?.label &&
+          element.type !== "FormHeader" &&
+          element.type !== "LayoutImage"
+        ) {
           map.set(element.id, element.extraAttributes.label);
         }
       });
     } catch (error) {
-      console.error('Error parsing page content:', error);
+      console.error("Error parsing page content:", error);
     }
   });
-  
+
   return map;
 };
 
-const transformSubmissions = (responses: SubmissionsData['data']['responses'], fieldMap: Map<string, string>): ProcessedSubmission[] => {
-  const transformedData =  responses.map(response => {
+const transformSubmissions = (
+  responses: SubmissionsData["data"]["submissions"],
+  fieldMap: Map<string, string>
+): ProcessedSubmission[] => {
+  const transformedData = responses.map((response) => {
     try {
       const content: Record<string, string> = JSON.parse(response.content);
       const transformedContent: Record<string, string> = {};
 
       fieldMap?.forEach((label, elementId) => {
         transformedContent[label] = content[elementId] ?? "";
-      })
+      });
 
       return {
         id: response.id,
         content: transformedContent,
-        createdAt: response.createdAt
+        createdAt: response.createdAt,
       };
     } catch (error) {
-      console.error('Error transforming submission:', error);
+      console.error("Error transforming submission:", error);
       return {
         id: response.id,
         content: {},
-        createdAt: response.createdAt
+        createdAt: response.createdAt,
       };
     }
   });
 
-  return transformedData; 
+  return transformedData;
 };
