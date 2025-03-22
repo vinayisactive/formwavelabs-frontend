@@ -21,7 +21,7 @@ const FormHeaderView: FC<submitCompPropsType> = ({ elementInstance }) => {
     <div className="w-full px-2">
       {selectedFontSizeForMobile && (
         <div className={`w-full flex ${isCenter ? "justify-center" : ""}`}>
-          <p className={`text-${selectedFontSizeForMobile} md:hidden font-${selectedFontWeight} ${textAlignmentClass}`}>
+          <p className={`text-${selectedFontSizeForMobile} md:hidden font-${selectedFontWeight} ${textAlignmentClass} whitespace-pre-wrap`}>
             {formHeader}
           </p>
         </div>
@@ -29,7 +29,7 @@ const FormHeaderView: FC<submitCompPropsType> = ({ elementInstance }) => {
 
       {selectedFontSizeForDesktop && (
         <div className={`w-full hidden md:flex ${isCenter ? "justify-center" : ""}`}>
-          <p className={`text-${selectedFontSizeForDesktop} font-${selectedFontWeight} ${textAlignmentClass}`}>
+          <p className={`text-${selectedFontSizeForDesktop} font-${selectedFontWeight} ${textAlignmentClass} whitespace-pre-wrap`}>
             {formHeader}
           </p>
         </div>

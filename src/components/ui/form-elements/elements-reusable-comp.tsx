@@ -65,7 +65,7 @@ interface SubmitComponentWrapperProps {
 
 export const ElementLayerTile= ({ label, typeLabel }: ElementLayerTileProps) => {
   return (
-    <div className="cursor-grab hover:shadow-sm transition-all p-2 rounded-md">
+    <div className="cursor-grab hover:shadow-sm transition-all p-2 rounded-md border-2">
       <div className="flex items-center gap-2">
         <GripVertical className="h-4 w-4 text-muted-foreground/50" />
         <div className="flex flex-col  w-full rounded-md">
