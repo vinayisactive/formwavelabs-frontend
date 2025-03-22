@@ -96,7 +96,7 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
     };
 
     fetchWorkspace();
-  });
+  },[]);
 
   useEffect(() => {
     if (elements) {
@@ -170,35 +170,36 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
 
   return (
     <div
-      className={`flex flex-row justify-between items-center h-full w-full gap-2 md:px-2`}
-    >
-      <div className="text-sm w-1/3 text-black text-left md:flex justify-start items-center gap-1 hidden">
-        <HiOutlineSquare3Stack3D />{" "}
-        <Link
-          href={`/workspaces/${workspaceId}`}
-          className="font-bold text-sm text-gray-500 hover:underline cursor-pointer whitespace-nowrap"
-        >
-          {workspaceName ? workspaceName : "loading..."}
-        </Link>
-        <ChevronsRight size={15} />
-        {formData && formData?.title?.length > 15
-          ? formData?.title.slice(0, 15)
-          : formData?.title}
-        ...
-      </div>
-
-      <div className="flex gap-2 items-center md:w-1/3 justify-center">
+    className={`flex flex-col md:flex-row justify-between items-center gap-2 py-2 w-full md:px-2`}
+  >
+    <div className="w-full md:w-1/3 text-black text-left flex items-center gap-1">
+      <HiOutlineSquare3Stack3D />
+      <Link
+        href={`/workspaces/${workspaceId}`}
+        className="font-bold text-sm text-gray-500 hover:underline whitespace-nowrap"
+      >
+        {workspaceName ? workspaceName : "loading..."}
+      </Link>
+      <ChevronsRight size={15} />
+      {formData && formData?.title?.length > 15
+        ? formData?.title.slice(0, 15)
+        : formData?.title}
+      ...
+    </div>
+  
+    <div className="w-full md:w-2/3 flex  justify-between items-center">
+      <div className="flex gap-2 items-center">
         {page > 1 && (
           <PreviousBtn
             handlePrevious={handlePrevious}
             isSaveAllowed={isSaveAllowed}
           />
         )}
-
+  
         <div className="bg-black p-1.5 px-2 text-sm rounded-md text-white">
           {page}/{totalPage}
         </div>
-
+  
         {isNextAvailable ? (
           <NextBtn
             handleNextPage={handleNextPage}
@@ -213,14 +214,14 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
             />
           )
         )}
-
+  
         <SaveBtn
           savePageMutation={savePageMutation}
           isSaveAllowed={isSaveAllowed}
         />
       </div>
-
-      <div className="flex gap-2 justify-end items-center w-1/3">
+  
+      <div className="flex gap-2 items-center">
         {formData?.status ? (
           <>
             <UnPublishBtn savePublishMutation={savePublishMutation} />
@@ -240,6 +241,8 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
         )}
       </div>
     </div>
+  </div>
+  
   );
 };
 

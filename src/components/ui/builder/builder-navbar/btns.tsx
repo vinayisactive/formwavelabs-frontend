@@ -146,7 +146,7 @@ export const PublishBtn = ({ savePublishMutation, isSaveAllowed }: PublishBtnPro
     >
       <Earth className="w-4 h-4 stroke-[1.5] text-green-400" />
       <span className="hidden md:inline whitespace-nowrap">
-        {savePublishMutation.isPending ? "Publishing..." : "Publish Form"}
+        {savePublishMutation.isPending ? "Publishing" : "Publish"}
       </span>
     </button>
   );
@@ -171,7 +171,7 @@ export const UnPublishBtn = ({ savePublishMutation }: UnPublishBtnProps) => {
     >
       <Earth className="w-4 h-4 stroke-[1.5] text-red-500" />
       <span className="hidden md:inline">
-        {savePublishMutation.isPending ? "Unpublishing..." : "Unpublish Form"}
+        {savePublishMutation.isPending ? "Unpublishing" : "Unpublish"}
       </span>
     </button>
   );
