@@ -1,14 +1,21 @@
-import WorkspaceSidebar from "@/components/ui/workspace/workspace-sidebar";
+"use client";
+
+import DesktopWorkspaceSidebar from "@/components/ui/workspace/desktop-workspace-sidebar";
+import useMediaQuery from "@/utility/useMediaQuery-hook";
 import React, { ReactNode } from "react";
 
-const WorkspaceLayout = async ({ children }: { children: ReactNode }) => {
-  return (
-    <div className="w-screen h-full border flex justify-center items-center bg-white">
-      <div className="hidden w-[20%] md:flex border h-full">
-        <WorkspaceSidebar/>
-      </div>
+const WorkspaceLayout = ({ children }: { children: ReactNode }) => {
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
-      <div className="w-[100%] md:w-[80%] h-full">{children}</div>
+  return (
+    <div className="w-screen h-full border flex justify-between items-center bg-white">
+      {!isMobile && (
+        <div className="md:w-[25%] lg:w-[20%] flex h-full">
+          <DesktopWorkspaceSidebar />
+        </div>
+      )}
+
+      <div className="w-[100%] md:w-[70%] lg:w-[80%] h-full">{children}</div>
     </div>
   );
 };
