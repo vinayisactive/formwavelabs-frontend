@@ -25,7 +25,7 @@ const WorkspaceNavbar: FC<WorkspaceNavbarProps> = ({
   const [isMembersModalOpen, setIsMembersModalOpen] = useState(false);
 
   return (
-    <div className="flex justify-between items-center w-full">
+    <div className="min-h-[50px] flex justify-between items-center w-full">
       <div className="flex justify-center items-center gap-2">
         <button
           onClick={() => setIsSidebarOpen(true)}

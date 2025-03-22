@@ -69,7 +69,7 @@ const Workspaces = () => {
         >
           <div className="flex items-center gap-2 text-gray-700">
             <Box size={15} className="text-gray-600" />
-            <span className="font-medium text-sm">Your Workspaces</span>
+            <span className="font-medium text-sm whitespace-nowrap">Your Workspaces</span>
             <span className="text-xs text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded-md">
               {data?.data.ownedWorkspaces.length || 0}
             </span>
@@ -92,7 +92,7 @@ const Workspaces = () => {
                 onClick={(e) => e.stopPropagation()}
               >
                 <HiOutlineSquare3Stack3D size={15} className="text-gray-500" />
-                <span className="text-gray-700 text-sm">{workspace.name}</span>
+                <span className="text-gray-700 text-sm whitespace-nowrap">{workspace.name}</span>
               </Link>
             ))}
           </div>
@@ -107,9 +107,9 @@ const Workspaces = () => {
           className="w-full p-2 flex items-center justify-between rounded-lg transition-all
           hover:bg-gray-50 active:bg-gray-100"
         >
-          <div className="flex items-center gap-2 text-gray-700">
+          <div className="flex items-center gap-2 text-gray-700 whitespace-nowrap">
             <Users size={15} className="text-gray-600" />
-            <span className="font-medium text-sm">Joined Workspaces</span>
+            <span className="font-medium text-sm whitespace-nowrap">Joined Workspaces</span>
             <span className="text-xs text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded-md">
               {data?.data.joinedWorkspaces.length || 0}
             </span>
@@ -132,7 +132,7 @@ const Workspaces = () => {
                 onClick={(e) => e.stopPropagation()}
               >
                 <HiOutlineSquare3Stack3D size={15} className="text-gray-500" />
-                <span className="text-gray-700 text-sm">{workspace.name}</span>
+                <span className="text-gray-700 text-sm whitespace-nowrap">{workspace.name}</span>
               </Link>
             ))}
           </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import Workspaces from "./workspaces";
 
-const WorkspaceSidebar = () => {
+const DesktopWorkspaceSidebar = () => {
   return (
     <div className="w-full h-full flex justify-center items-start">
           <Workspaces />
@@ -9,4 +9,4 @@ const WorkspaceSidebar = () => {
   );
 };
 
-export default WorkspaceSidebar;
+export default DesktopWorkspaceSidebar;

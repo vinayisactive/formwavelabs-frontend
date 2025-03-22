@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import WorkSpaceInviteModal from "./workspace-invite-modal";
 import WorkspaceCreateForm from "./workspace-create-form";
 import { Loader2 } from "lucide-react";
+import useMediaQuery from "@/utility/useMediaQuery-hook";
 
 export interface MemberInterface {
   role: string;
@@ -40,6 +41,7 @@ interface WorkspaceDataInterface {
 
 const Workspace = ({ wsId }: { wsId: string }) => {
   const currentUserData = useSession().data;
+  const isMobile = useMediaQuery("(max-width: 768px)");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isInviteModalOpen, setInviteModalOpen] = useState<boolean>(false);
   const [isCreateFormModal, setCreateFormModal] = useState<boolean>(false);
@@ -75,7 +77,6 @@ const Workspace = ({ wsId }: { wsId: string }) => {
 
   return (
     <div className="w-full h-full overflow-auto bg-gray-100 px-2 md:px-4 shadow-inner">
-      <div className="h-[6%] flex items-center gap-2">
         <WorkspaceNavbar
           workspaceName={data?.data.name}
           userRole={userRole}
@@ -85,7 +86,6 @@ const Workspace = ({ wsId }: { wsId: string }) => {
           setInviteModalOpen={setInviteModalOpen}
           setCreateFormModal={setCreateFormModal}
         />
-      </div>
 
       <div className="h-[94%] w-full rounded-tl-md rounded-tr-md  bg-white/50 border">
         {isLoading ? (
@@ -94,7 +94,7 @@ const Workspace = ({ wsId }: { wsId: string }) => {
           </div>
         ) : (
           <div className="w-full h-full">
-            { data?.data.forms.length ? (
+            {data?.data.forms.length ? (
               <div className="h-full w-full p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-scroll">
                 {data?.data.forms &&
                   data.data.forms?.map((form) => (
@@ -117,10 +117,7 @@ const Workspace = ({ wsId }: { wsId: string }) => {
           </div>
         )}
 
-        <WorkspaceSidebarMobile
-          setIsSidebarOpen={setIsSidebarOpen}
-          isSidebarOpen={isSidebarOpen}
-        />
+        {isMobile && <WorkspaceSidebarMobile setIsSidebarOpen={setIsSidebarOpen} isSidebarOpen={isSidebarOpen} />}
 
         {isInviteModalOpen && (
           <WorkSpaceInviteModal
