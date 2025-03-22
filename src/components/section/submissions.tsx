@@ -1,6 +1,6 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
-import SubmissionTable from "../ui/submission/submission-table";
+import SubmissionWithAnalytics from "../ui/submission/submission-with-analytics";
 interface FormElement {
   id: string;
   type: string;
@@ -106,7 +106,7 @@ const Submissions = async ({
     console.error("Error in Submissions component:", error);
   }
 
-  return <SubmissionTable submissions={submissions} errMsg={errMsg} formTitle={formTitle} />;
+  return <SubmissionWithAnalytics submissions={submissions} errMsg={errMsg} formTitle={formTitle}workspaceId={workspaceId}/>;
 };
 
 export default Submissions;

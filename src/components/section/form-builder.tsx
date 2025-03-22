@@ -5,18 +5,15 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-
-import BuilderPreview from "../ui/builder/builder-preview";
 import BuilderNavbar from "../ui/builder/builder-navbar/builder-navbar";
-
 import useElements from "@/utility/useElements-hook";
 import { handleAxiosError } from "@/utility/axios-err-handler";
 import { FormElemetInstance } from "@/utility/ts-types";
-
-import ElementsContainer from "../ui/builder/elements-container/elements-container";
-import ElementsReOrder from "../ui/builder/elements-reorder/elements-reorder";
 import { FormElemets } from "@/utility/static-data";
 import BuilderLoading from "../ui/builder/builder-loading";
+import useMediaQuery from "@/utility/useMediaQuery-hook";
+import DesktopFormBuilder from "../ui/builder/desktop-builder/desktop-form-builder";
+import MobileFormBuilder from "../ui/builder/mobile-form-builder";
 
 export interface FormPageData {
   id: string;
@@ -46,6 +43,8 @@ const FormBuilder = ({
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const { selectedElementInstance } = useElements();
+
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   let ElementEditSetting = null;
   if (selectedElementInstance) {
@@ -97,20 +96,20 @@ const FormBuilder = ({
   }
 
   return (
-    <div className="w-full h-full px-2 md:px-0 bg-white">
-{selectedElementInstance && ElementEditSetting && (
-  <div className="h-screen w-full fixed inset-0 bg-black/50 backdrop-blur-sm z-[10] flex">
-    <div className="py-10 w-full overflow-y-auto">
-      <div className="min-h-[calc(100vh-2rem)] flex items-start justify-center mx-auto">
-        <ElementEditSetting elementInstance={selectedElementInstance} />
-      </div>
-    </div>
-  </div>
-)}
+    <div className="w-full h-full flex flex-col gap-2 px-2 md:px-0 bg-white">
+      {selectedElementInstance && ElementEditSetting && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[10] flex border-2 border-red-500 px-3">
+          <div className="py-10 w-full overflow-y-auto">
+            <div className="min-h-[calc(100vh-2rem)] flex items-start justify-center mx-auto">
+              <ElementEditSetting elementInstance={selectedElementInstance} />
+            </div>
+          </div>
+        </div>
+      )}
 
-      <div className="h-[7%]">
+      <div className="min-h-[50px] h-auto md:h-[7%] flex justify-center items-center">
         <BuilderNavbar
-          formData={formData}
+          formData={formData} 
           workspaceId={workspaceId}
           page={currentPage}
           setCurrentPage={setCurrentPage}
@@ -118,25 +117,12 @@ const FormBuilder = ({
         />
       </div>
 
-      <div className="h-[93%] w-full flex gap-2">
-        <aside className="w-1/5 hidden md:flex">
-          <ElementsContainer />
-        </aside>
-
-        <div
-          className=" w-full md:w-3/5 rounded-tr-md  rounded-tl-md shadow-inner shadow-black/20"
-          style={{
-            backgroundColor: "#ffffff",
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23aaaaaa' fill-opacity='0.45' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E")`,
-            backgroundPosition: "center",
-          }}
-        >
-          <BuilderPreview formTheme={formData?.theme} />
-        </div>
-
-        <aside className="w-1/5 hidden md:flex">
-          <ElementsReOrder />
-        </aside>
+      <div className="h-[90%] md:h-[93%] w-full">
+        {isMobile ? (
+          <MobileFormBuilder theme={formData?.theme} />
+        ) : (
+          <DesktopFormBuilder theme={formData?.theme} />
+        )}
       </div>
     </div>
   );

@@ -10,10 +10,7 @@ import {
   User,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { Dispatch, SetStateAction, useState, useTransition } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { TiTickOutline } from "react-icons/ti";
-import { RxCross2 } from "react-icons/rx";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 
 const navItems = [
@@ -126,7 +123,7 @@ const UserProfile = ({ name }: { name: string }) => {
 
   return (
     <div
-      className="relative flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-xl cursor-pointer shadow-sm hover:bg-gray-50 transition-colors"
+      className="relative flex items-center gap-2 bg-white cursor-pointer hover:bg-gray-300 px-2 py-1 rounded-md transition-colors"
       onClick={userProfileToggle}
     >
       <div className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center">
@@ -163,155 +160,155 @@ const UserProfile = ({ name }: { name: string }) => {
 };
 
 
-const Notification = ({setIsOpen, isOpen}: {
-  setIsOpen: Dispatch<SetStateAction<boolean>>; 
-  isOpen: boolean
-}) => {
-  const currentUserData = useSession().data;
-  const queryClient = useQueryClient();
+// const Notification = ({setIsOpen, isOpen}: {
+//   setIsOpen: Dispatch<SetStateAction<boolean>>; 
+//   isOpen: boolean
+// }) => {
+//   const currentUserData = useSession().data;
+//   const queryClient = useQueryClient();
 
-  const [processingToken, setProcessingToken] = useState<string | null>(null);
+//   const [processingToken, setProcessingToken] = useState<string | null>(null);
 
-  const userNotificationToggle = () => {
-    setIsOpen(!isOpen);
-  };
+//   const userNotificationToggle = () => {
+//     setIsOpen(!isOpen);
+//   };
 
-  const {data, isLoading} = useQuery({
-    queryKey: ["invite"],
-    queryFn: async() => {
-        const res = await fetch(`https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/users/invitations`, {
-          headers: {
-            Authorization: `Bearer ${currentUserData?.accessToken}`
-          }
-        }); 
+//   const {data, isLoading} = useQuery({
+//     queryKey: ["invite"],
+//     queryFn: async() => {
+//         const res = await fetch(`https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/users/invitations`, {
+//           headers: {
+//             Authorization: `Bearer ${currentUserData?.accessToken}`
+//           }
+//         }); 
 
-        if(!res.ok){
-          throw new Error("Failed to fetch user invitations.")
-        }
+//         if(!res.ok){
+//           throw new Error("Failed to fetch user invitations.")
+//         }
 
-        const data = await res.json(); 
-        return data; 
-    },
-    refetchOnWindowFocus: true
-  });
+//         const data = await res.json(); 
+//         return data; 
+//     },
+//     refetchOnWindowFocus: true
+//   });
 
-  const inviteAcceptMutation = useMutation({
-    mutationFn: async(token: string) => {
-      setProcessingToken(token)
-      const res = await fetch(`https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/users/accept-invite`, {
-        method: "POST",
-        body: JSON.stringify({token}),
-        headers: {
-          Authorization: `Bearer ${currentUserData?.accessToken}`
-        }
-      }); 
+//   const inviteAcceptMutation = useMutation({
+//     mutationFn: async(token: string) => {
+//       setProcessingToken(token)
+//       const res = await fetch(`https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/users/accept-invite`, {
+//         method: "POST",
+//         body: JSON.stringify({token}),
+//         headers: {
+//           Authorization: `Bearer ${currentUserData?.accessToken}`
+//         }
+//       }); 
 
-      if(!res.ok){
-        throw new Error("Failed to accept invite.")
-      }; 
+//       if(!res.ok){
+//         throw new Error("Failed to accept invite.")
+//       }; 
 
-      const data = await res.json(); 
-      console.log(data);
-    }, 
-    onSuccess: () => queryClient.invalidateQueries({queryKey: ['invite']}),
-    onError:(err) => console.error(err)
-  }); 
+//       const data = await res.json(); 
+//       console.log(data);
+//     }, 
+//     onSuccess: () => queryClient.invalidateQueries({queryKey: ['invite']}),
+//     onError:(err) => console.error(err)
+//   }); 
 
-  const inviteRejectMutation = useMutation({
-    mutationFn: async(token: string) => {
-      setProcessingToken(token)
-      const res = await fetch(`https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/users/reject-invite`, {
-        method: "PATCH",
-        body: JSON.stringify({token}),
-        headers: {
-          Authorization: `Bearer ${currentUserData?.accessToken}`
-        }
-      }); 
+//   const inviteRejectMutation = useMutation({
+//     mutationFn: async(token: string) => {
+//       setProcessingToken(token)
+//       const res = await fetch(`https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/users/reject-invite`, {
+//         method: "PATCH",
+//         body: JSON.stringify({token}),
+//         headers: {
+//           Authorization: `Bearer ${currentUserData?.accessToken}`
+//         }
+//       }); 
 
-      if(!res.ok){
-        throw new Error("Failed to accept invite.")
-      }; 
+//       if(!res.ok){
+//         throw new Error("Failed to accept invite.")
+//       }; 
 
-      const data = await res.json(); 
-      console.log(data);
-    }, 
-    onSuccess: () => queryClient.invalidateQueries({queryKey: ['invite']}),
-    onError:(err) => console.error(err)
-  })
+//       const data = await res.json(); 
+//       console.log(data);
+//     }, 
+//     onSuccess: () => queryClient.invalidateQueries({queryKey: ['invite']}),
+//     onError:(err) => console.error(err)
+//   })
 
 
-  return (
-    <div
-      className="relative flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-xl cursor-pointer shadow-sm hover:bg-gray-50 transition-colors"
-      onClick={userNotificationToggle}
-    >
-      <div className="w-5 h-5 bg-gray-100 rounded-full flex items-center justify-center">
-        <Bell className="w-4 h-4 text-gray-600" />
-      </div>
-      <ChevronDown className="w-4 h-4 text-gray-600" />
+//   return (
+//     <div
+//       className="relative flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-xl cursor-pointer shadow-sm hover:bg-gray-50 transition-colors"
+//       onClick={userNotificationToggle}
+//     >
+//       <div className="w-5 h-5 bg-gray-100 rounded-full flex items-center justify-center">
+//         <Bell className="w-4 h-4 text-gray-600" />
+//       </div>
+//       <ChevronDown className="w-4 h-4 text-gray-600" />
 
-      {isOpen && (
-        <div className="min-w-[320px] h-[360px] absolute top-12 right-0 rounded-xl flex flex-col gap-2 border border-gray-200 bg-white shadow-2xl z-50">
-          <div className="p-4 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900">Invitations</h3>
-            <p className="text-sm text-gray-500 mt-1">
-              Manage your workspace invitations
-            </p>
-          </div>
+//       {isOpen && (
+//         <div className="min-w-[320px] h-[360px] absolute top-12 right-0 rounded-xl flex flex-col gap-2 border border-gray-200 bg-white shadow-2xl z-50">
+//           <div className="p-4 border-b border-gray-200">
+//             <h3 className="text-lg font-semibold text-gray-900">Invitations</h3>
+//             <p className="text-sm text-gray-500 mt-1">
+//               Manage your workspace invitations
+//             </p>
+//           </div>
           
-          {isLoading ? (
-            <div className="w-full h-full flex justify-center items-center">
-              <Loader2 className="animate-spin text-gray-400 h-6 w-6" />
-            </div>
-          ) : (
-            <div className="flex-1 flex flex-col p-2 overflow-y-auto">
-              {data?.data?.map((invite: {
-                id: string,
-                workspace: {
-                  name: string
-                },
-                role: 'EDITOR' | 'OWNER' | 'VIEWER' | 'ADMIN',
-                token: string
-              }) => (
-                <div 
-                  key={invite.id} 
-                  className="group flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors"
-                >
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">
-                      {invite.workspace.name}
-                    </p>
-                    <p className="text-sm text-gray-500 mt-1">
-                      Role: {invite.role.toLowerCase()}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2 ml-2">
-                    <button className="p-1.5 hover:bg-green-100 rounded-md text-green-600 hover:text-green-700 transition-colors flex justify-center items-center gap-2">
-                      <TiTickOutline className="w-5 h-5" onClick={(e) => {
-                        e.stopPropagation()
-                        inviteAcceptMutation.mutate(invite.token)
-                        }} />
+//           {isLoading ? (
+//             <div className="w-full h-full flex justify-center items-center">
+//               <Loader2 className="animate-spin text-gray-400 h-6 w-6" />
+//             </div>
+//           ) : (
+//             <div className="flex-1 flex flex-col p-2 overflow-y-auto">
+//               {data?.data?.map((invite: {
+//                 id: string,
+//                 workspace: {
+//                   name: string
+//                 },
+//                 role: 'EDITOR' | 'OWNER' | 'VIEWER' | 'ADMIN',
+//                 token: string
+//               }) => (
+//                 <div 
+//                   key={invite.id} 
+//                   className="group flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors"
+//                 >
+//                   <div className="flex-1 min-w-0">
+//                     <p className="text-sm font-medium text-gray-900 truncate">
+//                       {invite.workspace.name}
+//                     </p>
+//                     <p className="text-sm text-gray-500 mt-1">
+//                       Role: {invite.role.toLowerCase()}
+//                     </p>
+//                   </div>
+//                   <div className="flex items-center gap-2 ml-2">
+//                     <button className="p-1.5 hover:bg-green-100 rounded-md text-green-600 hover:text-green-700 transition-colors flex justify-center items-center gap-2">
+//                       <TiTickOutline className="w-5 h-5" onClick={(e) => {
+//                         e.stopPropagation()
+//                         inviteAcceptMutation.mutate(invite.token)
+//                         }} />
 
-                        {inviteAcceptMutation.isPending && processingToken === invite.token && <Loader2 className="animate-spin" size={15}  />}
-                    </button>
-                    <button className="p-1.5 hover:bg-red-100 rounded-md text-red-600 hover:text-red-700 transition-colors flex justify-center items-center gap-2">
-                      <RxCross2 className="w-5 h-5" onClick={(e) => {
-                        e.stopPropagation()
-                        inviteRejectMutation.mutate(invite.token);
-                      }} />
+//                         {inviteAcceptMutation.isPending && processingToken === invite.token && <Loader2 className="animate-spin" size={15}  />}
+//                     </button>
+//                     <button className="p-1.5 hover:bg-red-100 rounded-md text-red-600 hover:text-red-700 transition-colors flex justify-center items-center gap-2">
+//                       <RxCross2 className="w-5 h-5" onClick={(e) => {
+//                         e.stopPropagation()
+//                         inviteRejectMutation.mutate(invite.token);
+//                       }} />
 
-                      {inviteRejectMutation.isPending && processingToken === invite.token && <Loader2 className="animate-spin" size={15}  />}
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
-};
+//                       {inviteRejectMutation.isPending && processingToken === invite.token && <Loader2 className="animate-spin" size={15}  />}
+//                     </button>
+//                   </div>
+//                 </div>
+//               ))}
+//             </div>
+//           )}
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
 
 
 
@@ -320,22 +317,20 @@ const Navbar = () => {
   const isAuth = status === "authenticated";
   const name = session?.user?.name || null;
 
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-
   return (
-    <nav className="w-full h-[6vh] flex items-center justify-between px-4">
+    <nav className="w-full min-h-[50px] h-[6vh] flex items-center justify-between px-4">
       <Link href="/" className="flex items-center gap-2">
         <span className="text-xl font-bold text-black/50 hidden md:flex">Formwavelabs</span>
         <span className="text-xl font-bold text-black/50 flex md:hidden">FWLabs</span>
       </Link>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2">
         <NavItems isAuth={isAuth} />
 
         {isAuth && name ? (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <UserProfile name={name} />
-            <Notification  setIsOpen={setIsOpen} isOpen={isOpen}/>
+            <Link href={"/invites"} className=" cursor-pointer hover:bg-gray-300 rounded-md p-2"><Bell size={15} /></Link>
           </div>
         ) : (
           <SignIn />
