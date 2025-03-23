@@ -10,3 +10,9 @@
     -webkit-appearance: none; 
     appearance: none;
   }
+
+  @media (pointer: coarse) {
+    .dnd-element {
+      touch-action: none;
+    }
+  }

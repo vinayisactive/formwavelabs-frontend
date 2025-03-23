@@ -7,10 +7,16 @@ import { useDndMonitor, useDraggable, useDroppable } from "@dnd-kit/core";
 import { useEffect, useState } from "react";
 import { Pencil, Trash } from "lucide-react";
 
-const DndDraggableButton = ({ element, isElementTile }: { element: FormElemetInstance, isElementTile: boolean }) => {
+const DndDraggableButton = ({
+  element,
+  isElementTile,
+}: {
+  element: FormElemetInstance;
+  isElementTile: boolean;
+}) => {
   const [isMounted, setIsMounted] = useState<boolean>(false);
   const [isMouseOver, setMouseOver] = useState<boolean>(false);
-  const [isEditModeOn, setEditMode] = useState<boolean>(false)
+  const [isEditModeOn, setEditMode] = useState<boolean>(false);
   const [isElementDragging, setIsElementDragging] = useState<boolean>(false);
 
   const { setSelectedElementInstance, deleteElement, elements, addElement } =
@@ -20,12 +26,12 @@ const DndDraggableButton = ({ element, isElementTile }: { element: FormElemetIns
     setIsMounted(true);
   }, []);
 
-  let ChildElement ; 
+  let ChildElement;
 
-  if(isElementTile){
+  if (isElementTile) {
     ChildElement = FormElemets[element?.type]?.tile;
-  }else{
-    ChildElement = FormElemets[element?.type].submit; 
+  } else {
+    ChildElement = FormElemets[element?.type].submit;
   }
 
   const topHalf = useDroppable({
@@ -43,26 +49,32 @@ const DndDraggableButton = ({ element, isElementTile }: { element: FormElemetIns
     data: {
       type: element?.type,
       id: element?.id,
-      isElementTile : isElementTile
+      isElementTile: isElementTile,
     },
   });
 
   useDndMonitor({
-    onDragStart(){
+    onDragStart() {
       setIsElementDragging(true);
       document.body.classList.add("dragging-active");
     },
 
     onDragEnd(event) {
+      
+      const { active, over, delta } = event;
+      if (!active || !over) return;
+      const isSignificantDrag = Math.abs(delta.x) > 5 || Math.abs(delta.y) > 5;
+      if (!isSignificantDrag) return;
+
       setIsElementDragging(false);
       document.body.classList.remove("dragging-active");
-      
-      const { active, over } = event;
-      if (!active || !over) return;
+
 
       const isTopHalf = over.data.current?.isTopHalf;
       const isBottomHalf = over.data.current?.isBottomHalf;
       const elementTileId = active.data.current?.id;
+
+
 
       const handleElementReorder = () => {
         const overIndex = elements.findIndex(
@@ -84,7 +96,7 @@ const DndDraggableButton = ({ element, isElementTile }: { element: FormElemetIns
   });
 
   useEffect(() => {
-    const styleElement = document.createElement('style');
+    const styleElement = document.createElement("style");
     styleElement.innerHTML = `
       .dragging-active * {
         -webkit-user-select: none !important;
@@ -93,7 +105,7 @@ const DndDraggableButton = ({ element, isElementTile }: { element: FormElemetIns
       }
     `;
     document.head.appendChild(styleElement);
-    
+
     return () => {
       if (document.head.contains(styleElement)) {
         document.head.removeChild(styleElement);
@@ -104,7 +116,8 @@ const DndDraggableButton = ({ element, isElementTile }: { element: FormElemetIns
   if (draggable.isDragging) return null;
   if (!isMounted) return null;
 
-  const handleClick = () => {
+  const handleClick = (e: React.TouchEvent | React.MouseEvent) => {
+    e.preventDefault();
     if (!isElementDragging) {
       setEditMode((prev) => !prev);
     }
@@ -113,18 +126,17 @@ const DndDraggableButton = ({ element, isElementTile }: { element: FormElemetIns
   return (
     <div
       ref={draggable.setNodeRef}
-      {...draggable.listeners}
+      {...(!isEditModeOn ? draggable.listeners : {})} 
       {...draggable.attributes}
-      className="relative group bg-white backdrop-blur-md rounded-lg transition-all cursor-pointer group-hover:border-2 select-none whitespace-pre-wrap"
+      className="dnd-element relative group bg-white backdrop-blur-md rounded-lg transition-all cursor-pointer group-hover:border-2 select-none whitespace-pre-wrap"
       onMouseEnter={() => {
-        if(!isElementDragging)
-        setMouseOver(true);
+        if (!isElementDragging) setMouseOver(true);
       }}
       onMouseLeave={() => {
-        if(!isElementDragging)
-        setMouseOver(false);
+        if (!isElementDragging) setMouseOver(false);
       }}
       onClick={handleClick}
+      onTouchEnd={handleClick} 
     >
       <div
         ref={topHalf.setNodeRef}
