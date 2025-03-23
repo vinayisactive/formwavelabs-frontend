@@ -47,15 +47,27 @@ const DndDraggableButton = ({ element, isElementTile }: { element: FormElemetIns
     },
   });
 
+  // Prevent default touch behavior on mobile
+  const preventTouchSelect = (e: React.TouchEvent) => {
+    e.preventDefault();
+  };
+
   useDndMonitor({
     onDragStart(){
       setIsElementDragging(true);
       document.body.style.userSelect = "none";
+      document.body.style.webkitUserSelect = "none"; // Lowercase 'webkit' is correct
+      document.body.style.touchAction = "none"; 
+      document.body.classList.add("dragging-active");
     },
 
     onDragEnd(event) {
       setIsElementDragging(false);
       document.body.style.userSelect = ""; 
+      document.body.style.webkitUserSelect = "";
+      document.body.style.touchAction = "";
+      document.body.classList.remove("dragging-active");
+      
       const { active, over } = event;
       if (!active || !over) return;
 
@@ -82,6 +94,23 @@ const DndDraggableButton = ({ element, isElementTile }: { element: FormElemetIns
     },
   });
 
+  useEffect(() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .dragging-active * {
+        -webkit-user-select: none !important;
+        user-select: none !important;
+        -webkit-touch-callout: none !important;
+        touch-action: none !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+    
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }, []);
+
   if (draggable.isDragging) return null;
   if (!isMounted) return null;
 
@@ -90,7 +119,13 @@ const DndDraggableButton = ({ element, isElementTile }: { element: FormElemetIns
       ref={draggable.setNodeRef}
       {...draggable.listeners}
       {...draggable.attributes}
-      className="relative group bg-white backdrop-blur-md rounded-lg  transition-all cursor-pointer group-hover:border-2 select-none whitespace-pre-wrap"
+      className="relative group bg-white backdrop-blur-md rounded-lg transition-all cursor-pointer group-hover:border-2 select-none whitespace-pre-wrap"
+      style={{
+        WebkitUserSelect: "none",
+        userSelect: "none",
+        touchAction: "none"
+      }}
+      onTouchStart={preventTouchSelect}
       onMouseEnter={() =>{
         if(!isElementDragging)
         setMouseOver(true);
@@ -100,17 +135,16 @@ const DndDraggableButton = ({ element, isElementTile }: { element: FormElemetIns
         setMouseOver(false);}}
       onClick={() => setEditMode((prev) => !prev)}
     >
-
       <div
         ref={topHalf.setNodeRef}
-        className={`absolute  top-0 left-0 w-full h-1/2 rounded-t-lg ${
+        className={`absolute top-0 left-0 w-full h-1/2 rounded-t-lg ${
           topHalf.isOver ? "border-t-4 border-blue-400 z-10" : ""
         }`}
       />
 
       <div
         ref={bottomHalf.setNodeRef}
-        className={`absolute  bottom-0 left-0 w-full h-1/2 rounded-b-lg ${
+        className={`absolute bottom-0 left-0 w-full h-1/2 rounded-b-lg ${
           bottomHalf.isOver ? "border-b-4 border-blue-400 z-10" : ""
         }`}
       />
@@ -119,6 +153,11 @@ const DndDraggableButton = ({ element, isElementTile }: { element: FormElemetIns
         className={`h-full transition-opacity ${
           isMouseOver ? "opacity-50" : "opacity-100"
         }`}
+        style={{ 
+          WebkitUserSelect: "none", 
+          userSelect: "none",
+          pointerEvents: isElementDragging ? "none" : "auto"
+        }}
       >
         <ChildElement elementInstance={element} />
       </div>

@@ -11,17 +11,26 @@ const MobileFormBuilder = ({theme} : {theme: "BOXY" | "ROUNDED" | undefined}) =>
   const { elements } = useElements()
   const previewContainerRef  = useRef<HTMLDivElement | null>(null)
   const prevElementLength = useRef<number>(elements.length)
+  const [isScrollAllowed, setIsScrolledAllowed] = useState<boolean>(false); 
+
+  setTimeout(() => {
+    setIsScrolledAllowed(true);
+  }, 2000);
 
   useEffect(() => {
         if (previewContainerRef.current && elements.length > prevElementLength.current) {
           setTimeout(() => {
             if(previewContainerRef.current){
+                if(!isScrollAllowed){
+                  return; 
+                }
               previewContainerRef.current.scrollTop = previewContainerRef.current.scrollHeight; 
             }
           }, 0);
         }
  
-      prevElementLength.current = elements.length
+      prevElementLength.current = elements.length;
+          // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [elements.length])
 
   return (
