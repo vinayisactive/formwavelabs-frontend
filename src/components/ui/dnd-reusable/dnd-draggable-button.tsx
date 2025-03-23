@@ -26,150 +26,131 @@ const DndDraggableButton = ({
     setIsMounted(true);
   }, []);
 
-  let ChildElement;
+  const ChildElement = isElementTile 
+    ? FormElemets[element.type]?.tile
+    : FormElemets[element.type].submit;
 
-  if (isElementTile) {
-    ChildElement = FormElemets[element?.type]?.tile;
-  } else {
-    ChildElement = FormElemets[element?.type].submit;
-  }
-
-  const topHalf = useDroppable({
-    id: `${element?.id}-top`,
-    data: { type: element?.type, id: element?.id, isTopHalf: true },
+  const { setNodeRef: setTopRef } = useDroppable({
+    id: `${element.id}-top`,
+    data: { type: element.type, id: element.id, isTopHalf: true },
   });
 
-  const bottomHalf = useDroppable({
-    id: `${element?.id}-bottom`,
-    data: { type: element?.type, id: element?.id, isBottomHalf: true },
+  const { setNodeRef: setBottomRef } = useDroppable({
+    id: `${element.id}-bottom`,
+    data: { type: element.type, id: element.id, isBottomHalf: true },
   });
 
-  const draggable = useDraggable({
-    id: element?.id + "-drag-handler",
+  const { setNodeRef, listeners, attributes, isDragging } = useDraggable({
+    id: `${element.id}-drag-handler`,
     data: {
-      type: element?.type,
-      id: element?.id,
-      isElementTile: isElementTile,
+      type: element.type,
+      id: element.id,
+      isElementTile,
     },
   });
 
   useDndMonitor({
-    onDragStart() {
-      setIsElementDragging(true);
+    onDragStart: () => {
       document.body.classList.add("dragging-active");
+      setIsElementDragging(true);
     },
-
-    onDragEnd(event) {
-      
-      const { active, over, delta } = event;
-      if (!active || !over) return;
-      const isSignificantDrag = Math.abs(delta.x) > 5 || Math.abs(delta.y) > 5;
-      if (!isSignificantDrag) return;
-
+    onDragEnd: ({ active, over, delta }) => {
       setIsElementDragging(false);
       document.body.classList.remove("dragging-active");
 
+      if (!active || !over) return;
+    
+      const isSignificantDrag = Math.hypot(delta.x, delta.y) > 10;
+      if (!isSignificantDrag) return;
 
+      const elementTileId = active.data.current?.id;
       const isTopHalf = over.data.current?.isTopHalf;
       const isBottomHalf = over.data.current?.isBottomHalf;
-      const elementTileId = active.data.current?.id;
 
+      if (elementTileId && (isTopHalf || isBottomHalf)) {
+        const overIndex = elements.findIndex(el => el.id === over.data.current?.id);
+        if (overIndex === -1) return;
 
-
-      const handleElementReorder = () => {
-        const overIndex = elements.findIndex(
-          (el) => el.id === over.data.current?.id
-        );
-        if (overIndex === -1) throw new Error("Element not found");
-
-        const activeIndex = elements.findIndex((el) => el.id === elementTileId);
+        const activeIndex = elements.findIndex(el => el.id === elementTileId);
         const elementToMove = { ...elements[activeIndex] };
 
         deleteElement(elementTileId);
         addElement(isTopHalf ? overIndex : overIndex + 1, elementToMove);
-      };
-
-      if (elementTileId && (isTopHalf || isBottomHalf)) {
-        handleElementReorder();
       }
     },
   });
 
   useEffect(() => {
-    const styleElement = document.createElement("style");
-    styleElement.innerHTML = `
+    const style = document.createElement('style');
+    style.innerHTML = `
       .dragging-active * {
         -webkit-user-select: none !important;
         user-select: none !important;
-        -webkit-touch-callout: none !important;
+        touch-action: none !important;
+      }
+      @media (pointer: coarse) {
+        .dnd-element {
+          touch-action: pan-y;
+        }
+        .dnd-element button {
+          -webkit-tap-highlight-color: transparent;
+          z-index: 20;
+        }
       }
     `;
-    document.head.appendChild(styleElement);
-
+    document.head.appendChild(style);
+  
     return () => {
-      if (document.head.contains(styleElement)) {
-        document.head.removeChild(styleElement);
+      if (document.head.contains(style)) {
+        document.head.removeChild(style);
       }
     };
   }, []);
 
-  if (draggable.isDragging) return null;
-  if (!isMounted) return null;
-
-  const handleClick = (e: React.TouchEvent | React.MouseEvent) => {
+  const handleEditMode = (e: React.TouchEvent | React.MouseEvent) => {
     e.preventDefault();
     if (!isElementDragging) {
-      setEditMode((prev) => !prev);
+      setEditMode(prev => !prev);
     }
   };
 
+  if (!isMounted || isDragging) return null;
+
   return (
     <div
-      ref={draggable.setNodeRef}
-      {...(!isEditModeOn ? draggable.listeners : {})} 
-      {...draggable.attributes}
-      className="dnd-element relative group bg-white backdrop-blur-md rounded-lg transition-all cursor-pointer group-hover:border-2 select-none whitespace-pre-wrap"
-      onMouseEnter={() => {
-        if (!isElementDragging) setMouseOver(true);
-      }}
-      onMouseLeave={() => {
-        if (!isElementDragging) setMouseOver(false);
-      }}
-      onClick={handleClick}
-      onTouchEnd={handleClick} 
+      ref={setNodeRef}
+      {...(!isEditModeOn ? listeners : {})}
+      {...attributes}
+      className="dnd-element relative group bg-white backdrop-blur-md rounded-lg 
+                transition-all cursor-pointer select-none"
+      onMouseEnter={() => !isElementDragging && setMouseOver(true)}
+      onMouseLeave={() => !isElementDragging && setMouseOver(false)}
+      onClick={handleEditMode}
+      onTouchEnd={handleEditMode}
     >
-      <div
-        ref={topHalf.setNodeRef}
-        className={`absolute top-0 left-0 w-full h-1/2 rounded-t-lg ${
-          topHalf.isOver ? "border-t-4 border-blue-400 z-10" : ""
-        }`}
-      />
+      <div ref={setTopRef} className={`absolute top-0 w-full h-1/2 rounded-t-lg 
+        ${isElementDragging ? "border-t-4 border-blue-400 z-10" : ""}`} />
 
-      <div
-        ref={bottomHalf.setNodeRef}
-        className={`absolute bottom-0 left-0 w-full h-1/2 rounded-b-lg ${
-          bottomHalf.isOver ? "border-b-4 border-blue-400 z-10" : ""
-        }`}
-      />
+      <div ref={setBottomRef} className={`absolute bottom-0 w-full h-1/2 rounded-b-lg 
+        ${isElementDragging ? "border-b-4 border-blue-400 z-10" : ""}`} />
 
-      <div
-        className={`h-full transition-opacity ${
-          isMouseOver ? "opacity-50" : "opacity-100"
-        }`}
-      >
+      <div className={`h-full transition-opacity ${isMouseOver ? "opacity-50" : "opacity-100"}`}>
         <ChildElement elementInstance={element} />
       </div>
 
       {isEditModeOn && (
-        <div className="absolute inset-0 bg-white/30 backdrop-blur-sm rounded-lg flex items-center justify-center gap-4 group:">
+        <div className="absolute inset-0 bg-white/30 backdrop-blur-sm rounded-lg 
+                        flex items-center justify-center gap-4">
           <div
             className="flex flex-col items-center gap-2 text-gray-600"
+            onTouchStart={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              setSelectedElementInstance(element);
+            }}
             onClick={(e) => {
               e.stopPropagation();
-              setSelectedElementInstance(null);
-              setTimeout(() => {
-                setSelectedElementInstance(element);
-              }, 0);
+              setSelectedElementInstance(element);
             }}
           >
             <Pencil className="w-6 h-6" />
@@ -177,6 +158,12 @@ const DndDraggableButton = ({
 
           <button
             className="p-1.5 hover:bg-red-100 rounded-md transition-colors"
+            onTouchStart={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              deleteElement(element.id);
+              setSelectedElementInstance(null);
+            }}
             onClick={(e) => {
               e.stopPropagation();
               deleteElement(element.id);

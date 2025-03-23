@@ -27,8 +27,8 @@ const DndContextWrapper = ({children}: {children: ReactNode}) => {
 
   const touchSensor = useSensor(TouchSensor, {
     activationConstraint: {
-      delay: 300,  
-      tolerance: 25,
+      delay: 350, 
+      tolerance: 30, 
     },
   });
 

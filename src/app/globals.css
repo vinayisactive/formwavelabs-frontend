@@ -13,6 +13,15 @@
 
   @media (pointer: coarse) {
     .dnd-element {
-      touch-action: none;
+      touch-action: manipulation;
+    }
+    
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    .dnd-element button {
+      z-index: 20;
+      position: relative;
     }
   }
