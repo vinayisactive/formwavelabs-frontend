@@ -14,10 +14,10 @@ const DndDraggableButton = ({
   element: FormElemetInstance;
   isElementTile: boolean;
 }) => {
-  const [isMounted, setIsMounted] = useState<boolean>(false);
-  const [isMouseOver, setMouseOver] = useState<boolean>(false);
-  const [isEditModeOn, setEditMode] = useState<boolean>(false);
-  const [isElementDragging, setIsElementDragging] = useState<boolean>(false);
+  const [isMounted, setIsMounted] = useState(false);
+  const [isMouseOver, setMouseOver] = useState(false);
+  const [isEditModeOn, setEditMode] = useState(false);
+  const [isElementDragging, setIsElementDragging] = useState(false);
 
   const { setSelectedElementInstance, deleteElement, elements, addElement } =
     useElements();
@@ -26,18 +26,26 @@ const DndDraggableButton = ({
     setIsMounted(true);
   }, []);
 
-  const ChildElement = isElementTile 
+  const ChildElement = isElementTile
     ? FormElemets[element.type]?.tile
     : FormElemets[element.type].submit;
 
-  const { setNodeRef: setTopRef } = useDroppable({
+  const { setNodeRef: setTopRef, isOver: isTopOver } = useDroppable({
     id: `${element.id}-top`,
-    data: { type: element.type, id: element.id, isTopHalf: true },
+    data: {
+      type: element.type,
+      id: element.id,
+      isTopHalf: true,
+    },
   });
 
-  const { setNodeRef: setBottomRef } = useDroppable({
+  const { setNodeRef: setBottomRef, isOver: isBottomOver } = useDroppable({
     id: `${element.id}-bottom`,
-    data: { type: element.type, id: element.id, isBottomHalf: true },
+    data: {
+      type: element.type,
+      id: element.id,
+      isBottomHalf: true,
+    },
   });
 
   const { setNodeRef, listeners, attributes, isDragging } = useDraggable({
@@ -59,7 +67,7 @@ const DndDraggableButton = ({
       document.body.classList.remove("dragging-active");
 
       if (!active || !over) return;
-    
+
       const isSignificantDrag = Math.hypot(delta.x, delta.y) > 10;
       if (!isSignificantDrag) return;
 
@@ -68,10 +76,12 @@ const DndDraggableButton = ({
       const isBottomHalf = over.data.current?.isBottomHalf;
 
       if (elementTileId && (isTopHalf || isBottomHalf)) {
-        const overIndex = elements.findIndex(el => el.id === over.data.current?.id);
+        const overIndex = elements.findIndex(
+          (el) => el.id === over.data.current?.id
+        );
         if (overIndex === -1) return;
 
-        const activeIndex = elements.findIndex(el => el.id === elementTileId);
+        const activeIndex = elements.findIndex((el) => el.id === elementTileId);
         const elementToMove = { ...elements[activeIndex] };
 
         deleteElement(elementTileId);
@@ -81,7 +91,7 @@ const DndDraggableButton = ({
   });
 
   useEffect(() => {
-    const style = document.createElement('style');
+    const style = document.createElement("style");
     style.innerHTML = `
       .dragging-active * {
         -webkit-user-select: none !important;
@@ -99,7 +109,7 @@ const DndDraggableButton = ({
       }
     `;
     document.head.appendChild(style);
-  
+
     return () => {
       if (document.head.contains(style)) {
         document.head.removeChild(style);
@@ -110,7 +120,7 @@ const DndDraggableButton = ({
   const handleEditMode = (e: React.TouchEvent | React.MouseEvent) => {
     e.preventDefault();
     if (!isElementDragging) {
-      setEditMode(prev => !prev);
+      setEditMode((prev) => !prev);
     }
   };
 
@@ -128,13 +138,23 @@ const DndDraggableButton = ({
       onClick={handleEditMode}
       onTouchEnd={handleEditMode}
     >
-      <div ref={setTopRef} className={`absolute top-0 w-full h-1/2 rounded-t-lg 
-        ${isElementDragging ? "border-t-4 border-blue-400 z-10" : ""}`} />
+      <div
+        ref={setTopRef}
+        className={`absolute top-0 w-full h-1/2 rounded-t-lg 
+          ${isTopOver ? "border-t-4 border-blue-400 z-10" : ""}`}
+      />
 
-      <div ref={setBottomRef} className={`absolute bottom-0 w-full h-1/2 rounded-b-lg 
-        ${isElementDragging ? "border-b-4 border-blue-400 z-10" : ""}`} />
+      <div
+        ref={setBottomRef}
+        className={`absolute bottom-0 w-full h-1/2 rounded-b-lg 
+          ${isBottomOver ? "border-b-4 border-blue-400 z-10" : ""}`}
+      />
 
-      <div className={`h-full transition-opacity ${isMouseOver ? "opacity-50" : "opacity-100"}`}>
+      <div
+        className={`h-full transition-opacity ${
+          isMouseOver ? "opacity-50" : "opacity-100"
+        }`}
+      >
         <ChildElement elementInstance={element} />
       </div>
 
