@@ -29,6 +29,7 @@ const WorkSpaceInviteModal = ({
     const isValidEmail = emailRegex.test(email);
     const isValidRole = role !== null;
     setIsValid(isValidEmail && isValidRole);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [email, role]);
 
   const handleInvite = async () => {

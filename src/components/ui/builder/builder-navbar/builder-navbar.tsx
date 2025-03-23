@@ -96,6 +96,7 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
     };
 
     fetchWorkspace();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
 
   useEffect(() => {

@@ -9,7 +9,8 @@ import { Pencil, Trash } from "lucide-react";
 
 const DndDraggableButton = ({ element, isElementTile }: { element: FormElemetInstance, isElementTile: boolean }) => {
   const [isMounted, setIsMounted] = useState<boolean>(false);
-  const [isMouseOver, setMouseOver] = useState(false);
+  const [isMouseOver, setMouseOver] = useState<boolean>(false);
+  const [isEditModeOn, setEditMode] = useState<boolean>(false)
   const [isElementDragging, setIsElementDragging] = useState<boolean>(false);
 
   const { setSelectedElementInstance, deleteElement, elements, addElement } =
@@ -87,7 +88,7 @@ const DndDraggableButton = ({ element, isElementTile }: { element: FormElemetIns
       ref={draggable.setNodeRef}
       {...draggable.listeners}
       {...draggable.attributes}
-      className="relative group bg-white backdrop-blur-md rounded-lg  transition-all cursor-pointer whitespace-nowrap group-hover:border-2:"
+      className="relative group bg-white backdrop-blur-md rounded-lg  transition-all cursor-pointer group-hover:border-2 select-none whitespace-pre-wrap"
       onMouseEnter={() =>{
         if(!isElementDragging)
         setMouseOver(true);
@@ -95,7 +96,7 @@ const DndDraggableButton = ({ element, isElementTile }: { element: FormElemetIns
       onMouseLeave={() => {
         if(!isElementDragging)
         setMouseOver(false);}}
-      onClick={() => setMouseOver(isMouseOver)}
+      onClick={() => setEditMode((prev) => !prev)}
     >
 
       <div
@@ -114,14 +115,14 @@ const DndDraggableButton = ({ element, isElementTile }: { element: FormElemetIns
 
       <div
         className={`h-full transition-opacity ${
-          isMouseOver ? "opacity-20" : "opacity-100"
+          isMouseOver ? "opacity-50" : "opacity-100"
         }`}
       >
         <ChildElement elementInstance={element} />
       </div>
 
-      {isMouseOver && (
-        <div className="absolute inset-0 bg-white/50 backdrop-blur-md rounded-lg flex items-center justify-center gap-4 group:">
+      {isEditModeOn && (
+        <div className="absolute inset-0 bg-white/30 backdrop-blur-sm rounded-lg flex items-center justify-center gap-4 group:">
           <div
             className="flex flex-col items-center gap-2 text-gray-600"
             onClick={() => {

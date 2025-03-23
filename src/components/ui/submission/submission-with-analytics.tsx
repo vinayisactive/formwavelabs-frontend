@@ -46,6 +46,7 @@ const SubmissionWithAnalytics: FC<SubmissionTableProps> = ({submissions, errMsg,
       };
   
       fetchWorkspace();
+          // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
 
   const handleRowClick = (id: string) => {

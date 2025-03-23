@@ -76,7 +76,7 @@ const Workspace = ({ wsId }: { wsId: string }) => {
   }, [currentUserData?.user.id, data]);
 
   return (
-    <div className="w-full h-full overflow-auto bg-gray-100 px-2 md:px-4 shadow-inner">
+    <div className="w-full h-full overflow-auto bg-gray-100 px-2 flex flex-col gap-0 justify-center md:px-4 shadow-inner">
         <WorkspaceNavbar
           workspaceName={data?.data.name}
           userRole={userRole}
@@ -87,7 +87,7 @@ const Workspace = ({ wsId }: { wsId: string }) => {
           setCreateFormModal={setCreateFormModal}
         />
 
-      <div className="h-[94%] w-full rounded-tl-md rounded-tr-md  bg-white/50 border">
+      <div className="h-[94%] w-full rounded-tl-xl rounded-tr-xl  bg-white/50 border">
         {isLoading ? (
           <div className="w-full h-full flex justify-center items-center">
             <Loader2 className=" animate-spin" />
