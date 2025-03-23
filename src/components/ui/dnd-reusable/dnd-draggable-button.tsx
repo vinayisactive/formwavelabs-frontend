@@ -50,10 +50,12 @@ const DndDraggableButton = ({ element, isElementTile }: { element: FormElemetIns
   useDndMonitor({
     onDragStart(){
       setIsElementDragging(true);
+      document.body.style.userSelect = "none";
     },
 
     onDragEnd(event) {
       setIsElementDragging(false);
+      document.body.style.userSelect = ""; 
       const { active, over } = event;
       if (!active || !over) return;
 
