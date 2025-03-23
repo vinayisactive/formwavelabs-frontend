@@ -27,7 +27,7 @@ const DndContextWrapper = ({children}: {children: ReactNode}) => {
 
   const touchSensor = useSensor(TouchSensor, {
     activationConstraint: {
-      delay: 300,
+      delay: 200,
       tolerance: 8,
     },
   });
@@ -35,7 +35,15 @@ const DndContextWrapper = ({children}: {children: ReactNode}) => {
   const sensor = useSensors(mouseSensor, touchSensor, pointerSensor);
 
   return (
-    <DndContext sensors={sensor}>
+    <DndContext sensors={sensor} 
+    autoScroll={{
+      enabled: true,
+      threshold: {
+        x: 0.1,
+        y: 0.25
+      }
+    }}
+    >
         {children}
       <DndOverlayWrapper />
     </DndContext>

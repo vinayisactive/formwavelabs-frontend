@@ -83,7 +83,6 @@ const DndDraggableButton = ({ element, isElementTile }: { element: FormElemetIns
     },
   });
 
-
   useEffect(() => {
     const styleElement = document.createElement('style');
     styleElement.innerHTML = `
@@ -92,40 +91,40 @@ const DndDraggableButton = ({ element, isElementTile }: { element: FormElemetIns
         user-select: none !important;
         -webkit-touch-callout: none !important;
       }
-      
-      /* Only apply touch-action none to the drag handle during dragging */
-      .dragging-active .drag-handle {
-        touch-action: none !important;
-      }
     `;
     document.head.appendChild(styleElement);
     
     return () => {
-      document.head.removeChild(styleElement);
+      if (document.head.contains(styleElement)) {
+        document.head.removeChild(styleElement);
+      }
     };
   }, []);
 
   if (draggable.isDragging) return null;
   if (!isMounted) return null;
 
+  const handleClick = () => {
+    if (!isElementDragging) {
+      setEditMode((prev) => !prev);
+    }
+  };
+
   return (
     <div
       ref={draggable.setNodeRef}
       {...draggable.listeners}
       {...draggable.attributes}
-      className={`relative group bg-white backdrop-blur-md rounded-lg transition-all cursor-pointer group-hover:border-2 select-none whitespace-pre-wrap drag-handle ${isElementDragging ? 'is-dragging' : ''}`}
-      onMouseEnter={() =>{
+      className="relative group bg-white backdrop-blur-md rounded-lg transition-all cursor-pointer group-hover:border-2 select-none whitespace-pre-wrap"
+      onMouseEnter={() => {
         if(!isElementDragging)
         setMouseOver(true);
       }}
       onMouseLeave={() => {
         if(!isElementDragging)
-        setMouseOver(false);}}
-      onClick={() => {
-        if (!isElementDragging) {
-          setEditMode((prev) => !prev);
-        }
+        setMouseOver(false);
       }}
+      onClick={handleClick}
     >
       <div
         ref={topHalf.setNodeRef}
@@ -153,7 +152,8 @@ const DndDraggableButton = ({ element, isElementTile }: { element: FormElemetIns
         <div className="absolute inset-0 bg-white/30 backdrop-blur-sm rounded-lg flex items-center justify-center gap-4 group:">
           <div
             className="flex flex-col items-center gap-2 text-gray-600"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               setSelectedElementInstance(null);
               setTimeout(() => {
                 setSelectedElementInstance(element);
@@ -165,7 +165,7 @@ const DndDraggableButton = ({ element, isElementTile }: { element: FormElemetIns
 
           <button
             className="p-1.5 hover:bg-red-100 rounded-md transition-colors"
-            onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+            onClick={(e) => {
               e.stopPropagation();
               deleteElement(element.id);
               setSelectedElementInstance(null);
