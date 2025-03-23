@@ -47,25 +47,14 @@ const DndDraggableButton = ({ element, isElementTile }: { element: FormElemetIns
     },
   });
 
-  // Prevent default touch behavior on mobile
-  const preventTouchSelect = (e: React.TouchEvent) => {
-    e.preventDefault();
-  };
-
   useDndMonitor({
     onDragStart(){
       setIsElementDragging(true);
-      document.body.style.userSelect = "none";
-      document.body.style.webkitUserSelect = "none"; // Lowercase 'webkit' is correct
-      document.body.style.touchAction = "none"; 
       document.body.classList.add("dragging-active");
     },
 
     onDragEnd(event) {
       setIsElementDragging(false);
-      document.body.style.userSelect = ""; 
-      document.body.style.webkitUserSelect = "";
-      document.body.style.touchAction = "";
       document.body.classList.remove("dragging-active");
       
       const { active, over } = event;
@@ -94,6 +83,7 @@ const DndDraggableButton = ({ element, isElementTile }: { element: FormElemetIns
     },
   });
 
+
   useEffect(() => {
     const styleElement = document.createElement('style');
     styleElement.innerHTML = `
@@ -101,6 +91,10 @@ const DndDraggableButton = ({ element, isElementTile }: { element: FormElemetIns
         -webkit-user-select: none !important;
         user-select: none !important;
         -webkit-touch-callout: none !important;
+      }
+      
+      /* Only apply touch-action none to the drag handle during dragging */
+      .dragging-active .drag-handle {
         touch-action: none !important;
       }
     `;
@@ -119,13 +113,7 @@ const DndDraggableButton = ({ element, isElementTile }: { element: FormElemetIns
       ref={draggable.setNodeRef}
       {...draggable.listeners}
       {...draggable.attributes}
-      className="relative group bg-white backdrop-blur-md rounded-lg transition-all cursor-pointer group-hover:border-2 select-none whitespace-pre-wrap"
-      style={{
-        WebkitUserSelect: "none",
-        userSelect: "none",
-        touchAction: "none"
-      }}
-      onTouchStart={preventTouchSelect}
+      className={`relative group bg-white backdrop-blur-md rounded-lg transition-all cursor-pointer group-hover:border-2 select-none whitespace-pre-wrap drag-handle ${isElementDragging ? 'is-dragging' : ''}`}
       onMouseEnter={() =>{
         if(!isElementDragging)
         setMouseOver(true);
@@ -133,7 +121,11 @@ const DndDraggableButton = ({ element, isElementTile }: { element: FormElemetIns
       onMouseLeave={() => {
         if(!isElementDragging)
         setMouseOver(false);}}
-      onClick={() => setEditMode((prev) => !prev)}
+      onClick={() => {
+        if (!isElementDragging) {
+          setEditMode((prev) => !prev);
+        }
+      }}
     >
       <div
         ref={topHalf.setNodeRef}
@@ -153,11 +145,6 @@ const DndDraggableButton = ({ element, isElementTile }: { element: FormElemetIns
         className={`h-full transition-opacity ${
           isMouseOver ? "opacity-50" : "opacity-100"
         }`}
-        style={{ 
-          WebkitUserSelect: "none", 
-          userSelect: "none",
-          pointerEvents: isElementDragging ? "none" : "auto"
-        }}
       >
         <ChildElement elementInstance={element} />
       </div>
