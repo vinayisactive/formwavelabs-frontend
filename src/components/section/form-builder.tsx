@@ -13,7 +13,7 @@ import { FormElemets } from "@/utility/static-data";
 import BuilderLoading from "../ui/builder/builder-loading";
 import useMediaQuery from "@/utility/useMediaQuery-hook";
 import DesktopFormBuilder from "../ui/builder/desktop-builder/desktop-form-builder";
-import MobileFormBuilder from "../ui/builder/mobile-form-builder";
+import MobileFormBuilder from "../ui/builder/mobile-builder/mobile-form-builder";
 
 export interface FormPageData {
   id: string;
@@ -96,11 +96,11 @@ const FormBuilder = ({
   }
 
   return (
-    <div className="w-full h-full flex flex-col gap-2 px-2 md:px-0 bg-white">
+    <div className="w-full max-w-[1500px] h-full flex flex-col gap-2 px-2 md:px-0 bg-white mx-auto">
       {selectedElementInstance && ElementEditSetting && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[10] flex border-2 border-red-500 px-3">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[10] flex">
           <div className="py-10 w-full overflow-y-auto">
-            <div className="min-h-[calc(100vh-2rem)] flex items-start justify-center mx-auto">
+            <div className="min-h-[calc(100vh-2rem)] w-[90%] md:w-auto flex items-start justify-center mx-auto">
               <ElementEditSetting elementInstance={selectedElementInstance} />
             </div>
           </div>
@@ -117,7 +117,7 @@ const FormBuilder = ({
         />
       </div>
 
-      <div className="h-[90%] md:h-[93%] w-full">
+      <div className="h-[90%] md:h-[93%] overflow-x-hidden">
         {isMobile ? (
           <MobileFormBuilder theme={formData?.theme} />
         ) : (

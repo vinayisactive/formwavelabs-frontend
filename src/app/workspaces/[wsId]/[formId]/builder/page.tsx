@@ -7,7 +7,7 @@ const page = async({params}: { params: Promise<{wsId: string; formId: string}>})
    
   return (
     <ElementsContextProvider>
-      <div className='w-screen h-screen absolute top-0 left-0'>
+      <div className='w-screen h-screen absolute top-0 left-0 bg-white'>
          <FormBuilder formId={formId} workspaceId={wsId} />
       </div>
     </ElementsContextProvider>
