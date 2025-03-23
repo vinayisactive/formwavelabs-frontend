@@ -1,18 +1,33 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import DndDraggableButton from "../../dnd-reusable/dnd-draggable-button";
 import useElements from "@/utility/useElements-hook";
 
 const TileContainer = () => {
   const { elements } = useElements();  
+  const reOrderContainerRef = useRef<HTMLDivElement | null>(null); 
+  const initialElementsLength = useRef(elements.length);
+
+  useEffect(() => {
+    if (reOrderContainerRef.current && elements.length > initialElementsLength.current) {
+      setTimeout(() => {
+        if (reOrderContainerRef.current) {
+          reOrderContainerRef.current.scrollTop = reOrderContainerRef.current.scrollHeight;
+        }
+      }, 0);
+    }
+  
+    initialElementsLength.current = elements.length;
+  }, [elements.length]);
 
   return (
-    <div className="h-full w-full flex flex-col bg-background overflow-hidden ">
+    <div className="h-full w-full flex flex-col bg-background overflow-hidden">
       <div className="w-full p-1 bg-muted/50">
         <p className="font-bold text-sm whitespace-nowrap">Drag to Re-order / Edit</p>
       </div>
 
-      <div className={`flex-1 overflow-y-auto p-2 space-y-2 rounded-md`}>
+      <div className={`flex-1 overflow-y-auto p-2 space-y-2 rounded-md`} ref={reOrderContainerRef} >
         {elements.length === 0 ? (
           <AddElementsLabel />
         ) : (
