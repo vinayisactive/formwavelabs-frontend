@@ -1,8 +1,12 @@
 "use client";
 
 import React, { Dispatch, FC, SetStateAction, useState } from "react";
-import { Users, UserPlus, PanelRight, Plus } from "lucide-react";
+import { Users, UserPlus, PanelRight, Plus, Edit, Loader2, X } from "lucide-react";
 import WorkspaceMembers from "./workspace-members";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { useSession } from "next-auth/react";
+import { handleAxiosError } from "@/utility/axios-err-handler";
 
 interface WorkspaceNavbarProps {
   workspaceName: string | undefined;
@@ -23,6 +27,34 @@ const WorkspaceNavbar: FC<WorkspaceNavbarProps> = ({
   wsId,
 }) => {
   const [isMembersModalOpen, setIsMembersModalOpen] = useState(false);
+  const [isEditModeOn, setIsEditModeOn] = useState<boolean>(false);
+  const [workspaceNameInput, setWorkspaceNameInput] = useState<
+    string | undefined
+  >(workspaceName || "");
+  const session = useSession().data;
+  const queryClient = useQueryClient();
+
+  const updateWorkspaceNameMutation = useMutation({
+    mutationFn: async () => {
+      await axios.patch(
+        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/workspaces/${wsId}`,
+        {
+          name: workspaceNameInput,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${session?.accessToken}`,
+          },
+        }
+      );
+    },
+    onSuccess: () => {
+      setIsEditModeOn(false);
+      queryClient.invalidateQueries({ queryKey: ["workspace"] });
+      queryClient.invalidateQueries({ queryKey: ["workspaces"] });
+    },
+    onError: (error) => console.error(handleAxiosError(error)),
+  });
 
   return (
     <div className="min-h-[50px] flex justify-between items-center w-full">
@@ -34,7 +66,38 @@ const WorkspaceNavbar: FC<WorkspaceNavbarProps> = ({
           <PanelRight className="h-5 w-5" />
         </button>
 
-        <p className=" whitespace-nowrap">{workspaceName}</p>
+        <div>
+          {isEditModeOn ? (
+            <div className="flex justify-center items-center gap-2">
+              <input
+                type="text"
+                className=" rounded-md outline"
+                value={workspaceNameInput}
+                onChange={(e) => setWorkspaceNameInput(e.target.value)}
+              />
+              <button
+                className="p-1 rounded-md bg-black text-white flex justify-center items-center gap-2"
+                onClick={() => updateWorkspaceNameMutation.mutate()}
+              >
+                save
+                {updateWorkspaceNameMutation.isPending && (
+                  <Loader2 size={15} className="animate-spin" />
+                )}
+              </button>
+
+              <button className="bg-black rounded-md p-1 text-white" onClick={() => setIsEditModeOn(false)}>
+                <X size={15}/>
+              </button>
+            </div>
+          ) : (
+            <div className="flex gap-2 justify-center items-center">
+              <p className=" whitespace-nowrap">{workspaceName}</p>
+              { userRole === "OWNER" &&<button onClick={() => setIsEditModeOn(true)}>
+                <Edit size={15} />
+              </button>}
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="flex justify-end items-center gap-1 ">
@@ -47,26 +110,32 @@ const WorkspaceNavbar: FC<WorkspaceNavbarProps> = ({
           </button>
         )}
 
-{        userRole && <div className="relative">
-          <button
-            className="group flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors"
-            onClick={() => setIsMembersModalOpen((prev) => !prev)}
-          >
-            <Users className="text-black" size={15} />
-            <span className="hidden md:inline text-black text-sm font-medium">
-              Members
-            </span>
-          </button>
-
-          {isMembersModalOpen && (
-            <div
-              className="absolute top-0 right-0 z-50"
-              onClick={(e) => e.stopPropagation()}
+        {userRole && (
+          <div className="relative">
+            <button
+              className="group flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors"
+              onClick={() => setIsMembersModalOpen((prev) => !prev)}
             >
-              <WorkspaceMembers userRole={userRole} wsId={wsId} setIsMembersModalOpen={setIsMembersModalOpen} />
-            </div>
-          )}
-        </div>}
+              <Users className="text-black" size={15} />
+              <span className="hidden md:inline text-black text-sm font-medium">
+                Members
+              </span>
+            </button>
+
+            {isMembersModalOpen && (
+              <div
+                className="absolute top-0 right-0 z-50"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <WorkspaceMembers
+                  userRole={userRole}
+                  wsId={wsId}
+                  setIsMembersModalOpen={setIsMembersModalOpen}
+                />
+              </div>
+            )}
+          </div>
+        )}
 
         {(userRole === "ADMIN" || userRole === "OWNER") && (
           <button
