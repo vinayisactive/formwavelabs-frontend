@@ -132,6 +132,14 @@ const Submit = ({ formId }: { formId: string }) => {
     setIsFormError(false);
   }, [elementsToValidate]);
 
+  if(!formData){
+    return(
+      <div className="w-screen h-screen flex justify-center items-center">
+        Either form is not published or does not exists.
+      </div>
+    )
+  }
+
   return (
     <div className="w-full h-auto flex justify-center px-2">
       <div className="w-full max-w-3xl px-3 md:px-5 md:py-4 py-3 flex flex-col justify-center gap-5 mt-10 mb-20 md:border rounded-md">
