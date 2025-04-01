@@ -10,7 +10,7 @@ import {
   User,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { Dispatch, SetStateAction, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { RxCross2 } from "react-icons/rx";
@@ -117,11 +117,10 @@ const WorkspacesBtn = () => {
   );
 };
 
-const UserProfile = ({ name }: { name: string }) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+const UserProfile = ({ name, isOpen, setIsOpen }: { name: string, isOpen: boolean, setIsOpen: () => void }) => {
 
   const userProfileToggle = () => {
-    setIsOpen(!isOpen)
+    setIsOpen()
   };
 
   return (
@@ -164,7 +163,7 @@ const UserProfile = ({ name }: { name: string }) => {
 
 
 const Notification = ({setIsOpen, isOpen}: {
-  setIsOpen: Dispatch<SetStateAction<boolean>>; 
+  setIsOpen: () => void; 
   isOpen: boolean
 }) => {
   const currentUserData = useSession().data;
@@ -173,7 +172,7 @@ const Notification = ({setIsOpen, isOpen}: {
   const [processingToken, setProcessingToken] = useState<string | null>(null);
 
   const userNotificationToggle = () => {
-    setIsOpen(!isOpen);
+    setIsOpen()
   };
 
   const {data, isLoading} = useQuery({
@@ -324,6 +323,23 @@ const Navbar = () => {
   const name = session?.user?.name || null;
 
   const [isNotificationOpen, setNotificationOpen] = useState<boolean>(false); 
+  const [isUserProfileOpen, setUserProfileOpen] = useState<boolean>(false); 
+
+  const toggleUserProfile = () => {
+    if (isNotificationOpen) {
+      setNotificationOpen(false);
+    }
+
+    setUserProfileOpen(!isUserProfileOpen);
+  };
+
+  const toggleNotification = () => {
+    if (isUserProfileOpen) {
+      setUserProfileOpen(false);
+    }
+
+    setNotificationOpen(!isNotificationOpen);
+  };
 
   return (
     <nav className="w-full min-h-[50px] h-[6vh] flex items-center justify-between px-4">
@@ -337,8 +353,8 @@ const Navbar = () => {
 
         {isAuth && name ? (
           <div className="flex items-center gap-1">
-            <UserProfile name={name} />
-            <Notification setIsOpen={setNotificationOpen} isOpen={isNotificationOpen}/>
+            <UserProfile name={name} isOpen={isUserProfileOpen} setIsOpen={toggleUserProfile}/>
+            <Notification setIsOpen={toggleNotification} isOpen={isNotificationOpen}/>
           </div>
         ) : (
           <SignIn />
