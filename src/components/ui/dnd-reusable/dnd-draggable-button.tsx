@@ -159,8 +159,7 @@ const DndDraggableButton = ({
       </div>
 
       {isEditModeOn && (
-        <div className="absolute inset-0 bg-white/30 backdrop-blur-sm rounded-lg 
-                        flex items-center justify-center gap-4">
+        <div className="absolute inset-0 bg-white/30 backdrop-blur-sm rounded-lg flex items-center justify-center gap-4">
           <div
             className="flex flex-col items-center gap-2 text-gray-600"
             onTouchStart={(e) => {
@@ -168,6 +167,7 @@ const DndDraggableButton = ({
               e.preventDefault();
               setSelectedElementInstance(element);
             }}
+            
             onClick={(e) => {
               e.stopPropagation();
               setSelectedElementInstance(element);
