@@ -95,7 +95,7 @@ const Workspace = ({ wsId }: { wsId: string }) => {
         ) : (
           <div className="w-full h-full">
             {data?.data.forms.length ? (
-              <div className="h-full w-full p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-scroll">
+              <div className="h-full w-full p-4 space-y-4 overflow-y-scroll">
                 {data?.data.forms &&
                   data.data.forms?.map((form) => (
                     <FormCard

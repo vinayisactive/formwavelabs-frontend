@@ -1,8 +1,12 @@
 "use client";
 import React, { FC, useState, useEffect, useRef } from "react";
 import CopyToClipboard from "./copy-to-clipboard";
-import { ArrowUpRight, Pencil, MoreVertical } from "lucide-react";
+import { ArrowUpRight, Pencil, MoreVertical, Loader2, Trash2, BarChart2 } from "lucide-react";
 import Link from "next/link";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { useSession } from "next-auth/react";
+import { handleAxiosError } from "@/utility/axios-err-handler";
 
 interface FormCardProps {
   formId: string;
@@ -10,7 +14,7 @@ interface FormCardProps {
   title: string;
   status: boolean;
   submissions: number;
-  userRole: string | null
+  userRole: string | null;
 }
 
 const FormCard: FC<FormCardProps> = ({
@@ -24,6 +28,7 @@ const FormCard: FC<FormCardProps> = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const session = useSession().data;
 
   useEffect(() => {
     const handleCloseMenus = (e: CustomEvent) => {
@@ -42,6 +47,8 @@ const FormCard: FC<FormCardProps> = ({
         handleCloseMenus as EventListener
       );
   }, [formId]);
+
+  const queryClient = useQueryClient();
 
   const handleMenuToggle = () => {
     const newState = !isMenuOpen;
@@ -71,13 +78,30 @@ const FormCard: FC<FormCardProps> = ({
     };
   }, []);
 
+  const deleteFormMutation = useMutation({
+    mutationFn: async () => {
+      await axios.delete(
+        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/workspaces/${workspaceId}/forms/${formId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${session?.accessToken}`,
+          },
+        }
+      );
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["workspace"] }),
+    onError: (error) => console.error(handleAxiosError(error)),
+  });
+
   return (
-    <div className="w-full h-[150px] max-h-[150px] flex flex-col justify-center p-4 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all">
-      <div className="h-[40%] flex justify-between items-start mb-3">
-        <div className="flex items-center gap-2">
-          <h3 className="font-medium text-gray-800 text-sm">{title}</h3>
-        </div>
-        <div className="relative" ref={menuRef}>
+    <div className="w-full h-[150px] md:h-[100px] max-h-[150px] md:max-h-[100px] flex flex-col justify-center p-4 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all">
+      <div className="flex justify-between items-start mb-3 md:mb-0">
+        <h3 className="font-medium text-gray-800 text-sm md:text-2xl truncate max-w-[70%]">
+          {title}
+        </h3>
+        
+        {/* Mobile Menu */}
+        <div className="md:hidden relative" ref={menuRef}>
           <button
             onClick={handleMenuToggle}
             className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
@@ -87,7 +111,7 @@ const FormCard: FC<FormCardProps> = ({
 
           {isMenuOpen && (
             <div
-              className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 z-10"
+              className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-black z-10"
               onMouseEnter={handleMenuMouseEnter}
               onMouseLeave={handleMenuMouseLeave}
             >
@@ -95,7 +119,7 @@ const FormCard: FC<FormCardProps> = ({
                 {userRole !== "VIEWER" && userRole !== null && (
                   <Link
                     href={`/workspaces/${workspaceId}/${formId}/builder`}
-                    className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+                    className="flex items-center justify-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     <Pencil size={16} />
@@ -105,25 +129,83 @@ const FormCard: FC<FormCardProps> = ({
 
                 <Link
                   href={`/workspaces/${workspaceId}/${formId}/submission`}
-                  className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md transition-colors whitespace-nowrap"
+                  className="flex items-center justify-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md transition-colors whitespace-nowrap"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <ArrowUpRight size={16} />
                   Submissions
                 </Link>
+
+                <button
+                  className="w-full px-4 py-2 text-gray-700 flex justify-center items-center gap-2  bg-red-400 hover:bg-red-500 rounded-md transition-colors whitespace-nowrap"
+                  onClick={() => deleteFormMutation.mutate()}
+                >
+                  Delete{" "}
+                  {deleteFormMutation.isPending && (
+                    <Loader2 size={15} className="animate-spin" />
+                  )}
+                </button>
               </div>
             </div>
           )}
         </div>
+
+        {/* Desktop Actions */}
+        <div className="hidden md:flex items-center gap-4">
+          {/* Status */}
+          {status ? (
+            <div className="flex items-center gap-1.5 text-green-600 font-medium text-sm">
+              <span>Published</span>
+              <CopyToClipboard
+                textToCopy={`http://localhost:3000/submit/${formId}`}
+                className="p-1 hover:bg-green-50 rounded-md"
+              />
+            </div>
+          ) : (
+            <span className="text-gray-500 font-medium text-sm">Draft</span>
+          )}
+
+          {/* Submissions */}
+          <div className="flex items-center gap-1 text-gray-800 font-medium text-sm">
+            <BarChart2 size={16} className="text-gray-600" />
+            <span>{submissions}</span>
+          </div>
+
+          {/* Edit Button */}
+          {userRole !== "VIEWER" && userRole !== null && (
+            <Link
+              href={`/workspaces/${workspaceId}/${formId}/builder`}
+              className="flex items-center gap-1 p-1.5 hover:bg-gray-100 rounded-md transition-colors text-gray-700"
+            >
+              <Pencil size={16} />
+              <span className="hidden lg:inline">Edit</span>
+            </Link>
+          )}
+
+          {/* Delete Button */}
+          <button
+            onClick={() => deleteFormMutation.mutate()}
+            className="flex items-center gap-1 p-1.5 hover:bg-red-100 rounded-md transition-colors text-red-600"
+            disabled={deleteFormMutation.isPending}
+          >
+            {deleteFormMutation.isPending ? (
+              <Loader2 size={16} className="animate-spin" />
+            ) : (
+              <Trash2 size={16} />
+            )}
+            <span className="hidden lg:inline">Delete</span>
+          </button>
+        </div>
       </div>
 
-      <div className=" h-[60%] flex flex-col justify-center gap-3">
+      {/* Mobile Status & Submissions */}
+      <div className="md:hidden flex-1 flex flex-col justify-center gap-3">
         <div className="flex items-center justify-between">
           <span className="text-sm text-gray-500">Status</span>
           <div className="flex items-center gap-2">
             {status ? (
               <div className="flex items-center gap-1.5 text-green-600 font-medium text-sm">
-                <span className="hidden sm:inline">Published</span>
+                <span className="sm:inline">Published</span>
                 <CopyToClipboard
                   textToCopy={`http://localhost:3000/submit/${formId}`}
                   className="p-1.5 hover:bg-green-50 rounded-md"
