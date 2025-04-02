@@ -10,15 +10,17 @@ import {
 } from "@dnd-kit/core";
 import { ReactNode } from "react";
 import DndOverlayWrapper from "./dnd-overlay";
+import useMediaQuery from "@/utility/useMediaQuery-hook";
 
-const DndContextWrapper = ({children}: {children: ReactNode}) => {
+const DndContextWrapper = ({ children }: { children: ReactNode }) => {
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   const pointerSensor = useSensor(PointerSensor, {
     activationConstraint: {
-      distance: 8
+      distance: isMobile ? 5 : 8,
     },
   });
-  
+
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
       distance: 10,
@@ -27,24 +29,30 @@ const DndContextWrapper = ({children}: {children: ReactNode}) => {
 
   const touchSensor = useSensor(TouchSensor, {
     activationConstraint: {
-      delay: 350, 
-      tolerance: 30, 
+      delay: isMobile ? 200 : 350,
+      tolerance: isMobile ? 15 : 30,
     },
   });
 
-  const sensor = useSensors(mouseSensor, touchSensor, pointerSensor);
+  const sensors = useSensors(
+    ...(isMobile 
+      ? [touchSensor, pointerSensor]
+      : [mouseSensor, touchSensor, pointerSensor])
+  ); 
 
   return (
-    <DndContext sensors={sensor} 
-    autoScroll={{
-      enabled: true,
-      threshold: {
-        x: 0.1,
-        y: 0.25
-      }
-    }}
+    <DndContext
+      sensors={sensors}
+      autoScroll={{
+        enabled: true,
+        threshold: {
+          x: 0.1,
+          y: isMobile ? 0.15 : 0.25,
+        },
+        acceleration: isMobile ? 7 : 5,
+      }}
     >
-        {children}
+      {children}
       <DndOverlayWrapper />
     </DndContext>
   );
