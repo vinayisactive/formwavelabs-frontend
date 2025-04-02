@@ -41,6 +41,19 @@ const Submit = ({ formId }: { formId: string }) => {
     setFormValues((prev) => ({ ...prev, [key]: value }));
   };
 
+  useEffect(() => {
+    const formAnalyticData = async() => {
+      try {
+        await axios.post(`https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formId}/track`)
+      } catch (error) {
+        console.error(handleAxiosError(error))
+      }
+    }
+
+    formAnalyticData(); 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); 
+
   const handleSubmit = async () => {
     try {
       if (!isFormValid()) {
