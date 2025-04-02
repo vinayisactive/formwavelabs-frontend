@@ -189,7 +189,7 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
     </div>
   
     <div className="w-full md:w-2/3 flex  justify-between items-center">
-      <div className="flex gap-2 items-center justify-center w-1/2">
+      <div className="flex gap-2 items-center justify-start md:justify-center w-1/2">
         {page > 1 && (
           <PreviousBtn
             handlePrevious={handlePrevious}
@@ -200,15 +200,13 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
         <div className="bg-black p-1.5 px-2 text-sm rounded-md text-white">
           {page}/{totalPage}
         </div>
-  
 
-  
         <SaveBtn
           savePageMutation={savePageMutation}
           isSaveAllowed={isSaveAllowed}
         />
 
-                {isNextAvailable ? (
+         {isNextAvailable ? (
           <NextBtn
             handleNextPage={handleNextPage}
             isSaveAllowed={isSaveAllowed}

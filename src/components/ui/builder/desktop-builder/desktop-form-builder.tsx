@@ -2,7 +2,7 @@ import React from 'react'
 import ElementsContainer from '../elements-container/elements-container'
 import DesktopBuilderPreview from './desktop-builder-preview'
 import DndContextWrapper from '../../dnd-reusable/dnd-context-wrapper'
-import TileContainer from './desktop-tile-reorder-container'
+import TileContainer from '../tile-container/tile-container'
 
 const DesktopFormBuilder = ({theme} : {theme: "BOXY" | "ROUNDED" | undefined}) => {
   return (

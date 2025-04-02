@@ -5,6 +5,7 @@ import DndContextWrapper from "../../dnd-reusable/dnd-context-wrapper";
 import MobileBuilderPreview from "./mobile-builder-preview";
 import ElementsContainer from "../elements-container/elements-container";
 import useElements from "@/utility/useElements-hook";
+import TileContainer from "../tile-container/tile-container";
 
 const MobileFormBuilder = ({
   theme,
@@ -12,6 +13,8 @@ const MobileFormBuilder = ({
   theme: "BOXY" | "ROUNDED" | undefined;
 }) => {
   const [isAddElementModalOpen, setAddElementModal] = useState<boolean>(false);
+  const [isLayerReOrderModalOpen, setLayerReOrderModal] =
+    useState<boolean>(false);
   const { elements } = useElements();
   const previewContainerRef = useRef<HTMLDivElement | null>(null);
   const prevElementLength = useRef<number>(elements.length);
@@ -50,12 +53,19 @@ const MobileFormBuilder = ({
         backgroundPosition: "center",
       }}
     >
-      <div className="w-full justify-start items-center py-1">
+      <div className="w-full flex justify-start items-center gap-2 py-1 ">
         <button
           className="p-1 bg-white rounded-md shadow-sm shadow-black/50"
           onClick={() => setAddElementModal(true)}
         >
-          <Plus size={15} />
+          <Plus size={18} />
+        </button>
+
+        <button
+          className="p-1 bg-white rounded-md shadow-sm text-[12px] shadow-black/50"
+          onClick={() => setLayerReOrderModal(true)}
+        >
+          Re Order
         </button>
       </div>
 
@@ -63,9 +73,7 @@ const MobileFormBuilder = ({
         className="w-full h-full overflow-y-scroll scroll-smooth"
         ref={previewContainerRef}
       >
-        <DndContextWrapper>
-          <MobileBuilderPreview theme={theme} />
-        </DndContextWrapper>
+        <MobileBuilderPreview theme={theme} />
       </div>
 
       {isAddElementModalOpen && (
@@ -76,6 +84,22 @@ const MobileFormBuilder = ({
           <div className="w-[80%] bg-white rounded-md p-2">
             <ElementsContainer />
           </div>
+        </div>
+      )}
+
+      {isLayerReOrderModalOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[10] h-full flex justify-center items-center"
+          onClick={(e) => {
+            e.stopPropagation();
+            setLayerReOrderModal(false);
+          }}
+        >
+          <DndContextWrapper>
+            <div className="w-[80%] bg-white rounded-md px-2  h-[80%]">
+              <TileContainer closeLayer={setLayerReOrderModal} />
+            </div>
+          </DndContextWrapper>
         </div>
       )}
     </div>

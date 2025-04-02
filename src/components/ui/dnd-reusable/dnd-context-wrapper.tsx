@@ -35,9 +35,7 @@ const DndContextWrapper = ({ children }: { children: ReactNode }) => {
   });
 
   const sensors = useSensors(
-    ...(isMobile 
-      ? [touchSensor, pointerSensor]
-      : [mouseSensor, touchSensor, pointerSensor])
+    mouseSensor, touchSensor, pointerSensor
   ); 
 
   return (

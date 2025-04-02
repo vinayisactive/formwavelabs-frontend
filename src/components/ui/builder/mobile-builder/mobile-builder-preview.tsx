@@ -1,7 +1,7 @@
 import React from "react";
 import useElements from "@/utility/useElements-hook";
 import { FormElemetInstance } from "@/utility/ts-types";
-import DndDraggableButton from "../../dnd-reusable/dnd-draggable-button";
+import { FormElemets } from "@/utility/static-data";
 
 const MobileBuilderPreview = ({
   theme,
@@ -9,7 +9,7 @@ const MobileBuilderPreview = ({
   theme: "BOXY" | "ROUNDED" | undefined;
 }) => {
   const { elements } = useElements();
-
+  
   return (
     <div className="w-full px-1 flex justify-between">
       <div
@@ -20,9 +20,11 @@ const MobileBuilderPreview = ({
         }`}
       >
         {elements?.map((el: FormElemetInstance) => {
+          const Element = FormElemets[el.type].submit; 
+
           return (
             <div key={el?.id}>
-              <DndDraggableButton element={el} isElementTile={false} />
+              <Element elementInstance={el} />
             </div>
           );
         })}
@@ -30,10 +32,6 @@ const MobileBuilderPreview = ({
         {elements.length === 0 && (
           <div className="text-center">Add form elements in builder</div>
         )}
-      </div>
-
-      <div className="w-[20px] bg-gray-400 rounded-tr-md">
-
       </div>
     </div>
   );

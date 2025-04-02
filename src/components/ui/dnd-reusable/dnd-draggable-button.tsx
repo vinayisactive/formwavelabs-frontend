@@ -4,15 +4,17 @@ import { FormElemets } from "@/utility/static-data";
 import { FormElemetInstance } from "@/utility/ts-types";
 import useElements from "@/utility/useElements-hook";
 import { useDndMonitor, useDraggable, useDroppable } from "@dnd-kit/core";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Pencil, Trash } from "lucide-react";
 
 const DndDraggableButton = ({
   element,
   isElementTile,
+  closeLayer
 }: {
   element: FormElemetInstance;
   isElementTile: boolean;
+  closeLayer? : Dispatch<SetStateAction<boolean>>; 
 }) => {
   const [isMounted, setIsMounted] = useState(false);
   const [isMouseOver, setMouseOver] = useState(false);
@@ -165,6 +167,7 @@ const DndDraggableButton = ({
             onTouchStart={(e) => {
               e.stopPropagation();
               e.preventDefault();
+              closeLayer?.(false)
               setSelectedElementInstance(element);
             }}
             
