@@ -17,7 +17,7 @@ const DndContextWrapper = ({ children }: { children: ReactNode }) => {
 
   const pointerSensor = useSensor(PointerSensor, {
     activationConstraint: {
-      distance: isMobile ? 5 : 8,
+      distance: isMobile ? 15 : 8,
     },
   });
 
@@ -29,8 +29,8 @@ const DndContextWrapper = ({ children }: { children: ReactNode }) => {
 
   const touchSensor = useSensor(TouchSensor, {
     activationConstraint: {
-      delay: isMobile ? 200 : 350,
-      tolerance: isMobile ? 15 : 30,
+      delay: isMobile ? 500 : 350,
+      tolerance: isMobile ? 50 : 30, 
     },
   });
 
@@ -47,9 +47,9 @@ const DndContextWrapper = ({ children }: { children: ReactNode }) => {
         enabled: true,
         threshold: {
           x: 0.1,
-          y: isMobile ? 0.15 : 0.25,
+          y: 0.1 
         },
-        acceleration: isMobile ? 7 : 5,
+        acceleration: 10 
       }}
     >
       {children}
