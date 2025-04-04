@@ -1,12 +1,22 @@
 "use client";
 
 import React, { Dispatch, FC, SetStateAction, useState } from "react";
-import { Users, UserPlus, PanelRight, Plus, Edit, Loader2, X } from "lucide-react";
+import {
+  Users,
+  UserPlus,
+  PanelRight,
+  Plus,
+  Edit,
+  Loader2,
+  X,
+  Database,
+} from "lucide-react";
 import WorkspaceMembers from "./workspace-members";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { handleAxiosError } from "@/utility/axios-err-handler";
+import WorkspaceAsset from "./workspace-asset";
 
 interface WorkspaceNavbarProps {
   workspaceName: string | undefined;
@@ -31,6 +41,8 @@ const WorkspaceNavbar: FC<WorkspaceNavbarProps> = ({
   const [workspaceNameInput, setWorkspaceNameInput] = useState<
     string | undefined
   >(workspaceName || "");
+  const [isAssetModalOpen, setIsAssetModalOpen] = useState<boolean>(false);
+
   const session = useSession().data;
   const queryClient = useQueryClient();
 
@@ -85,16 +97,21 @@ const WorkspaceNavbar: FC<WorkspaceNavbarProps> = ({
                 )}
               </button>
 
-              <button className="bg-black rounded-md p-1 text-white" onClick={() => setIsEditModeOn(false)}>
-                <X size={15}/>
+              <button
+                className="bg-black rounded-md p-1 text-white"
+                onClick={() => setIsEditModeOn(false)}
+              >
+                <X size={15} />
               </button>
             </div>
           ) : (
             <div className="flex gap-2 justify-center items-center">
               <p className=" whitespace-nowrap">{workspaceName}</p>
-              { userRole === "OWNER" &&<button onClick={() => setIsEditModeOn(true)}>
-                <Edit size={15} />
-              </button>}
+              {userRole === "OWNER" && (
+                <button onClick={() => setIsEditModeOn(true)}>
+                  <Edit size={15} />
+                </button>
+              )}
             </div>
           )}
         </div>
@@ -145,6 +162,22 @@ const WorkspaceNavbar: FC<WorkspaceNavbarProps> = ({
             <UserPlus size={15} />
             <span className="hidden md:flex">Invite</span>
           </button>
+        )}
+
+    {  userRole && <button
+          className="flex items-center gap-1 px-2 py-1 rounded-md hover:bg-gray-200 text-sm"
+          onClick={() => setIsAssetModalOpen((prev) => !prev)}
+        >
+          <Database size={14} />
+          <span className="hidden md:flex">Assets</span>
+        </button>}
+
+        {isAssetModalOpen && (
+          <div className="fixed inset-0 bg-white/40 backdrop-blur-sm z-50">
+            <div className="w-full h-full flex justify-center items-center" onClick={(e) => e.stopPropagation()}>
+              <WorkspaceAsset workspaceName={workspaceName} wsId={wsId} setIsAssetModalOpen={setIsAssetModalOpen} />
+            </div>
+          </div>
         )}
       </div>
     </div>
