@@ -3,10 +3,11 @@ import { submitCompPropsType } from "@/utility/ts-types";
 import { FC, useState } from "react";
 import { FileUploadCustomInstance } from "./file-upload-prop-attributes";
 import { SubmitComponentWrapper } from "../elements-reusable-comp";
-import ImageKitFileUpload from "../../imagekit-file-uploader";
+// import ImageKitFileUpload from "../../imagekit-file-uploader";
 import { Loader, X } from "lucide-react";
 import { handleAxiosError } from "@/utility/axios-err-handler";
 import axios from "axios";
+import FileUploader from "../../file-uploader";
 
 const FileUploadSubmit: FC<submitCompPropsType> = ({
   elementInstance,
@@ -15,7 +16,7 @@ const FileUploadSubmit: FC<submitCompPropsType> = ({
   handleValues,
   formValues,
   isFormError,
-  theme,
+  formId
 }) => {
   const { id, extraAttributes } = elementInstance as FileUploadCustomInstance;
   const { label, helperText, required, selectedFileType } = extraAttributes;
@@ -76,14 +77,11 @@ const FileUploadSubmit: FC<submitCompPropsType> = ({
       isFormError={isFormError}
     >
       {!fileUrl && (
-        <ImageKitFileUpload
+        <FileUploader
+          type="FORM"
+          id={formId || ""}
           fileType={selectedFileType}
-          onSuccess={(res) => handleChange(`${res.url}::${res.fileId}`)}
-          className={
-            theme === "BOXY"
-              ? "border-r-4 border-b-4 border-black"
-              : "rounded-md border-gray-300 border-2"
-          }
+          onUploadComplete={(res) => handleChange(res.assetUrl)}
         />
       )}
 

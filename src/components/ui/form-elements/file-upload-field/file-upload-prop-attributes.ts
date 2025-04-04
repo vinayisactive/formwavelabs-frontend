@@ -1,6 +1,6 @@
 import { FormElemetInstance } from "@/utility/ts-types"
 
-export type accecptedFiletype = "pdf"  | "image" | "video";
+export type accecptedFiletype = "PDF"  | "IMAGE"; 
 
 export type fileUploadExtraAttributesTypes = {
     label : string;
@@ -14,8 +14,8 @@ export const fileUploadExtraAttributes : fileUploadExtraAttributesTypes = {
     label: "file upload field label",
     helperText: "helperText",
     required: false,
-    fileTypes: ["pdf", "image", "video"],
-    selectedFileType : "pdf"
+    fileTypes: ["PDF", "IMAGE"],
+    selectedFileType : "PDF"
 }
 
 export type FileUploadCustomInstance  = FormElemetInstance & {
