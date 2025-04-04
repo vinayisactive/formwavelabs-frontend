@@ -101,7 +101,7 @@ const FormBuilder = ({
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[10] flex">
           <div className="py-10 w-full overflow-y-auto">
             <div className="min-h-[calc(100vh-2rem)] w-[90%] md:w-auto flex items-start justify-center mx-auto">
-              <ElementEditSetting elementInstance={selectedElementInstance} />
+              <ElementEditSetting elementInstance={selectedElementInstance} workspaceId={workspaceId} />
             </div>
           </div>
         </div>

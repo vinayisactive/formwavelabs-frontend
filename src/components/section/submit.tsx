@@ -180,6 +180,7 @@ const Submit = ({ formId }: { formId: string }) => {
             const SubmitComponent = FormElemets[el.type].submit;
             return (
               <SubmitComponent
+                formId={formId}
                 elementInstance={el}
                 key={el.id}
                 handleValues={handleValues}

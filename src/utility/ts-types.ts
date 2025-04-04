@@ -21,10 +21,12 @@ export type FormElement = {
 
 export interface FormElementProps {
   elementInstance: FormElemetInstance;
+  workspaceId?: string
 }
 
 export type submitCompPropsType = {
-  elementInstance: FormElemetInstance;
+    formId?: string
+    elementInstance: FormElemetInstance;
     handleValues?: submitValueType;
     formValues?: { [key: string]: string };
     setFormValues?: Dispatch<SetStateAction<{ [key: string]: string }>>;
