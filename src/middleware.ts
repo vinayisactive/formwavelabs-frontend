@@ -31,8 +31,7 @@ export const config = {
   matcher: [
     "/sign-in",
     "/sign-up",
-    "/workspaces",
-    "/form/:path*",
+    "/workspaces/:path*",
     "/submit/:path*",
   ],
 };
