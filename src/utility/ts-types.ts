@@ -28,15 +28,15 @@ export type submitCompPropsType = {
     formId?: string
     elementInstance: FormElemetInstance;
     handleValues?: submitValueType;
-    formValues?: { [key: string]: string };
-    setFormValues?: Dispatch<SetStateAction<{ [key: string]: string }>>;
+    formValues?: { [key: string]: {id: string, value: string, label: string} };
+    setFormValues?: Dispatch<SetStateAction<{ [key: string]: {id: string, value: string, label: string} }>>;
     elementsToValidate?: Record<string, string | undefined>; 
     setElementsToValidate?: Dispatch<SetStateAction<Record<string, string | undefined>>>
     isFormError?: boolean;
     theme? : "BOXY" | "ROUNDED" | undefined
 }
 
-export type submitValueType = (key: string, value: string) => void;
+export type submitValueType = (key: string, value: { id: string, value: string, label: string}) => void;
 
 export type FormElemetsType = {
     [key in (ElementsType | LayoutElementsType)]: FormElement;
