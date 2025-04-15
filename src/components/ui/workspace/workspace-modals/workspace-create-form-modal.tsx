@@ -12,7 +12,7 @@ interface CreateFormInterface {
   theme: "ROUNDED" | "BOXY";
 }
 
-const WorkspaceCreateForm = ({
+const WorkspaceCreateFormModal = ({
   wsId,
   workspaceName,
   isCreateFormModal,
@@ -219,4 +219,4 @@ const WorkspaceCreateForm = ({
   );
 };
 
-export default WorkspaceCreateForm;
+export default WorkspaceCreateFormModal;

@@ -9,12 +9,12 @@ const WorkSpaceInviteModal = ({
   wsId,
   workspaceName,
   isInviteModalOpen,
-  setInviteModalOpen,
+  setInviteModal,
 }: {
   wsId: string;
   workspaceName: string | undefined;
   isInviteModalOpen: boolean;
-  setInviteModalOpen: Dispatch<SetStateAction<boolean>>;
+  setInviteModal: Dispatch<SetStateAction<boolean>>;
 }) => {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState<"ADMIN" | "EDITOR" | "VIEWER">("VIEWER");
@@ -59,7 +59,7 @@ const WorkSpaceInviteModal = ({
   };
 
   const onClose = () => {
-    setInviteModalOpen((prev) => !prev);
+    setInviteModal((prev) => !prev);
   };
 
   if (!isInviteModalOpen) return null;

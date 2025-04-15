@@ -1,14 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import FormCard from "../form-card";
 import { useSession } from "next-auth/react";
 import WorkspaceNavbar from "./workspace-navbar";
-import WorkspaceSidebarMobile from "./workspace-sidebar-mobile";
 import { useQuery } from "@tanstack/react-query";
-import WorkSpaceInviteModal from "./workspace-invite-modal";
-import WorkspaceCreateForm from "./workspace-create-form";
 import { Loader2 } from "lucide-react";
-import useMediaQuery from "@/utility/useMediaQuery-hook";
 
 export interface MemberInterface {
   role: string;
@@ -39,12 +35,8 @@ interface WorkspaceDataInterface {
   message: string;
 }
 
-const Workspace = ({ wsId }: { wsId: string }) => {
+const CurrentWorkspace = ({ wsId, setCreateWorkspaceModal }: { wsId: string, setCreateWorkspaceModal: Dispatch<SetStateAction<boolean>> }) => {
   const currentUserData = useSession().data;
-  const isMobile = useMediaQuery("(max-width: 768px)");
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isInviteModalOpen, setInviteModalOpen] = useState<boolean>(false);
-  const [isCreateFormModal, setCreateFormModal] = useState<boolean>(false);
   const [userRole, setRole] = useState<string | null>(null);
 
   const { data, isLoading } = useQuery({
@@ -77,22 +69,20 @@ const Workspace = ({ wsId }: { wsId: string }) => {
   }, [currentUserData?.user.id, data]);
 
   return (
-    <div className="w-full h-full overflow-auto bg-gray-100 px-2 flex flex-col gap-0 justify-center md:px-4 shadow-inner">
+    <div className="w-full h-full overflow-auto bg-[#f1f1f1] px-2 flex flex-col gap-2 md:gap-0 justify-center md:px-4">
         <WorkspaceNavbar
           workspaceName={data?.data.name}
+          setCreateWorkspaceModal={setCreateWorkspaceModal}
           userRole={userRole}
           membersCount={data?.data?.members?.length}
-          setIsSidebarOpen={setIsSidebarOpen}
           wsId={wsId}
-          setInviteModalOpen={setInviteModalOpen}
-          setCreateFormModal={setCreateFormModal}
         />
 
-      <div className="h-[94%] w-full rounded-tl-xl rounded-tr-xl  bg-white/50 border">
+      <div className="h-[94%] w-full rounded-tl-xl rounded-tr-xl  bg-white border">
         {isLoading ? (
           <div className="w-full h-full flex justify-center items-center">
             <Loader2 className=" animate-spin" />
-          </div>
+          </div> 
         ) : (
           <div className="w-full h-full">
             {data?.data.forms.length ? (
@@ -116,29 +106,9 @@ const Workspace = ({ wsId }: { wsId: string }) => {
             )}
           </div>
         )}
-
-        {isMobile && <WorkspaceSidebarMobile setIsSidebarOpen={setIsSidebarOpen} isSidebarOpen={isSidebarOpen} />}
-
-        {isInviteModalOpen && (
-          <WorkSpaceInviteModal
-            wsId={wsId}
-            workspaceName={data?.data.name}
-            isInviteModalOpen={isInviteModalOpen}
-            setInviteModalOpen={setInviteModalOpen}
-          />
-        )}
-
-        {isCreateFormModal && (
-          <WorkspaceCreateForm
-            wsId={wsId}
-            workspaceName={data?.data.name}
-            isCreateFormModal={isCreateFormModal}
-            setCreateFormModal={setCreateFormModal}
-          />
-        )}
       </div>
     </div>
   );
 };
 
-export default Workspace;
+export default CurrentWorkspace;

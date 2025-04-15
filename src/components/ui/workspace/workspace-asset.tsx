@@ -18,10 +18,10 @@ interface WorkspaceAsset {
 interface WorkspaceAssetProps {
   workspaceName: string | undefined;
   wsId: string;
-  setIsAssetModalOpen: Dispatch<SetStateAction<boolean>>;
+  setAssetModal: Dispatch<SetStateAction<boolean>>;
 }
 
-const WorkspaceAsset: FC<WorkspaceAssetProps> = ({workspaceName, wsId, setIsAssetModalOpen}) => {
+const WorkspaceAsset: FC<WorkspaceAssetProps> = ({workspaceName, wsId, setAssetModal}) => {
   const session = useSession().data;
   const [selectedAssetId, setSelectedAssetId] = useState<string | null>(null);
   const queryClient = useQueryClient();
@@ -110,7 +110,7 @@ const WorkspaceAsset: FC<WorkspaceAssetProps> = ({workspaceName, wsId, setIsAsse
           )}
           
           <button
-            onClick={() => setIsAssetModalOpen(false)}
+            onClick={() => setAssetModal(false)}
             className="p-1.5 rounded-full hover:bg-gray-100 transition-colors"
           >
             <X className="w-5 h-5 text-gray-600" />

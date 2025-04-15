@@ -24,11 +24,11 @@ interface MembersInterface {
 const WorkspaceMembers = ({
   userRole,
   wsId,
-  setIsMembersModalOpen
+  setMembersModal
 }: {
   userRole: string | null;
   wsId: string;
-  setIsMembersModalOpen: Dispatch<SetStateAction<boolean>>; 
+  setMembersModal: Dispatch<SetStateAction<boolean>>; 
 }) => {
   const currentUserData = useSession();
   const queryClient = useQueryClient();
@@ -100,7 +100,7 @@ const WorkspaceMembers = ({
        <div className="flex justify-between items-center p-4 border-b border-gray-200">
         <h2 className="text-lg font-semibold">Members</h2>
         <button 
-          onClick={() => setIsMembersModalOpen(false)}
+          onClick={() => setMembersModal(false)}
           className="p-1 hover:bg-gray-100 rounded-full transition-colors"
         >
           <X className="h-5 w-5 text-gray-500" />
