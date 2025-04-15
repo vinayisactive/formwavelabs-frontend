@@ -15,7 +15,7 @@ const EmailSubmit: FC<submitCompPropsType> = ({
   const { label, helperText, required, placeHolder } = extraAttributes;
 
   const [inputValue, setInputValue] = useState<string>(
-    formValues?.[id] || ""
+    formValues?.[id]?.value || ""
   );
 
   const validateEmail = (email: string) => {
@@ -31,7 +31,7 @@ const EmailSubmit: FC<submitCompPropsType> = ({
       [id]: validateEmail(value) ? undefined : "",
     }));
     
-    handleValues?.(id, value);
+    handleValues?.(id, {id, value, label: extraAttributes.label});
   };
 
   return (
@@ -50,7 +50,7 @@ const EmailSubmit: FC<submitCompPropsType> = ({
         id={id}
         placeholder={placeHolder}
         required={required}
-        value={formValues?.[id] || inputValue}
+        value={formValues?.[id]?.value || inputValue}
         onChange={(event) => handleChange(event.target.value)}
         className="w-full pb-1 border-b-2 border-gray-300 focus:outline-none text-sm mt-1"
       />

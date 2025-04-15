@@ -17,7 +17,7 @@ const TextFieldSubmit: React.FC<submitCompPropsType> = ({
   const { label, helperText, placeholder, required } = extraAttributes;
 
   const [inputValue, setInputValue] = useState<string>(
-    formValues?.[id] || ""
+    formValues?.[id]?.value || ""
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +31,7 @@ const TextFieldSubmit: React.FC<submitCompPropsType> = ({
     }
 
     setInputValue(newValue);
-    handleValues?.(id, newValue); 
+    handleValues?.(id, { id, value: newValue, label: extraAttributes.label}); 
   };
 
   return (
@@ -48,7 +48,7 @@ const TextFieldSubmit: React.FC<submitCompPropsType> = ({
         id={id}
         placeholder={placeholder}
         required={required}
-        value={formValues?.[id] || inputValue}
+        value={formValues?.[id]?.value || inputValue}
         onChange={handleChange}
         className="w-full pb-1 border-b-2 border-gray-300 focus:outline-none text-sm mt-1"
       />

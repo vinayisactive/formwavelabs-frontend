@@ -18,7 +18,7 @@ const TextAreaSubmit: React.FC<submitCompPropsType> = ({
   const { label, helperText, placeholder, required } = extraAttributes;
 
   const [inputValue, setInputValue] = useState<string>(
-    formValues?.[id] || ""
+    formValues?.[id]?.value || ""
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -33,7 +33,7 @@ const TextAreaSubmit: React.FC<submitCompPropsType> = ({
 
     setInputValue(newValue);
     if (handleValues) {
-      handleValues(id, newValue);
+      handleValues(id, {id, value: newValue, label: extraAttributes.label});
     }
   };
 
@@ -50,7 +50,7 @@ const TextAreaSubmit: React.FC<submitCompPropsType> = ({
         id={id}
         placeholder={placeholder}
         required={required}
-        value={formValues?.[id] || inputValue}
+        value={formValues?.[id]?.value || inputValue}
         onChange={handleChange}
         className={`w-full px-3 py-2 border-2 border-gray-300 ${theme === "BOXY" ? "" : "rounded-md"} focus:outline-none focus:ring-2 focus:ring-black focus:border-black-500 text-sm`}
       />

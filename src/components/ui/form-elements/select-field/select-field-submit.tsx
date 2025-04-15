@@ -18,7 +18,7 @@ const SelectSubmit: FC<submitCompPropsType> = ({
     extraAttributes;
 
   const [inputValue, setInputValue] = useState<string>(
-    formValues?.[id] || ""
+    formValues?.[id]?.value || ""
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -32,7 +32,7 @@ const SelectSubmit: FC<submitCompPropsType> = ({
     }
 
     setInputValue(newValue);
-    handleValues?.(id, newValue);
+    handleValues?.(id, {id, value: newValue, label: extraAttributes.label});
   };
 
   return (
@@ -47,7 +47,7 @@ const SelectSubmit: FC<submitCompPropsType> = ({
       <select
         id={id}
         required={required}
-        value={formValues?.[id] || inputValue}
+        value={formValues?.[id]?.value || inputValue}
         onChange={handleChange}
         className={`w-full px-3 mt-2  ${
           theme === "BOXY"

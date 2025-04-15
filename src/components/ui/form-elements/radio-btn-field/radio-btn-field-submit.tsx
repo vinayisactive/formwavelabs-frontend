@@ -16,7 +16,7 @@ const RadioBtnSubmit: FC<submitCompPropsType> = ({
   const { id, extraAttributes } = elementInstance as RadioButtonCustomInstance;
   const { label, helperText, options, required } = extraAttributes;
   const [inputValue, setInputValue] = useState<string>(
-    formValues?.[id] || ""
+    formValues?.[id]?.value || ""
   );
 
   const handleChange = (value: string) => {
@@ -29,7 +29,7 @@ const RadioBtnSubmit: FC<submitCompPropsType> = ({
       }));
     }
 
-    handleValues?.(id, value);
+    handleValues?.(id, {id, value, label: extraAttributes.label});
   };
 
   return (
@@ -54,7 +54,7 @@ const RadioBtnSubmit: FC<submitCompPropsType> = ({
               name={id}
               value={option}
               checked={
-                formValues?.[id] === option || inputValue === option
+                formValues?.[id]?.value === option || inputValue === option
               }
               onChange={(e) => handleChange(e.target.value)}
               className="peer hidden"

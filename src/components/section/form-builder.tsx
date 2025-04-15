@@ -27,16 +27,17 @@ export interface FormData {
   title: string;
   status: boolean;
   totalPages: number;
+  workspaceId: string; 
   theme: "BOXY" | "ROUNDED";
 }
 
 const FormBuilder = ({
   formId,
-  workspaceId,
 }: {
   formId: string;
-  workspaceId: string;
 }) => {
+
+  console.log(formId)
   const { setElements } = useElements();
   const { data: session } = useSession();
   const token = session?.accessToken;
@@ -59,9 +60,11 @@ const FormBuilder = ({
     queryKey: ["formData", formId, currentPage],
     queryFn: async () => {
       const response = await axios.get(
-        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/workspaces/${workspaceId}/forms/${formId}/pages?p=${currentPage}`,
+        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formId}/pages?p=${currentPage}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
+
+      console.log(response)
       return response.data.data as FormData;
     },
     staleTime: 0,
@@ -92,7 +95,7 @@ const FormBuilder = ({
   }
 
   if (error) {
-    return <ErrorScreen error={error} workspaceId={workspaceId} />;
+    return <ErrorScreen error={error} workspaceId={formData?.workspaceId} />;
   }
 
   return (
@@ -101,7 +104,7 @@ const FormBuilder = ({
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[10] flex">
           <div className="py-10 w-full overflow-y-auto">
             <div className="min-h-[calc(100vh-2rem)] w-[90%] md:w-auto flex items-start justify-center mx-auto">
-              <ElementEditSetting elementInstance={selectedElementInstance} workspaceId={workspaceId} />
+              <ElementEditSetting elementInstance={selectedElementInstance} workspaceId={formData?.workspaceId} />
             </div>
           </div>
         </div>
@@ -110,7 +113,7 @@ const FormBuilder = ({
       <div className="min-h-[50px] h-auto md:h-[7%] flex justify-center items-center">
         <BuilderNavbar
           formData={formData} 
-          workspaceId={workspaceId}
+          workspaceId={formData?.workspaceId}
           page={currentPage}
           setCurrentPage={setCurrentPage}
           totalPage={formData?.totalPages}
@@ -133,7 +136,7 @@ const ErrorScreen = ({
   workspaceId,
 }: {
   error: unknown;
-  workspaceId: string;
+  workspaceId: string | undefined; 
 }) => {
   return (
     <div className="flex flex-col items-center text-center space-y-4">

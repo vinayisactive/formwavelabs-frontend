@@ -17,7 +17,7 @@ const CheckBoxFieldSubmit: FC<submitCompPropsType> = ({
   const { id, extraAttributes } = elementInstance as CheckboxCustomInstance;
   const { label, helperText, required } = extraAttributes;
   const [checked, setChecked] = useState<boolean>(
-    formValues?.[id] === "true"
+    formValues?.[id]?.value === "true"
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +31,7 @@ const CheckBoxFieldSubmit: FC<submitCompPropsType> = ({
     }
 
     setChecked(isChecked);
-    handleValues?.(id, isChecked.toString());
+    handleValues?.(id, {id, value: isChecked.toString(), label: extraAttributes.label});
   };
 
   return (

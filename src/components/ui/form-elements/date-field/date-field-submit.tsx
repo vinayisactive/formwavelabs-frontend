@@ -22,11 +22,11 @@ const DateFieldSubmit: FC<submitCompPropsType> = ({
   };
 
   const [inputDate, setInputDate] = useState(() =>
-    formatDate(formValues?.[element.id])
+    formatDate(formValues?.[element.id]?.value)
   );
 
   useEffect(() => {
-    setInputDate(formatDate(formValues?.[element.id]));
+    setInputDate(formatDate(formValues?.[element.id]?.value));
   }, [formValues, element.id]);
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,7 +34,7 @@ const DateFieldSubmit: FC<submitCompPropsType> = ({
 
     if (dateValue === "") {
       setInputDate("");
-      handleValues?.(element.id, "");
+      handleValues?.(element.id, {id: element.id, value: "", label});
 
       if (required) {
         setElementsToValidate?.((prev) => ({
@@ -45,7 +45,7 @@ const DateFieldSubmit: FC<submitCompPropsType> = ({
     } else {
       const date = new Date(dateValue);
       setInputDate(dateValue);
-      handleValues?.(element.id, date.toLocaleString());
+      handleValues?.(element.id, {id: element.id, value: date.toLocaleString(), label});
 
       if (required) {
         setElementsToValidate?.((prev) => ({

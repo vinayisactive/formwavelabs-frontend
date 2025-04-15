@@ -20,7 +20,7 @@ const MultipleChoiceSubmit: FC<submitCompPropsType> = ({
   const { label, helperText, options, required } = extraAttributes;
 
   const [selectedOptions, setSelectedOptions] = useState<string[]>(() => {
-    const storedValue = formValues?.[id];
+    const storedValue = formValues?.[id]?.value;
     return typeof storedValue === "string" && storedValue !== "" 
       ? storedValue.split(",") 
       : [];
@@ -33,7 +33,7 @@ const MultipleChoiceSubmit: FC<submitCompPropsType> = ({
         ? cleanPrev.filter((opt) => opt !== option)
         : [...cleanPrev, option];
 
-      handleValues?.(id, newOptions.join(","));
+      handleValues?.(id, {id, value: newOptions.join(","), label: extraAttributes.label});
 
       if (required) {
         const isValid = newOptions.length > 0;

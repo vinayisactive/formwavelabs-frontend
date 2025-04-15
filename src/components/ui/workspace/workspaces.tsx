@@ -37,6 +37,7 @@ const Workspaces = () => {
   const { data, isLoading, error } = useQuery<WorkspacesData>({
     queryKey: ["workspaces"],
     queryFn: async () => {
+      
       const res = await fetch(
         "https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/workspaces",
         { headers: { Authorization: `Bearer ${session?.accessToken}` } }
@@ -44,6 +45,7 @@ const Workspaces = () => {
       if (!res.ok) throw new Error("Failed to fetch workspaces");
       return res.json();
     },
+    retry: 5,
   });
 
   const addWorkspaceMutation = useMutation({

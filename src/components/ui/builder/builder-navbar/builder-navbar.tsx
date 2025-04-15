@@ -27,7 +27,7 @@ import { ChevronsRight } from "lucide-react";
 
 interface BuilderNavbarProps {
   formData: FormData | undefined;
-  workspaceId: string;
+  workspaceId: string | undefined;
   page: number;
   setCurrentPage: Dispatch<SetStateAction<number>>;
   totalPage: number | undefined;
@@ -109,7 +109,7 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
   const savePageMutation = useMutation<void, AxiosError, void>({
     mutationFn: async () => {
       await axios.patch(
-        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/workspaces/${workspaceId}/forms/${formData?.id}/pages?p=${formData?.pages[0].page}`,
+        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formData?.id}/pages?p=${formData?.pages[0].page}`,
         {
           pageId: formData?.pages[0].id,
           content: elements,
@@ -128,7 +128,7 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
   const savePublishMutation = useMutation<void, AxiosError, void>({
     mutationFn: async () => {
       await axios.patch(
-        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/workspaces/${workspaceId}/forms/${formData?.id}/status`,
+        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formData?.id}/status`,
         null,
         {
           headers: {
@@ -144,7 +144,7 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
   const createNextMutation = useMutation<void, AxiosError, void>({
     mutationFn: async () => {
       const response = await axios.post(
-        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/workspaces/${workspaceId}/forms/${formData?.id}/pages/next?p=${page}`,
+        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formData?.id}/pages/next?p=${page}`,
         null,
         {
           headers: {

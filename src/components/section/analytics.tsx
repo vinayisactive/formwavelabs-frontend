@@ -47,9 +47,9 @@ interface SectionHeaderProps {
 }
 
 const Breadcrumb = ({ workspaceId, workspaceName, formTitle }: { 
-  workspaceId: string;
-  workspaceName: string | null;
-  formTitle: string | null | undefined;
+  workspaceId: string | undefined;
+  workspaceName: string | undefined;
+  formTitle: string | undefined;
 }) => (
   <div className="mb-8 flex items-center text-sm text-gray-500">
     <HiOutlineSquare3Stack3D className="mr-2 h-4 w-4" />
@@ -171,28 +171,51 @@ const EngagementTrends = ({ data }: { data: AnalyticsData['recentDailyAnalytics'
     );
   };
 
-const Analytics = ({ formId, workspaceId }: { formId: string, workspaceId: string }) => {
-  const [formTitle, setFormTitle] = useState<string | undefined | null>(null);
+  export interface FormDataInterface {
+    id: string; 
+    title: string; 
+    status: boolean; 
+    workspace: {
+      id: string; 
+      name: string; 
+    }
+  }
+
+const Analytics = ({ formId }: { formId: string }) => {
+  const [formData, setFormData] = useState<FormDataInterface | undefined | null>(null);
   const { data: currentUserData, status } = useSession();
-  const [workspaceName, setWorkspaceName] = useState<null | string>(null);
+  // const [workspaceName, setWorkspaceName] = useState<null | string>(null);
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // const [workspaceId, setWorkspaceId] = useState<null | string>(null); 
+
+  // useEffect(() => {
+  //   const fetchWorkspace = async() => {
+  //     if(!workspaceId) return; 
+  //     const workspaceRes = await axios.get(
+  //       `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/workspaces/${workspaceId}`,
+  //       { headers: { Authorization: `Bearer ${currentUserData?.accessToken}` } }
+  //     );
+  //     setWorkspaceName(workspaceRes.data.data.name);
+  //   }
+
+  //   fetchWorkspace();
+  // },[workspaceId, currentUserData])
+
 
   useEffect(() => {
     if(status === "authenticated" && currentUserData.accessToken){
      const fetchData = async () => {
         try {
-        const workspaceRes = await axios.get(
-          `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/workspaces/${workspaceId}`,
-          { headers: { Authorization: `Bearer ${currentUserData?.accessToken}` } }
-        );
-        setWorkspaceName(workspaceRes.data.data.name);
-
-        const formRes = await axios.get(
+; 
+       const formRes = await axios.get(
           `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formId}`,
           { headers: { Authorization: `Bearer ${currentUserData?.accessToken}` } }
         );
-        setFormTitle(formRes.data.data.title);
+        setFormData(formRes.data.data);
+        // setWorkspaceId(formRes.data.data.workspaceId); 
+        console.log(formRes)
 
         const analyticsRes = await axios.get(
           `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formId}/track`,
@@ -210,7 +233,7 @@ const Analytics = ({ formId, workspaceId }: { formId: string, workspaceId: strin
     }else if (status === "unauthenticated") {
         setLoading(false);
     }
-  }, [formId, workspaceId, currentUserData, status]);
+  }, [formId, currentUserData, status]);
 
 
   const totalStats = [
@@ -257,9 +280,9 @@ const Analytics = ({ formId, workspaceId }: { formId: string, workspaceId: strin
   return (
     <div className="w-full max-w-screen-xl mx-auto px-4 py-8 overflow-x-hidden">
       <Breadcrumb 
-        workspaceId={workspaceId}
-        workspaceName={workspaceName}
-        formTitle={formTitle}
+        workspaceId={formData?.workspace.id}
+        workspaceName={formData?.workspace.name}
+        formTitle={formData?.title}
       />
 
       <div className="mb-10">

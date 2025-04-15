@@ -64,7 +64,8 @@ const Workspace = ({ wsId }: { wsId: string }) => {
       return data;
     },
     enabled: Boolean(wsId),
-    refetchOnWindowFocus: true
+    refetchOnWindowFocus: true,
+    retry: 5
   });
 
   useEffect(() => {
@@ -101,7 +102,6 @@ const Workspace = ({ wsId }: { wsId: string }) => {
                     <FormCard
                       key={form.id}
                       formId={form.id}
-                      workspaceId={data.data.id}
                       title={form.title}
                       status={form.status}
                       submissions={form._count.submissions}

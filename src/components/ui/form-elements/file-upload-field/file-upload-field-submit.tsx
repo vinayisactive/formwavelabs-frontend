@@ -20,7 +20,7 @@ const FileUploadSubmit: FC<submitCompPropsType> = ({
 }) => {
   const { id, extraAttributes } = elementInstance as FileUploadCustomInstance;
   const { label, helperText, required, selectedFileType } = extraAttributes;
-  const [fileUrl, setFileUrl] = useState<string | null>(formValues?.[id] || null);
+  const [fileUrl, setFileUrl] = useState<string | null>(formValues?.[id].value || null);
 
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -35,7 +35,7 @@ const FileUploadSubmit: FC<submitCompPropsType> = ({
       }));
     }
 
-    handleValues?.(id, url);
+    handleValues?.(id, {id, value: url, label: extraAttributes.label});
   };
 
   const handleRemoveUrl = async () => {
@@ -53,7 +53,7 @@ const FileUploadSubmit: FC<submitCompPropsType> = ({
 
       setIsLoading(false);
       setFileUrl(null);
-      handleValues?.(id, "");
+      handleValues?.(id, {id, value: "", label: extraAttributes.label});
     } catch (error) {
       setErrorMsg(handleAxiosError(error));
       setIsLoading(false);

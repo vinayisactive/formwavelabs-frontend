@@ -10,7 +10,6 @@ import { handleAxiosError } from "@/utility/axios-err-handler";
 
 interface FormCardProps {
   formId: string;
-  workspaceId: string;
   title: string;
   status: boolean;
   submissions: number;
@@ -19,7 +18,6 @@ interface FormCardProps {
 
 const FormCard: FC<FormCardProps> = ({
   formId,
-  workspaceId,
   title,
   status,
   submissions,
@@ -81,7 +79,7 @@ const FormCard: FC<FormCardProps> = ({
   const deleteFormMutation = useMutation({
     mutationFn: async () => {
       await axios.delete(
-        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/workspaces/${workspaceId}/forms/${formId}`,
+        `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formId}`,
         {
           headers: {
             Authorization: `Bearer ${session?.accessToken}`,
@@ -118,7 +116,7 @@ const FormCard: FC<FormCardProps> = ({
               <div className="p-2 space-y-1">
                 {userRole !== "VIEWER" && userRole !== null && (
                   <Link
-                    href={`/workspaces/${workspaceId}/${formId}/builder`}
+                    href={`/forms/${formId}/builder`}
                     className="flex items-center justify-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
                     onClick={() => setIsMenuOpen(false)}
                   >
@@ -128,7 +126,7 @@ const FormCard: FC<FormCardProps> = ({
                 )}
 
                 <Link
-                  href={`/workspaces/${workspaceId}/${formId}/submission`}
+                  href={`/forms/${formId}/submission`}
                   className="flex items-center justify-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md transition-colors whitespace-nowrap"
                   onClick={() => setIsMenuOpen(false)}
                 >
@@ -174,7 +172,7 @@ const FormCard: FC<FormCardProps> = ({
           {/* Edit Button */}
           {userRole !== "VIEWER" && userRole !== null && (
             <Link
-              href={`/workspaces/${workspaceId}/${formId}/builder`}
+              href={`/forms/${formId}/builder`}
               className="flex items-center gap-1 p-1.5 hover:bg-gray-100 rounded-md transition-colors text-gray-700"
             >
               <Pencil size={16} />

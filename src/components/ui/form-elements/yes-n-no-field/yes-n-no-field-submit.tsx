@@ -15,7 +15,7 @@ const YesAndNoFieldSubmit: FC<submitCompPropsType> = ({
   const { id, extraAttributes } = elementInstance as YesAndNoFieldCustomInstance;
   const { label, helperText, options, required } = extraAttributes;
   const [inputValue, setInputValue] = useState<string>(
-    formValues?.[id] || ""
+    formValues?.[id]?.value|| ""
   );
 
   const handleChange = (value: string) => {
@@ -28,7 +28,7 @@ const YesAndNoFieldSubmit: FC<submitCompPropsType> = ({
       }));
     }
 
-    handleValues?.(id, value);
+    handleValues?.(id, {id, value, label: extraAttributes.label});
   };
 
   return (
@@ -49,7 +49,7 @@ const YesAndNoFieldSubmit: FC<submitCompPropsType> = ({
               name={id}
               value={option}
               checked={
-                formValues?.[id] === option || inputValue === option
+                formValues?.[id]?.value === option || inputValue === option
               }
               onChange={(e) => handleChange(e.target.value)}
               className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500 cursor-pointer"

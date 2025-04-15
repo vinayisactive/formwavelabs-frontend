@@ -31,13 +31,13 @@ const Submit = ({ formId }: { formId: string }) => {
     []
   );
 
-  const [formValues, setFormValues] = useState<{ [key: string]: string }>({});
+  const [formValues, setFormValues] = useState<{ [key: string]: { id: string, value: string, label: string} }>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [errMsg, setErrMsg] = useState<string>("");
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [isFormError, setIsFormError] = useState<boolean>(false);
 
-  const handleValues = (key: string, value: string) => {
+  const handleValues = (key: string, value: { id: string, value: string, label: string}) => {
     setFormValues((prev) => ({ ...prev, [key]: value }));
   };
 
