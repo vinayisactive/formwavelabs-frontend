@@ -3,7 +3,7 @@ import SignInForm from '@/components/section/sign-in-form'
 
 const SignIn = () => {
   return (
-    <div className='w-screen h-screen flex justify-center items-center'>
+    <div className=''>
       <SignInForm/>
 </div>
   )

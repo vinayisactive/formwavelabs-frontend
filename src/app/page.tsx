@@ -1,21 +1,12 @@
-import { ArrowUpRight } from "lucide-react";
-import Link from "next/link";
 import React from "react";
 
 const Page = () => {
   return (
-    <div className=" h-full flex flex-col gap-2 justify-center items-center">
-      <p>
-        you probably find the link from my github while stalking me, so please
-        you better follow me on twitter oki ?
+    <div className="h-full max-w-screen-lg mx-auto w-full flex flex-col gap-2 justify-center items-center px-16">
+      <p className="text-5xl md:text-9xl text-center">
+        FormWaveLabs
       </p>
-      <Link
-        href={"https://x.com/vinayisactive"}
-        target="_blank"
-        className="text-blue-400 flex justify-center items-center gap-2 hover:underline"
-      >
-        vinayisactive <ArrowUpRight className="text-sm" />
-      </Link>
+      <p className="mt-2 text-sm text-center md:text-right md:text-base w-full">You can really create damn creative and eye pleasing forms</p>
     </div>
   );
 };
