@@ -5,6 +5,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 const SignUpForm = () => {
   const router = useRouter();
@@ -54,14 +55,17 @@ const SignUpForm = () => {
 
   return (
     <div className=" bg-white absolute top-0 left-0 inset-0 flex items-center overflow-hidden">
-      <div
-        className="w-[60%] hidden lg:flex h-full"
-        style={{
-          backgroundImage: `url(https://res.cloudinary.com/dmx424ib8/image/upload/v1744718167/s4thekdnk90cwcudhnam.png);`,
-          backgroundSize: "cover",
-          backgroundPosition: "right",
-        }}
-      ></div>
+      <div className="relative w-[60%] hidden lg:flex h-full">
+        <Image
+          src="https://res.cloudinary.com/dmx424ib8/image/upload/v1744718167/s4thekdnk90cwcudhnam.png"
+          alt="Background"
+          fill
+          style={{
+            objectFit: "cover",
+            objectPosition: "right",
+          }}
+        />
+      </div>
 
       <div className="w-full px-8 lg:px-0 lg:w-[30%] h-full flex justify-center  items-center">
         <form
@@ -69,7 +73,7 @@ const SignUpForm = () => {
           className="w-[400px] max-w-md flex flex-col gap-4 text-black"
         >
           <div className="mb-8 space-y-2">
-            <p className="text-3xl text-black">Sign-Up</p>
+            <p className="text-3xl text-black font-bold">Sign-Up</p>
             <p>Start using FormWaveLabs for free</p>
           </div>
 
@@ -80,6 +84,7 @@ const SignUpForm = () => {
               id="name"
               value={userDetails.name}
               onChange={handleInput}
+              placeholder="Full name..."
               className="w-full px-3 py-2 border rounded"
               required
             />
@@ -92,6 +97,7 @@ const SignUpForm = () => {
               id="email"
               value={userDetails.email}
               onChange={handleInput}
+              placeholder="@mail"
               className="w-full px-3 py-2 border rounded"
               required
             />
@@ -104,6 +110,7 @@ const SignUpForm = () => {
               id="password"
               value={userDetails.password}
               onChange={handleInput}
+              placeholder="Must be of 6 characters."
               className="w-full px-3 py-2 border rounded"
               minLength={6}
               required
