@@ -1,6 +1,7 @@
 "use client"
 import { handleAxiosError } from "@/utility/axios-err-handler";
 import axios, { AxiosProgressEvent } from "axios";
+import { Folder, Upload } from "lucide-react";
 import React, { FC, useState, ChangeEvent } from "react";
 
 export interface SaveAssetType {
@@ -88,51 +89,44 @@ const FileUploader: FC<FileUploaderProps> = ({ fileType, type, id, onUploadCompl
     };
 
     return (
-      <div className="w-full">
-        <div className="flex items-center space-x-3">
-          <label className="flex justify-center items-center px-4 py-2 bg-white text-blue-500 rounded-md border border-blue-500 cursor-pointer hover:bg-blue-50">
-            <span>{file ? file.name : `Select ${fileType === "IMAGE" ? 'Image' : 'PDF'}`}</span>
-            <input 
-              type="file" 
-              className="hidden" 
-              accept={fileType === "IMAGE" ? 'image/*' : 'application/pdf'} 
-              onChange={(e) => {
-                e.stopPropagation(); 
-                handleFileChange(e); 
-              }}
-              disabled={loading}
-            />
-          </label>
-          
-          <button
-            onClick={(e) => {
-              e.stopPropagation(); 
-              handleUpload(); 
-            }}
-            disabled={!file || loading}
-            className={`px-4 py-2 rounded-md ${
-              !file || loading 
-                ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
-                : 'bg-blue-500 text-white hover:bg-blue-600'
-            }`}
-          >
-            {loading ? 'Uploading...' : 'Upload'}
-          </button>
-        </div>
-        
-        {error && (
-          <div className="mt-2 text-red-500 text-sm">{error}</div>
-        )}
-        
-        {loading && (
-          <div className="mt-3">
-            <div className="h-2 bg-gray-200 rounded-full">
-              <div 
-                className="h-full bg-blue-500 rounded-full" 
-                style={{ width: `${progress}%` }}
-              ></div>
+      <div className="w-full max-w-xs space-y-2">
+        {!loading ? (
+          <>
+            <div className="flex items-center gap-2">
+              <label className="flex items-center gap-1.5 text-sm font-medium text-gray-900 cursor-pointer hover:bg-gray-100 px-3 py-1.5 rounded-full border border-gray-300 transition-colors">
+                <Folder className="h-4 w-4" />
+                <span className="truncate max-w-[120px]">
+                  {file ? file.name : `Choose ${fileType}`}
+                </span>
+                <input 
+                  type="file" 
+                  className="hidden" 
+                  accept={fileType === "IMAGE" ? 'image/*' : 'application/pdf'} 
+                  onChange={handleFileChange}
+                />
+              </label>
+              
+              <button
+                onClick={handleUpload}
+                disabled={!file}
+                className="px-4 py-2 rounded-full bg-black text-white hover:bg-gray-800 disabled:bg-gray-300 disabled:text-gray-500 transition-colors"
+              >
+                <Upload size={14} />
+              </button>
             </div>
-            <div className="mt-1 text-xs text-gray-500 text-right">{progress}%</div>
+            {error && (
+              <div className="text-red-600 text-xs font-medium px-2">{error}</div>
+            )}
+          </>
+        ) : (
+          <div className="space-y-1">
+            <div className="text-xs text-gray-500 text-right">{progress}%</div>
+            <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-gray-900 rounded-full" 
+                style={{ width: `${progress}%` }}
+              />
+            </div>
           </div>
         )}
       </div>
