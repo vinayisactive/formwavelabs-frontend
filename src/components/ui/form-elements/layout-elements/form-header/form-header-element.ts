@@ -4,7 +4,7 @@ import FormHeaderTile from "./form-header-tile";
 import FormHeaderSetting from "./form-header-setting";
 import FormHeaderView from "./form-header-view";
 
-const type : LayoutElementsType = "FormHeader"
+const type : LayoutElementsType = "Form-Header"
 
 const FormHeaderLayoutElement : FormElement = {
     type, 
@@ -18,7 +18,7 @@ const FormHeaderLayoutElement : FormElement = {
     setting: FormHeaderSetting,
     submit: FormHeaderView,
 
-    elementButton: "FormHeader"
+    elementButton: "Header"
 }; 
 
 export default FormHeaderLayoutElement; 

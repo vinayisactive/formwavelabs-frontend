@@ -4,7 +4,7 @@ import LayoutImageTile from "./layout-image-tile";
 import LayoutImageSetting from "./layout-image-setting";
 import LayoutImageView from "./layout-image-view";
 
-const type: LayoutElementsType = "LayoutImage";
+const type: LayoutElementsType = "Layout-Image";
 
 const LayoutImageFormElement: FormElement = {
   type,
@@ -18,7 +18,7 @@ const LayoutImageFormElement: FormElement = {
   setting: LayoutImageSetting,
   submit: LayoutImageView,
 
-  elementButton: "LayoutImage",
+  elementButton: "Layout Image",
 };
 
 export default LayoutImageFormElement;

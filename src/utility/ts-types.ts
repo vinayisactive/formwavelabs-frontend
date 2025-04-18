@@ -1,18 +1,18 @@
 import { Dispatch, SetStateAction } from "react";
 
-export type ElementsType = "TextField" | "SelectField" | "CheckboxField" | "RadioButtonField"  | "TextAreaField" | "YesAndNoField" | "MultipleChoiceField" | "DateField" | "FileUploadField" | "EmailField"
-export type LayoutElementsType = "FormHeader" | "LayoutImage"
+export type FormFieldsElementsType = "Text-Field" | "Select-Field" | "Checkbox-Field" | "RadioButton-Field"  | "Text-Area-Field" | "Yes-and-No-Field" | "Multiple-Choice-Field" | "Date-Field" | "File-Upload-Field" | "Email-Field"
+export type LayoutElementsType = "Form-Header" | "Layout-Image"
 
 
 export type FormElemetInstance = {
   id: string;
-  type: ElementsType | LayoutElementsType; 
+  type: FormFieldsElementsType | LayoutElementsType; 
   extraAttributes?: Record<string, unknown>;
 };
 
 export type FormElement = {
   construct: (id: string) => FormElemetInstance;
-  type: ElementsType | LayoutElementsType; 
+  type: FormFieldsElementsType | LayoutElementsType; 
   tile: React.FC<FormElementProps>;
   setting: React.FC<FormElementProps>;
   submit: React.FC<submitCompPropsType>;
@@ -39,6 +39,6 @@ export type submitCompPropsType = {
 export type submitValueType = (key: string, value: { id: string, value: string, label: string}) => void;
 
 export type FormElemetsType = {
-    [key in (ElementsType | LayoutElementsType)]: FormElement;
+    [key in (FormFieldsElementsType | LayoutElementsType)]: FormElement;
   };
 

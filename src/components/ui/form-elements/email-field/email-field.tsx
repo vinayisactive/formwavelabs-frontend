@@ -1,10 +1,10 @@
-import { ElementsType, FormElement } from "@/utility/ts-types";
+import { FormFieldsElementsType, FormElement } from "@/utility/ts-types";
 import { emailExtraAttributes as extraAttributes } from "./email-prop-attributes";
 import EmailFieldTile from "./email-field-tile";
 import EmailSetting from "./email-field-setting";
 import EmailSubmit from "./email-field-submit";
 
-const type : ElementsType = "EmailField"
+const type : FormFieldsElementsType = "Email-Field"
 
 const EmailFieldFormElement : FormElement = {
     type,
@@ -18,7 +18,7 @@ const EmailFieldFormElement : FormElement = {
     setting: EmailSetting,
     submit: EmailSubmit,
 
-    elementButton: "EmailField"
+    elementButton: "Email Input"
 }
 
 export default EmailFieldFormElement

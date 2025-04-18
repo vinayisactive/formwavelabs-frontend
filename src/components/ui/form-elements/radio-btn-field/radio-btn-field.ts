@@ -1,10 +1,10 @@
-import { FormElement, ElementsType } from "@/utility/ts-types";
+import { FormElement, FormFieldsElementsType } from "@/utility/ts-types";
 import { RadioBtnExtraAttributes as extraAttributes } from "./radio-btn-prop-attributes";
 import RadioBtnFieldTile from "./radio-btn-field-tile";
 import RadioBtnSetting from "./radio-btn-field-setting";
 import RadioBtnSubmit from "./radio-btn-field-submit";
 
-const type: ElementsType = "RadioButtonField";
+const type: FormFieldsElementsType = "RadioButton-Field";
 
 const RadioBtnFormElement: FormElement = {
   type,
@@ -19,7 +19,7 @@ const RadioBtnFormElement: FormElement = {
   setting: RadioBtnSetting,
   submit: RadioBtnSubmit,
 
-  elementButton: "RadioButtonField"
+  elementButton: "Single Selection"
 };
 
 export default RadioBtnFormElement;

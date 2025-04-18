@@ -1,11 +1,10 @@
-import { ElementsType, FormElement } from "@/utility/ts-types";
+import { FormFieldsElementsType, FormElement } from "@/utility/ts-types";
 import { checkBoxExtraAttributes as extraAttributes } from "./checkbox-prop-attributes";
 import CheckBoxFieldTile from "./checkbox-field-tile";
 import CheckBoxSetting from "./checkbox-field-setting";
 import CheckBoxFieldSubmit from "./checkbox-field-submit";
 
-
-const type: ElementsType = "CheckboxField";
+const type: FormFieldsElementsType = "Checkbox-Field";
 
 const CheckBoxFieldElement: FormElement = {
   type,
@@ -20,7 +19,7 @@ const CheckBoxFieldElement: FormElement = {
   setting: CheckBoxSetting,
   submit: CheckBoxFieldSubmit,
   
-  elementButton: "CheckboxField"
+  elementButton: "Check Box"
 };
 
 export default CheckBoxFieldElement;

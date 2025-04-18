@@ -1,10 +1,10 @@
-import { ElementsType, FormElement } from "@/utility/ts-types";
+import { FormFieldsElementsType, FormElement } from "@/utility/ts-types";
 import { textAreaExtraAttributes as extraAttributes } from "./text-area-prop-attributes";
 import TextAreaTile from "./text-area-field-tile";
 import TextAreaSetting from "./text-area-field-setting";
 import TextAreaSubmit from "./text-area-field-submit";
 
-const type: ElementsType = "TextAreaField";
+const type: FormFieldsElementsType = "Text-Area-Field";
 
 const TextAreaFormElement: FormElement = {
   type,
@@ -19,7 +19,7 @@ const TextAreaFormElement: FormElement = {
   setting: TextAreaSetting,
   submit: TextAreaSubmit,
 
-  elementButton: "TextAreaField"
+  elementButton: "Text Area"
 };
 
 export default TextAreaFormElement; 
