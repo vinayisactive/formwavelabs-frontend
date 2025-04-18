@@ -33,7 +33,7 @@ const EmailSetting: FC<FormElementProps> = ({ elementInstance }) => {
   return (
     <SettingWrapper>
       <SettingHeader
-        title="Email settings"
+        title="Email input settings"
         onClose={() => setSelectedElementInstance(null)}
       />
 

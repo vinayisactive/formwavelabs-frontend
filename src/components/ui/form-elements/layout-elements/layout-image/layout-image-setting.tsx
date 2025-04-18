@@ -64,12 +64,12 @@ const LayoutImageSetting: FC<FormElementProps> = ({
   return (
     <SettingWrapper>
       <SettingHeader
-        title="Layout Image setting"
+        title="Layout image setting"
         onClose={() => setSelectedElementInstance(null)}
       />
 
       <InputTile
-        label="Image layout label"
+        label="Layout Image label"
         placeholder="label..."
         value={extraAttributes.label}
         onChange={(value) => handleChange("label", value)}

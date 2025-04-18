@@ -36,12 +36,12 @@ const FileUploadSetting: FC<FormElementProps> = ({
   return (
     <SettingWrapper>
       <SettingHeader
-        title="File uplaod setting"
+        title="Upload file setting"
         onClose={() => setSelectedElementInstance(null)}
       />
 
       <InputTile
-        label="File-uplaod label"
+        label="Upload file label"
         placeholder="label..."
         value={extraAttributes.label}
         onChange={(value) => handleChange("label", value)}

@@ -1,5 +1,6 @@
 import {
   InputTile,
+  RequiredCheckTile,
   SettingFooter,
   SettingHeader,
   SettingWrapper,
@@ -10,12 +11,14 @@ import { FC, useState } from "react";
 import { FormElementProps } from "@/utility/ts-types";
 import createUpdateSettingHandler from "@/utility/generic-update-setting-fn";
 
-const CheckBoxSetting: FC<FormElementProps> = ({elementInstance}) => {
+const CheckBoxSetting: FC<FormElementProps> = ({ elementInstance }) => {
   const { setSelectedElementInstance, updateElementInstance } = useElements();
   const element = elementInstance as CheckboxCustomInstance;
-  const [extraAttributes, setExtraAttributes] = useState(element.extraAttributes);
+  const [extraAttributes, setExtraAttributes] = useState(
+    element.extraAttributes
+  );
 
-  const handleChange = createUpdateSettingHandler(setExtraAttributes); 
+  const handleChange = createUpdateSettingHandler(setExtraAttributes);
 
   const handleSave = () => {
     const updatedElement = {
@@ -46,6 +49,11 @@ const CheckBoxSetting: FC<FormElementProps> = ({elementInstance}) => {
         value={extraAttributes.helperText}
         placeholder="helper text..."
         onChange={(value) => handleChange("helperText", value)}
+      />
+
+      <RequiredCheckTile
+        checked={extraAttributes.required}
+        onChange={(checked) => handleChange("required", checked)}
       />
 
       <SettingFooter

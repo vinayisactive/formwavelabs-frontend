@@ -53,7 +53,7 @@ const SelectSetting: FC<FormElementProps> = ({ elementInstance }) => {
   return (
     <SettingWrapper>
       <SettingHeader
-        title="Drop down setting"
+        title="Dropdown setting"
         onClose={() => setSelectedElementInstance(null)}
       />
 

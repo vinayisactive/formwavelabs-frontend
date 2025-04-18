@@ -97,7 +97,7 @@ const MobileFormBuilder = ({
         >
           <DndContextWrapper>
             <div className="w-[80%] bg-white rounded-md p-2  h-[80%]">
-              <TileContainer closeLayer={setLayerReOrderModal} />
+              <TileContainer />
             </div>
           </DndContextWrapper>
         </div>

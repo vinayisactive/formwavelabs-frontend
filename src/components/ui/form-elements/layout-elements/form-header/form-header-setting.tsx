@@ -33,12 +33,12 @@ const FormHeaderSetting: FC<FormElementProps> = ({ elementInstance }) => {
   return (
     <SettingWrapper>
       <SettingHeader
-        title="Form header setting"
+        title="Header setting"
         onClose={() => setSelectedElementInstance(null)}
       />
 
       <InputTile
-        label="Form header label"
+        label="Header label"
         placeholder="label..."
         onChange={(value) => handleChange("formHeader", value)}
         value={extraAttributes.formHeader}

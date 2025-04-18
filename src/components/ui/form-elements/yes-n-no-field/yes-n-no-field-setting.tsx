@@ -35,12 +35,12 @@ import createUpdateSettingHandler from "@/utility/generic-update-setting-fn";
     return (
       <SettingWrapper>
         <SettingHeader
-          title="Yes-and-No setting"
+          title="Yes / No setting"
           onClose={() => setSelectedElementInstance(null)}
         />
   
         <InputTile
-          label="Yes-and-No label"
+          label="Yes / No label"
           placeholder="label.."
           value={extraAttributes.label}
           onChange={(value) => handleChange("label", value)}

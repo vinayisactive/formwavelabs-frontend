@@ -34,13 +34,13 @@ const TextAreaSetting: FC<FormElementProps> = ({ elementInstance }) => {
   return (
     <SettingWrapper>
       <SettingHeader
-        title="TextArea field settings"
+        title="Text Area settings"
         onClose={() => setSelectedElementInstance(null)}
       />
 
       <div className="space-y-2">
         <InputTile
-          label="Text-area label"
+          label="Text area label"
           value={extraAttributes.label}
           onChange={(value) => handleChange("label", value)}
           placeholder="label..."

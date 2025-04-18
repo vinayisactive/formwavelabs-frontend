@@ -53,12 +53,12 @@ const MultipleChoiceSetting: FC<FormElementProps> = ({ elementInstance }) => {
   return (
     <SettingWrapper>
       <SettingHeader
-        title="Multiple choice setting"
+        title="Multi selection setting"
         onClose={() => setSelectedElementInstance(null)}
       />
 
       <InputTile
-        label="Multiple choice label"
+        label="Multi selection label"
         value={extraAttributes.label}
         placeholder="label..."
         onChange={(value) => handleChange("label", value)}

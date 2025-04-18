@@ -36,7 +36,7 @@ const DateSetting: FC<FormElementProps> = ({elementInstance}) => {
   return (
     <SettingWrapper>
       <SettingHeader
-        title="Date field setting"
+        title="Date input setting"
         onClose={() => setSelectedElementInstance(null)}
       />
 

@@ -2,13 +2,14 @@ import React from "react";
 import useElements from "@/utility/useElements-hook";
 import { FormElemetInstance } from "@/utility/ts-types";
 import { FormElemets } from "@/utility/static-data";
+import { Pencil, Trash } from "lucide-react";
 
 const MobileBuilderPreview = ({
   theme,
 }: {
   theme: "BOXY" | "ROUNDED" | undefined;
 }) => {
-  const { elements } = useElements();
+  const { elements, setSelectedElementInstance, deleteElement } = useElements();
   
   return (
     <div className="w-full px-1 flex justify-between">
@@ -23,8 +24,21 @@ const MobileBuilderPreview = ({
           const Element = FormElemets[el.type].submit; 
 
           return (
-            <div key={el?.id}>
-              <Element elementInstance={el} />
+            <div key={el?.id} className="w-full flex gap-2 justify-between px-1">
+
+              <div className="flex flex-col gap-2 justify-center items-center flex-grow">
+                <span className="p-1  text-black rounded-md hover:bg-gray-300 ">
+                  <Pencil size={13} onClick={() => setSelectedElementInstance(el)} className="cursor-pointer"/>
+                </span>
+
+                <span className="p-1  text-black rounded-md hover:bg-gray-300">
+                  <Trash size={13} onClick={() => deleteElement(el?.id)} className="cursor-pointer"/>
+                </span>
+              </div>
+              
+              <div className="w-full ">
+               <Element elementInstance={el} theme={theme} />
+              </div>
             </div>
           );
         })}

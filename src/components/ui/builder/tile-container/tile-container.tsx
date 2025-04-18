@@ -1,13 +1,16 @@
 "use client";
 
-import { Dispatch, SetStateAction, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import DndDraggableButton from "../../dnd-reusable/dnd-draggable-button";
 import useElements from "@/utility/useElements-hook";
+import useMediaQuery from "@/utility/useMediaQuery-hook";
+import MobileDndDraggableButton from "../../dnd-reusable/dnd-draggable-button-mobile";
 
-const TileContainer = ({closeLayer} : {closeLayer? : Dispatch<SetStateAction<boolean>>}) => {
+const TileContainer = () => {
   const { elements } = useElements();  
   const reOrderContainerRef = useRef<HTMLDivElement | null>(null); 
   const initialElementsLength = useRef(elements.length);
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   useEffect(() => {
     if (reOrderContainerRef.current && elements.length > initialElementsLength.current) {
@@ -28,11 +31,14 @@ const TileContainer = ({closeLayer} : {closeLayer? : Dispatch<SetStateAction<boo
       </div>
 
       <div className={`flex-1 overflow-y-scroll p-2 space-y-2 rounded-md`} ref={reOrderContainerRef} >
-        {elements.length === 0 ? (
+        { elements.length === 0 ? (
           <AddElementsLabel />
         ) : (
-          elements.map((el) => <DndDraggableButton key={el.id} element={el} isElementTile={true} closeLayer={closeLayer}/>)
-        )}
+          elements.map((el) => (
+            isMobile ? <MobileDndDraggableButton key={el.id} element={el} isElementTile={true} /> :<DndDraggableButton key={el.id} element={el} isElementTile={true}/>
+          )
+        ))
+      }
       </div>
     </div>
   );

@@ -55,12 +55,12 @@ const RadioBtnSetting: FC<FormElementProps> = ({
   return (
     <SettingWrapper>
       <SettingHeader
-        title="Single select setting"
+        title="Single selection setting"
         onClose={() => setSelectedElementInstance(null)}
       />
 
       <InputTile
-        label="Single select label"
+        label="Single Selection label"
         placeholder="label..."
         value={extraAttributes.label}
         onChange={(value) => handleChange("label", value)}
