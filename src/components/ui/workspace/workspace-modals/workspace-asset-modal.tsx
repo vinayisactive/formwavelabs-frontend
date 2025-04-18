@@ -9,9 +9,9 @@ interface WorkspaceAssetModalProps {
 
 const WorkspaceAssetModal: FC<WorkspaceAssetModalProps> = ({workspaceName, wsId, setAssetModal}) => {
   return (
-    <div className="fixed inset-0 bg-white/50 backdrop-blur-sm z-50">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50">
     <div
-      className="w-full h-full flex justify-center items-center"
+      className="w-[90%] mx-auto h-full flex justify-center items-center"
       onClick={(e) => e.stopPropagation()}
     >
       <WorkspaceAsset

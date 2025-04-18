@@ -51,20 +51,21 @@ const WorkspaceSection = ({
     {activeSection === sectionType && (
       <div className="mt-1 flex flex-col ml-7">
         {workspaces?.map((workspace) => (
-          <Link
-            href={`/workspaces/${workspace.id}?s=${sectionType}`}
+          <div
+          
             key={workspace.id}
             className="flex items-center h-7 rounded-bl-2xl relative border-b-2 border-l-2 border-black/80 z-20"
             onClick={(e) => e.stopPropagation()}
           >
-            <span
+            <Link
+              href={`/workspaces/${workspace.id}?s=${sectionType}`}
               className={`p-1 text-sm whitespace-nowrap w-[95%] absolute top-3 left-5 z-30 rounded-lg px-2 bg-[#f1f1f1] ${
                 workspace.id === wsId ? "text-black font-bold" : "text-gray-400"
               }`}
             >
               {workspace.name}
-            </span>
-          </Link>
+            </Link>
+          </div>
         ))}
       </div>
     )}
@@ -115,7 +116,7 @@ const Workspaces = ({ setCreateWorkspaceModal, wsId }: {
 
   return (
     <div className="mx-auto space-y-5 p-2 w-full h-full flex flex-col bg-[#f1f1f1]">
-      <Link href="/" className="hidden md:flex text-lg mt-1 text-black font-bold">
+      <Link href="/" className="hidden md:flex text-lg mt-1 px-1 text-black font-bold">
         Home &gt; Workspaces
       </Link>
 

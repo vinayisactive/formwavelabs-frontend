@@ -18,7 +18,7 @@ interface Form {
   id: string;
   title: string;
   status: boolean;
-  _count: { pages: number; submissions: number };
+  _count: { pages: number; submissions: number, visits: number };
   createdAt: string;
 }
 
@@ -78,15 +78,16 @@ const CurrentWorkspace = ({ wsId, setCreateWorkspaceModal }: { wsId: string, set
           wsId={wsId}
         />
 
-      <div className="h-[94%] w-full rounded-tl-xl rounded-tr-xl  bg-white border">
+      <div className="h-[90%] md:h-[94%] w-full rounded-tl-xl rounded-tr-xl  bg-white border">
         {isLoading ? (
           <div className="w-full h-full flex justify-center items-center">
             <Loader2 className=" animate-spin" />
           </div> 
         ) : (
           <div className="w-full h-full">
-            {data?.data.forms.length ? (
-              <div className="h-full w-full p-4 space-y-4 overflow-y-scroll">
+          {data?.data.forms.length ? (
+            <div className="h-full w-full p-4 overflow-y-auto">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {data?.data.forms &&
                   data.data.forms?.map((form) => (
                     <FormCard
@@ -95,10 +96,12 @@ const CurrentWorkspace = ({ wsId, setCreateWorkspaceModal }: { wsId: string, set
                       title={form.title}
                       status={form.status}
                       submissions={form._count.submissions}
+                      visits={form._count.visits}
                       userRole={userRole}
                     />
                   ))}
               </div>
+            </div>
             ) : (
               <div className="w-full h-full flex justify-center items-center">
                 No Forms in this workspace.

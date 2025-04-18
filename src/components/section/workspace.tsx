@@ -11,7 +11,7 @@ const Workspace = ({ wsId }: { wsId: string }) => {
   const [isCreateWorkspaceModalOpen, setCreateWorkspaceModal] = useState<boolean>(false);
 
   return (
-    <div className=" absolute inset-0 border flex justify-between items-center bg-white">
+    <div className=" absolute inset-0  flex justify-between items-center bg-white">
       {!isMobile && (
         <div className="md:w-[30%] lg:w-[20%] flex h-full">
           <Workspaces setCreateWorkspaceModal={setCreateWorkspaceModal} wsId={wsId} />

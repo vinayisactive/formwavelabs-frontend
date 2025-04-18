@@ -14,7 +14,7 @@ const WorkspaceSidebarMobile = ({
   wsId: string
 }) => {
   return (
-    <div className={`fixed inset-0 transition-opacity ${ isMobileSidebarOpen ? "visible opacity-100" : "invisible opacity-0 pointer-events-none"} md:hidden`}>
+    <div className={`fixed inset-0 transition-opacity ${ isMobileSidebarOpen ? "visible opacity-100" : "invisible opacity-0 pointer-events-none"} md:hidden z-[90]`}>
       <div className={`absolute inset-0 bg-black/50 transition-opacity duration-300 ${ isMobileSidebarOpen ? "opacity-100" : "opacity-0"}`} onClick={() => setMobileSidebar(false)}/>
 
       <div className={`absolute left-0 top-0 w-3/4 h-full bg-[#f1f1f1] shadow-xl transform transition-transform duration-300 ease-in-out ${ isMobileSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
