@@ -1,9 +1,3 @@
-import {
-    HelpCircle,
-    ListCheck,
-    MousePointer2,
-    TextCursorInputIcon,
-  } from "lucide-react";
   import {
     InputTile,
     RequiredCheckTile,
@@ -41,35 +35,26 @@ import createUpdateSettingHandler from "@/utility/generic-update-setting-fn";
     return (
       <SettingWrapper>
         <SettingHeader
-          title="Yes and No setting"
-          description="Set Yes and No setting"
-          icon={MousePointer2}
+          title="Yes-and-No setting"
           onClose={() => setSelectedElementInstance(null)}
         />
   
         <InputTile
-          label="Label for Yes and No"
-          placeholder="type here..."
-          helperText="enter label"
+          label="Yes-and-No label"
+          placeholder="label.."
           value={extraAttributes.label}
-          icon={TextCursorInputIcon}
           onChange={(value) => handleChange("label", value)}
         />
   
         <InputTile
           label="Helper text"
-          placeholder="type here..."
-          helperText="Helper text here "
+          placeholder="helper text..."
           value={extraAttributes.helperText ?? ""}
-          icon={HelpCircle}
           onChange={(value) => handleChange("helperText", value)}
         />
     
         <RequiredCheckTile
-          label="Required"
-          helperText="Must be check before submiting"
           onChange={(value) => handleChange("required", value)}
-          icon={ListCheck}
           checked={extraAttributes.required}
         />
   

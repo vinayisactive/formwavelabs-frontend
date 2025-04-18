@@ -1,12 +1,5 @@
 import {
-  HelpCircle,
-  ListCheck,
-  TextCursorInputIcon,
-  ToggleLeft,
-} from "lucide-react";
-import {
   InputTile,
-  RequiredCheckTile,
   SettingFooter,
   SettingHeader,
   SettingWrapper,
@@ -37,32 +30,22 @@ const CheckBoxSetting: FC<FormElementProps> = ({elementInstance}) => {
   return (
     <SettingWrapper>
       <SettingHeader
-        title="Checkbox setting"
-        description="Tune the settings"
-        icon={ToggleLeft}
+        title="Check-box setting"
         onClose={() => setSelectedElementInstance(null)}
       />
 
       <InputTile
-        icon={TextCursorInputIcon}
-        label="label"
+        label="Check-box label"
         value={extraAttributes.label}
+        placeholder="label..."
         onChange={(value) => handleChange("label", value)}
       />
 
       <InputTile
-        icon={HelpCircle}
-        label="helper text"
+        label="Helper text"
         value={extraAttributes.helperText}
+        placeholder="helper text..."
         onChange={(value) => handleChange("helperText", value)}
-      />
-
-      <RequiredCheckTile
-        label="Required"
-        helperText="Must be check before submiting"
-        onChange={(value) => handleChange("required", value)}
-        icon={ListCheck}
-        checked={extraAttributes.required}
       />
 
       <SettingFooter

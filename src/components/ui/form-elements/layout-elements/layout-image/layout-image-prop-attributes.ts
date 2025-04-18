@@ -10,7 +10,7 @@ type LayoutImageExtraAttributeType = {
 }
 
 export const layoutImageExtraAttributes : LayoutImageExtraAttributeType = {
-    label: "Layout image url",
+    label: "Layout image label",
     url: "",
     height: ["small", "medium", "large"],
     selectedHeight : "medium"

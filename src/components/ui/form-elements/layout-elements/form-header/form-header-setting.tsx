@@ -8,13 +8,6 @@ import {
 } from "../../elements-reusable-comp";
 import { FormHeaderCustomInstance } from "./form-header-prop-attributes";
 import useElements from "@/utility/useElements-hook";
-import {
-  FileClockIcon,
-  Layout,
-  Text,
-  TextCursorInput,
-  Type,
-} from "lucide-react";
 import createUpdateSettingHandler from "@/utility/generic-update-setting-fn";
 import { FormElementProps } from "@/utility/ts-types";
 
@@ -41,53 +34,45 @@ const FormHeaderSetting: FC<FormElementProps> = ({ elementInstance }) => {
     <SettingWrapper>
       <SettingHeader
         title="Form header setting"
-        description="Layout element"
-        icon={Layout}
         onClose={() => setSelectedElementInstance(null)}
       />
 
       <InputTile
-        label="Form header"
-        helperText="edit for header"
-        placeholder="type here..."
-        icon={TextCursorInput}
+        label="Form header label"
+        placeholder="label..."
         onChange={(value) => handleChange("formHeader", value)}
         value={extraAttributes.formHeader}
       />
 
     <SelectTile
-        label="Mobile font size"
-        placeholder="Select font size"
+        label="Mobile font-size"
+        placeholder="Select font-size"
         options={extraAttributes.fontSize}
         value={extraAttributes.selectedFontSizeForMobile}
-        icon={FileClockIcon}
         onChange={(value) => handleChange("selectedFontSizeForMobile", value)}
       />
 
       <SelectTile
-        label="Desktop font size"
-        placeholder="Select font size"
+        label="Desktop font-size"
+        placeholder="Select font-size"
         options={extraAttributes.fontSize}
         value={extraAttributes.selectedFontSizeForDesktop}
-        icon={FileClockIcon}
         onChange={(value) => handleChange("selectedFontSizeForDesktop", value)}
       />
 
       <SelectTile
-        label="Edit font Weight"
-        placeholder="Select font weight"
+        label="Select font-weight"
+        placeholder="Select font-weight"
         options={extraAttributes.fontWeight}
         value={extraAttributes.selectedFontWeight}
-        icon={Type}
         onChange={(value) => handleChange("selectedFontWeight", value)}
       />
 
       <SelectTile
-        label="Edit font Position"
+        label="Select text-position"
         placeholder="Select position"
         options={extraAttributes.position}
         value={extraAttributes.selectedPosition}
-        icon={Text}
         onChange={(value) => handleChange("selectedPosition", value)}
       />
 

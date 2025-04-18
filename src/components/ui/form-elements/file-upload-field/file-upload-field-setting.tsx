@@ -9,13 +9,6 @@ import {
   SettingHeader,
   SettingWrapper,
 } from "../elements-reusable-comp";
-import {
-  FileCogIcon,
-  FileDownIcon,
-  HelpCircle,
-  ListCheck,
-  TextCursorInput,
-} from "lucide-react";
 import useElements from "@/utility/useElements-hook";
 import createUpdateSettingHandler from "@/utility/generic-update-setting-fn";
 
@@ -43,44 +36,34 @@ const FileUploadSetting: FC<FormElementProps> = ({
   return (
     <SettingWrapper>
       <SettingHeader
-        title="File uplaod element setting"
-        icon={FileDownIcon}
-        description="Tune up your uplaod element"
+        title="File uplaod setting"
         onClose={() => setSelectedElementInstance(null)}
       />
 
       <InputTile
-        label="File uplaod label"
-        helperText="edit for specific file"
-        placeholder="type here..."
+        label="File-uplaod label"
+        placeholder="label..."
         value={extraAttributes.label}
-        icon={TextCursorInput}
         onChange={(value) => handleChange("label", value)}
       />
 
       <InputTile
-        label="helper text"
-        helperText="appare down element"
+        label="Helper text"
         placeholder="type here..."
         value={extraAttributes.helperText}
-        icon={HelpCircle}
         onChange={(value) => handleChange("helperText", value)}
       />
 
       <SelectTile
         label="Select file type"
         options={extraAttributes.fileTypes}
-        icon={FileCogIcon}
         value={extraAttributes.selectedFileType}
         onChange={(value) => handleChange("selectedFileType", value)}
       />
 
       <RequiredCheckTile
-        icon={ListCheck}
-        label="Required Field"
         checked={extraAttributes.required}
         onChange={(checked) => handleChange("required", checked)}
-        helperText="User must provide value to submit form"
       />
 
       <SettingFooter

@@ -1,10 +1,10 @@
 import { FormElemetInstance } from "@/utility/ts-types";
 
 export const textAreaExtraAttributes = {
-    label: "TextArea label",
-    helperText: "check setting to edit",
+    label: "Text-area label",
+    helperText: "helper text...",
     required: false,
-    placeholder: "type here...",
+    placeholder: "placeholder...",
   };
 
   export type TextAreaCustomInstance = FormElemetInstance & {

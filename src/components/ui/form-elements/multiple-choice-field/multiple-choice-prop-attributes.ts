@@ -9,9 +9,9 @@ interface multipleChoiceFieldExtraAttributesInteface {
 
 export const multipleChoiceFieldExtraAttributes = {
     label: "Multiple Choice label",
-    helperText: "Check setting to edit",
+    helperText: "helper text...",
     required: false, 
-    options: ["Option1", "Option2"]
+    options: ["example one", "example two"]
 }; 
 
 export type MultipleChoiceFieldCustomInstance = FormElemetInstance & {

@@ -8,8 +8,8 @@ interface yesAndNoFieldExtraAttributesType {
 }
 
 export const yesAndNoFieldExtraAttributes = {
-    label: "Yes and No label",
-    helperText: "Check setting to edit",
+    label: "Yes-and-No label",
+    helperText: "helper text...",
     required: false, 
     options: ["Yes", "No"]
 }; 

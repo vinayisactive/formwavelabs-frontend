@@ -1,9 +1,8 @@
 import { FormElemetInstance } from "@/utility/ts-types";
 
 export const checkBoxExtraAttributes = {
-    label : "Check box label",
-    helperText: "Check setting to edit",
-    required: false, 
+    label : "Checkbox label",
+    helperText: "helper text...",
 }; 
 
 export type CheckboxCustomInstance = FormElemetInstance & {

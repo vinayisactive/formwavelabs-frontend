@@ -1,5 +1,6 @@
-import { LucideIcon, Save, X } from "lucide-react";
-import { GripVertical } from "lucide-react";
+import { Settings2, X, ChevronDown, ChevronUp, GripVertical } from "lucide-react";
+import { FC } from "react";
+
 
 interface ElementLayerTileProps {
   label: string;
@@ -12,25 +13,18 @@ interface SettingWrapperProps {
 
 interface SettingHeaderProps {
   title: string;
-  description?: string;
   onClose: () => void;
-  icon: LucideIcon;
 }
 
 interface InputTileProps {
-  icon: LucideIcon;
   label: string;
   value: string;
   placeholder?: string;
-  helperText?: string;
   onChange: (value: string) => void;
 }
 
 interface RequiredCheckTileProps {
-  icon: LucideIcon;
-  label: string;
   checked: boolean;
-  helperText?: string;
   onChange: (checked: boolean) => void;
 }
 
@@ -40,11 +34,9 @@ interface SettingFooterProps {
 }
 
 interface SelectTileProps {
-  icon: LucideIcon;
   label: string;
   value: string;
   placeholder?: string;
-  helperText?: string;
   options: string[];
   onChange: (value: string) => void;
 }
@@ -62,6 +54,10 @@ interface SubmitComponentWrapperProps {
   errorLable?: string
 }
 
+interface OptionsButtonProps {
+  option: string;
+  removeHandler: (option: string) => void;
+}
 
 export const ElementLayerTile= ({ label, typeLabel }: ElementLayerTileProps) => {
   return (
@@ -80,54 +76,40 @@ export const ElementLayerTile= ({ label, typeLabel }: ElementLayerTileProps) => 
 };
 
 export const SettingWrapper = ({ children }: SettingWrapperProps) => (
-  <div className="w-full p-4 space-y-5 max-w-lg mx-auto bg-white border rounded-lg">{children}</div>
-);
-
-export const SettingHeader = ({title, description, onClose, icon: Icon }: SettingHeaderProps) => (
-  <div className="flex items-center justify-between pb-4 border-b border-gray-150">
-    <div className="flex items-center space-x-3">
-      <Icon className="w-5 h-5 text-gray-600" />
-      <div>
-        <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-        {description && (
-          <p className="mt-1 text-sm text-gray-500">{description}</p>
-        )}
-      </div>
-    </div>
-    <button
-      onClick={onClose}
-      className="p-1 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-400 hover:text-gray-600"
-    >
-      <X className="w-5 h-5" />
-    </button>
+  <div className="w-full p-6 space-y-7 max-w-lg mx-auto bg-white rounded-xl">
+    {children}
   </div>
 );
 
-export const InputTile = ({icon: Icon, label, value, placeholder, helperText, onChange}: InputTileProps) => (
-  <div className="bg-gray-50 p-4 rounded-lg border border-gray-150">
-    <div className="flex items-center space-x-2 mb-3">
-      <Icon className="w-4 h-4 text-gray-500" />
-      <label className="text-sm font-medium text-gray-700">{label}</label>
-    </div>
+export const SettingHeader = ({title }: SettingHeaderProps) => (
+  <div className="flex items-center justify-start gap-2">
+      <Settings2 className="" />
+      <h3 className="text-2xl font-semibold text-gray-900">{title}</h3>
+  </div>
+);
+
+export const InputTile = ({label, value, placeholder, onChange}: InputTileProps) => (
+  <div className="space-y-2 w-full">
+    <label className="block text-sm font-medium text-gray-700">
+      {label}
+    </label>
+
     <input
       type="text"
-      className="w-full p-2 rounded-md bg-white border-gray-200 focus:border-gray-400 focus:ring-1 focus:ring-gray-400 text-sm"
       value={value}
       onChange={(e) => onChange(e.target.value)}
+      className="w-full px-3 py-2.5 border rounded-lg border-gray-300 focus:border-gray-400 
+               focus:ring-2 focus:ring-gray-200 placeholder-gray-400 text-sm transition-all"
       placeholder={placeholder}
     />
-    {helperText && <p className="mt-2 text-xs text-gray-400">{helperText}</p>}
   </div>
 );
 
-export const RequiredCheckTile = ({ icon: Icon, label, checked, helperText, onChange }: RequiredCheckTileProps) => (
-  <div className="bg-gray-50 p-4 rounded-lg border border-gray-150">
-    <div className="flex items-center justify-between">
-      <div className="flex items-center space-x-2">
-        <Icon className="w-4 h-4 text-gray-500" />
-        <span className="text-sm font-medium text-gray-700">{label}</span>
-      </div>
-      <label className="relative inline-flex items-center cursor-pointer">
+export const RequiredCheckTile = ({checked, onChange }: RequiredCheckTileProps) => (
+    <div className="flex items-center justify-start gap-2 pt-2">
+        <span className="text-sm font-semibold text-gray-700">Required</span>
+
+       <label className="relative inline-flex items-center cursor-pointer">
         <input
           type="checkbox"
           className="sr-only peer"
@@ -137,58 +119,74 @@ export const RequiredCheckTile = ({ icon: Icon, label, checked, helperText, onCh
         <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-gray-800"></div>
       </label>
     </div>
-    {helperText && <p className="mt-2 text-xs text-gray-400">{helperText}</p>}
+);
+
+export const OptionsButton: FC<OptionsButtonProps> = ({ option, removeHandler }) => {
+  return (
+    <button className=" px-5 py-2 border text-black text-xs relative rounded-md">
+      <span
+        className=" absolute -top-2 -right-2 bg-black text-white rounded"
+        onClick={() => removeHandler(option)}
+      >
+        <X size={18} />
+      </span>
+      <span className="text-black">{option}</span>
+    </button>
+  );
+};
+
+export const SelectTile = ({ label, value, placeholder = "Select an option", options, onChange }: SelectTileProps) => (
+  <div className="space-y-2">
+    <label className="text-sm font-medium text-gray-700">{label}</label>
+    <div className="relative">
+      <select 
+        className="w-full px-3 py-2.5 border rounded-lg border-gray-300 focus:border-gray-400 placeholder-gray-400 text-sm transition-all appearance-none pr-10 bg-transparent"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+      >
+        <option value="" disabled className="text-gray-400">
+          {placeholder}
+        </option>
+        {options.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
+      
+      <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none flex flex-col">
+        <ChevronUp className=" text-gray-400 mb-[1px]" size={12} />
+        <ChevronDown className=" text-gray-400" size={12} />
+      </div>
+    </div>
   </div>
 );
 
 export const SettingFooter = ({onCancel, onSave}: SettingFooterProps) => (
-  <div className="flex flex-col md:flex-row gap-3 pt-4 border-t border-gray-150">
+  <div className=" w-full flex gap-3 justify-end items-center ">
     <button
-      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+      className="w-[25%] flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-black border hover:bg-gray-200 rounded-lg transition-colors"
       onClick={onCancel}
     >
-      <X className="w-4 h-4" />
       Cancel
     </button>
+
     <button
-      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-white bg-black hover:bg-gray-900 rounded-lg transition-colors"
+      className="w-[25%] flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-white bg-black hover:bg-black/85 rounded-lg transition-colors"
       onClick={onSave}
     >
-      <Save className="w-4 h-4" />
-      Save Changes
+      Update
     </button>
   </div>
 );
+
+
 
 export const RequiredFieldError = ({errorLable}: {errorLable?: string}) => {
   return (
     <div className="text-[12px] py-1 text-red-400">{errorLable ? errorLable : "Field is required" } </div>
   );
 };
-
-export const SelectTile = ({icon: Icon, label, value, placeholder = "Select an option", helperText, options, onChange }: SelectTileProps) => (
-  <div className="bg-gray-50 p-4 rounded-lg border border-gray-150">
-    <div className="flex items-center space-x-2 mb-3">
-      <Icon className="w-4 h-4 text-gray-500" />
-      <label className="text-sm font-medium text-gray-700">{label}</label>
-    </div>
-    <select
-      className="w-full p-2 rounded-md bg-white border-gray-200 focus:border-gray-400 focus:ring-1 focus:ring-gray-400 text-sm appearance-none"
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-    >
-      <option value="" disabled className="text-gray-400">
-        {placeholder}
-      </option>
-      {options.map((option) => (
-        <option key={option} value={option}>
-          {option}
-        </option>
-      ))}
-    </select>
-    {helperText && <p className="mt-2 text-xs text-gray-400">{helperText}</p>}
-  </div>
-);
 
 export const SubmitComponentWrapper = ({id, label, required, helperText, currentElementToValidate, isFormError, children, labelClass = "text-xl text-black", helperTextClassName = "text-xs text-gray-500 px-2 bg-black/5 mt-1",errorLable = "Field is required"}: SubmitComponentWrapperProps) => {
   return (

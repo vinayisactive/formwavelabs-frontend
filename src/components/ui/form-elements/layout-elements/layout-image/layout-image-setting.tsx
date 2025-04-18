@@ -8,7 +8,7 @@ import {
   SettingHeader,
   SettingWrapper,
 } from "../../elements-reusable-comp";
-import { Image as ImageIcon, Loader2, TextCursorInputIcon } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import useElements from "@/utility/useElements-hook";
 import { LayoutImageCustomInstance } from "./layout-image-prop-attributes";
 import createUpdateSettingHandler from "@/utility/generic-update-setting-fn";
@@ -65,14 +65,12 @@ const LayoutImageSetting: FC<FormElementProps> = ({
     <SettingWrapper>
       <SettingHeader
         title="Layout Image setting"
-        description="Upload an image"
-        icon={ImageIcon}
         onClose={() => setSelectedElementInstance(null)}
       />
 
       <InputTile
-        label="Image layout name"
-        icon={TextCursorInputIcon}
+        label="Image layout label"
+        placeholder="label..."
         value={extraAttributes.label}
         onChange={(value) => handleChange("label", value)}
       />
@@ -114,7 +112,6 @@ const LayoutImageSetting: FC<FormElementProps> = ({
         placeholder="Select image sizes"
         options={extraAttributes.height}
         value={extraAttributes.selectedHeight}
-        icon={ImageIcon}
         onChange={(value) => handleChange("selectedHeight", value)}
       />
 

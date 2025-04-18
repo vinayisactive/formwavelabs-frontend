@@ -2,7 +2,6 @@
 import { TextAreaCustomInstance } from "./text-area-prop-attributes";
 import { FC, useState } from "react";
 import useElements from "@/utility/useElements-hook";
-import { TextCursorInput, HelpCircle, ListChecks } from "lucide-react";
 import {
   InputTile,
   RequiredCheckTile,
@@ -13,17 +12,14 @@ import {
 import { FormElementProps } from "@/utility/ts-types";
 import createUpdateSettingHandler from "@/utility/generic-update-setting-fn";
 
-
-const TextAreaSetting: FC<FormElementProps> = ({
-  elementInstance,
-}) => {
+const TextAreaSetting: FC<FormElementProps> = ({ elementInstance }) => {
   const currentElement = elementInstance as TextAreaCustomInstance;
   const [extraAttributes, setExtraAttributes] = useState(
     currentElement.extraAttributes
   );
   const { updateElementInstance, setSelectedElementInstance } = useElements();
 
-  const handleChange = createUpdateSettingHandler(setExtraAttributes); 
+  const handleChange = createUpdateSettingHandler(setExtraAttributes);
 
   const handleSave = () => {
     const updatedElement = {
@@ -38,44 +34,35 @@ const TextAreaSetting: FC<FormElementProps> = ({
   return (
     <SettingWrapper>
       <SettingHeader
-        title="TextArea Field Settings"
-        description="Configure text area properties"
+        title="TextArea field settings"
         onClose={() => setSelectedElementInstance(null)}
-        icon={TextCursorInput}
       />
 
       <div className="space-y-2">
         <InputTile
-          icon={TextCursorInput}
-          label="Field Label"
+          label="Text-area label"
           value={extraAttributes.label}
           onChange={(value) => handleChange("label", value)}
-          placeholder="Enter field label"
+          placeholder="label..."
         />
 
         <InputTile
-          icon={HelpCircle}
-          label="Helper Text"
-          value={extraAttributes.helperText}
-          onChange={(value) => handleChange("helperText", value)}
-          placeholder="Enter helper text"
-          helperText="Appears below the input field"
-        />
-
-        <InputTile
-          icon={TextCursorInput}
-          label="Placeholder Text"
+          label="Placeholder"
           value={extraAttributes.placeholder}
           onChange={(value) => handleChange("placeholder", value)}
-          placeholder="Enter placeholder text"
+          placeholder="placeholder..."
+        />
+
+        <InputTile
+          label="Helper"
+          value={extraAttributes.helperText}
+          onChange={(value) => handleChange("helperText", value)}
+          placeholder="helper text..."
         />
 
         <RequiredCheckTile
-          icon={ListChecks}
-          label="Required Field"
           checked={extraAttributes.required}
           onChange={(checked) => handleChange("required", checked)}
-          helperText="User must provide value to submit form"
         />
       </div>
 

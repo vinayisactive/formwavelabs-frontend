@@ -8,8 +8,8 @@ interface RadioButtonExtraAttributeType {
 }
 
 export const RadioBtnExtraAttributes = {
-    label: "Radio button label",
-    helperText: "Check setting to edit",
+    label: "Single select label",
+    helperText: "helper text...",
     required: false, 
     options: ["example"]
 }; 

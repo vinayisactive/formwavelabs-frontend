@@ -1,13 +1,6 @@
 import {
-  HelpCircle,
-  ListCheck,
-  MousePointer2,
-  PenBoxIcon,
-  TextCursorInputIcon,
-  X,
-} from "lucide-react";
-import {
   InputTile,
+  OptionsButton,
   RequiredCheckTile,
   SettingFooter,
   SettingHeader,
@@ -62,61 +55,62 @@ const RadioBtnSetting: FC<FormElementProps> = ({
   return (
     <SettingWrapper>
       <SettingHeader
-        title="Radio Button setting"
-        description="Set Radio button setting"
-        icon={MousePointer2}
+        title="Single select setting"
         onClose={() => setSelectedElementInstance(null)}
       />
 
       <InputTile
-        label="Label for Radio button"
-        placeholder="type here..."
-        helperText="enter label"
+        label="Single select label"
+        placeholder="label..."
         value={extraAttributes.label}
-        icon={TextCursorInputIcon}
         onChange={(value) => handleChange("label", value)}
       />
 
       <InputTile
         label="Helper text"
-        placeholder="type here..."
-        helperText="Helper text here "
+        placeholder="helper text..."
         value={extraAttributes.helperText ?? ""}
-        icon={HelpCircle}
         onChange={(value) => handleChange("helperText", value)}
       />
 
-<div className="flex flex-col justify-center gap-2">
-        <div className="flex flex-col gap-2 ">
-          <InputTile
-            label="Enter option"
-            value={optionValue}
-            placeholder="Enter here..."
-            icon={PenBoxIcon}
-            onChange={(value) => setOptionValue(value)}
-          />
+        <div className="flex flex-col justify-center gap-2 pt-2">
+          <div className="flex justify-between items-end gap-2 ">
+            <InputTile
+              label="Enter option"
+              value={optionValue}
+              placeholder="Enter here..."
+              onChange={(value) => setOptionValue(value)}
+            />
 
-          <button
-            onClick={handleOptionAdd}
-            className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-          >
-            Add
-          </button>
+            <button
+              onClick={handleOptionAdd}
+              className="py-3 px-4 bg-black text-white text-xs rounded-lg hover:bg-black/85"
+            >
+              Add
+            </button>
+          </div>
+
+          <div className="text-sm py-2">
+            {extraAttributes.options?.length === 0 ? (
+              <div className="w-full text-xs text-black">
+                options will appear here...
+              </div>
+            ) : (
+              <div className="flex gap-5 flex-wrap ">
+                {extraAttributes.options.map((option) => (
+                  <OptionsButton
+                    key={option}
+                    option={option}
+                    removeHandler={removeOption}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
         </div>
-
-
-        <div className="text-sm mt-2 flex gap-5 flex-wrap">
-          {extraAttributes.options?.map((option) => (
-            <OptionsButton key={option} option={option} removeHandler={removeOption}/>
-          ))}
-        </div>
-      </div>
 
       <RequiredCheckTile
-        label="Required"
-        helperText="Must be check before submiting"
         onChange={(value) => handleChange("required", value)}
-        icon={ListCheck}
         checked={extraAttributes.required}
       />
 
@@ -129,22 +123,3 @@ const RadioBtnSetting: FC<FormElementProps> = ({
 };
 
 export default RadioBtnSetting;
-
-
-interface OptionsButtonProps{
-    option : string, 
-    removeHandler: (option: string) => void; 
-  }
-  
-  const OptionsButton : FC<OptionsButtonProps> = ({option, removeHandler}) => {
-    return(
-      <button
-                className=" px-5 py-2 bg-black/20 text-white relative rounded-md"
-              >
-                <span className=" absolute -top-2 -right-2 bg-red-300 rounded-full" onClick={() => removeHandler(option)}>
-                  <X />
-                </span>
-                <span className="text-black">{option}</span>
-              </button>
-    )
-  }

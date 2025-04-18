@@ -9,11 +9,11 @@ interface selectExtraAttributesInterface{
 }
 
 export const selectExtraAttributes = {
-    label : "Select label",
-    helperText: "Check setting to edit",
-    selectPlaceHolder: "Select an option",
+    label : "Dropdown label",
+    helperText: "helper text",
+    selectPlaceHolder: "Dropdown placeholder",
     required: false, 
-    options: []
+    options: ["example"]
 }; 
 
 export type selectFieldCustomInstance = FormElemetInstance & {

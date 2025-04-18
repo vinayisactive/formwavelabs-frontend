@@ -9,7 +9,6 @@ import {
   SettingHeader,
   SettingWrapper,
 } from "../elements-reusable-comp";
-import { Calendar, HelpCircle, ListCheck, TextCursorInputIcon } from "lucide-react";
 import useElements from "@/utility/useElements-hook";
 import { FormElementProps } from "@/utility/ts-types";
 import createUpdateSettingHandler from "@/utility/generic-update-setting-fn";
@@ -38,35 +37,26 @@ const DateSetting: FC<FormElementProps> = ({elementInstance}) => {
     <SettingWrapper>
       <SettingHeader
         title="Date field setting"
-        description="Edit on your own"
-        icon={Calendar}
         onClose={() => setSelectedElementInstance(null)}
       />
 
       <InputTile
-        icon={TextCursorInputIcon}
         label="Date label"
-        helperText="Edit on your own"
         value={extraAttributes.label}
-        placeholder="label"
+        placeholder="label..."
         onChange={(value) => handleChange("label", value)}
       />
 
       <InputTile
-        icon={HelpCircle}
-        label="edit helper text"
-        helperText="Edit on your own"
+        label="Helper text"
         value={extraAttributes.helperText}
-        placeholder="helper text"
+        placeholder="helper text..."
         onChange={(value) => handleChange("helperText", value)}
       />
 
       <RequiredCheckTile
-        icon={ListCheck}
-        label="Required Field"
         checked={extraAttributes.required}
         onChange={(checked) => handleChange("required", checked)}
-        helperText="User must provide value to submit form"
       />
 
       <SettingFooter

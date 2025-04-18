@@ -2,7 +2,7 @@ import { FormElemetInstance } from "@/utility/ts-types";
 
 export const textExtraAttributes = {
     label: "Text label",
-    helperText: "check setting to edit",
+    helperText: "helper text...",
     required: false,
     placeholder: "type here...",
   };
