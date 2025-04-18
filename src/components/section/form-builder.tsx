@@ -102,8 +102,8 @@ const FormBuilder = ({
     <div className="w-full max-w-[1500px] h-full flex flex-col gap-2 px-2 md:px-0 bg-white mx-auto">
       {selectedElementInstance && ElementEditSetting && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[10] flex">
-          <div className="py-10 w-full overflow-y-auto">
-            <div className="min-h-[calc(100vh-2rem)] w-[90%] md:w-auto flex items-start justify-center mx-auto">
+          <div className=" w-full overflow-y-auto">
+            <div className="h-full w-[90%] md:w-[28%] flex items-center justify-center mx-auto">
               <ElementEditSetting elementInstance={selectedElementInstance} workspaceId={formData?.workspaceId} />
             </div>
           </div>
@@ -152,3 +152,10 @@ const ErrorScreen = ({
 };
 
 export default FormBuilder;
+
+
+
+
+
+
+// 
