@@ -2,7 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-  input:not([type="checkbox"]):not([type="radio"]):not([type="date"]),
+input:not([type="text"])
+     :not([type="checkbox"])
+     :not([type="radio"])
+     :not([type="date"]),
   textarea,
   select,
   button {
