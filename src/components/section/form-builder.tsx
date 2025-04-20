@@ -103,7 +103,7 @@ const FormBuilder = ({
       {selectedElementInstance && ElementEditSetting && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[10] flex">
           <div className=" w-full overflow-y-auto">
-            <div className="h-full w-[90%] md:w-[28%] flex items-center justify-center mx-auto">
+            <div className="h-full w-[90%] md:w-[60%] flex items-center justify-center mx-auto">
               <ElementEditSetting elementInstance={selectedElementInstance} workspaceId={formData?.workspaceId} />
             </div>
           </div>

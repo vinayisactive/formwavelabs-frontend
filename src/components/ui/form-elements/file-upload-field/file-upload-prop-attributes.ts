@@ -11,7 +11,7 @@ export type fileUploadExtraAttributesTypes = {
 }
 
 export const fileUploadExtraAttributes : fileUploadExtraAttributesTypes = {
-    label: "file upload field label",
+    label: "File upload field label",
     helperText: "helperText",
     required: false,
     fileTypes: ["PDF", "IMAGE"],

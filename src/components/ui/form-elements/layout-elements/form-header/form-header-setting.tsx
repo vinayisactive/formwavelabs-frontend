@@ -69,11 +69,19 @@ const FormHeaderSetting: FC<FormElementProps> = ({ elementInstance }) => {
       />
 
       <SelectTile
-        label="Select text-position"
+        label="Select desktop text-position"
         placeholder="Select position"
         options={extraAttributes.position}
-        value={extraAttributes.selectedPosition}
-        onChange={(value) => handleChange("selectedPosition", value)}
+        value={extraAttributes.selectedDesktopPosition}
+        onChange={(value) => handleChange("selectedDesktopPosition", value)}
+      />
+
+    <SelectTile
+        label="Select mobile text-position"
+        placeholder="Select position"
+        options={extraAttributes.position}
+        value={extraAttributes.selectedMobilePosition}
+        onChange={(value) => handleChange("selectedMobilePosition", value)}
       />
 
       <SettingFooter

@@ -7,7 +7,7 @@ const FormHeaderTile: FC<FormElementProps> = ({elementInstance}) =>{
     const { extraAttributes } = elementInstance as FormHeaderCustomInstance; 
 
     return (
-        <ElementLayerTile label={extraAttributes.formHeader} typeLabel="Form header"/>
+        <ElementLayerTile label={extraAttributes.formHeader} typeLabel="Header"/>
     )
 }
 

@@ -7,7 +7,7 @@ const TextFieldTile: FC<FormElementProps> = ({ elementInstance }) => {
   const element = elementInstance as TextCustomInstance;
   const { label } = element.extraAttributes;
 
-  return <ElementLayerTile label={label} typeLabel="Text field" />;
+  return <ElementLayerTile label={label} typeLabel="Text Input" />;
 };
 
 export default TextFieldTile;

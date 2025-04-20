@@ -27,7 +27,7 @@ const TileContainer = () => {
   return (
     <div className="h-full w-full flex flex-col bg-background overflow-hidden">
       <div className="w-full p-1 bg-muted/50">
-        <p className="font-bold text-sm whitespace-nowrap">Drag to Re-order / Edit</p>
+        <p className="font-bold text-sm whitespace-nowrap pl-2">Drag to Re-order / Edit</p>
       </div>
 
       <div className={`flex-1 overflow-y-scroll p-2 space-y-2 rounded-md`} ref={reOrderContainerRef} >

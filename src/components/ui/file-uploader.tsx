@@ -93,9 +93,9 @@ const FileUploader: FC<FileUploaderProps> = ({ fileType, type, id, onUploadCompl
         {!loading ? (
           <>
             <div className="flex items-center gap-2">
-              <label className="flex items-center gap-1.5 text-sm font-medium text-gray-900 cursor-pointer hover:bg-gray-100 px-3 py-1.5 rounded-full border border-gray-300 transition-colors">
-                <Folder className="h-4 w-4" />
-                <span className="truncate max-w-[120px]">
+              <label className="flex items-center gap-1.5 text-sm font-medium text-gray-900 cursor-pointer hover:bg-gray-100 px-3 py-1.5 rounded-xl border-2 border-gray-300 hover:border-black transition-colors">
+                <Folder size={15} className="text-gray-700" />
+                <span className="truncate max-w-[120px] text-gray-700 text-sm">
                   {file ? file.name : `Choose ${fileType}`}
                 </span>
                 <input 
@@ -109,7 +109,7 @@ const FileUploader: FC<FileUploaderProps> = ({ fileType, type, id, onUploadCompl
               <button
                 onClick={handleUpload}
                 disabled={!file}
-                className="px-4 py-2 rounded-full bg-black text-white hover:bg-gray-800 disabled:bg-gray-300 disabled:text-gray-500 transition-colors"
+                className="px-4 py-2 rounded-xl bg-black text-white hover:bg-gray-800 disabled:bg-gray-300 disabled:text-gray-500 transition-colors"
               >
                 <Upload size={14} />
               </button>

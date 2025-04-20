@@ -34,7 +34,7 @@ const DesktopBuilderPreview = ({formTheme}: {formTheme: "BOXY" | "ROUNDED" | und
   return (
     <div className="h-full overflow-y-scroll p-3" ref={previewContainerRef}>
       <div
-        className={`flex flex-col gap-5 p-2 mx-auto shadow-md  bg-white ${
+        className={` space-y-6 px-2 py-3 mx-auto shadow-md  bg-white ${
           formTheme === "BOXY"
             ? "border-r-4 border-b-4 border-black border"
             : "border rounded-md"
@@ -43,7 +43,7 @@ const DesktopBuilderPreview = ({formTheme}: {formTheme: "BOXY" | "ROUNDED" | und
         {elements?.map((el: FormElemetInstance) => {
           const SubmitComponent = FormElemets[el?.type].submit;
           return (
-            <div key={el?.id}>
+            <div key={el?.id} className="">
               <SubmitComponent elementInstance={el} theme={formTheme} />
             </div>
           );

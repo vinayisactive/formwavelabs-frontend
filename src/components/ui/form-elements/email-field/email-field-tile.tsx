@@ -6,7 +6,7 @@ import { EmailCustomInstance } from "./email-prop-attributes"
 const EmailFieldTile: FC<FormElementProps> = ({elementInstance}) => {
     const { label } = (elementInstance as EmailCustomInstance).extraAttributes
 
-    return <ElementLayerTile label={label} typeLabel="Email" />
+    return <ElementLayerTile label={label} typeLabel="Email Input" />
 }
 
 export default EmailFieldTile

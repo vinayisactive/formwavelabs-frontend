@@ -9,27 +9,31 @@ const FormHeaderView: FC<submitCompPropsType> = ({ elementInstance }) => {
   const {
     formHeader,
     selectedFontWeight,
-    selectedPosition,
+    selectedDesktopPosition,
+    selectedMobilePosition,
     selectedFontSizeForDesktop,
     selectedFontSizeForMobile,
   } = extraAttributes;
 
-  const isCenter = selectedPosition === "center";
-  const textAlignmentClass = isCenter ? "text-center" : "text-left";
+  const isMobileTextCenter = selectedMobilePosition === "center";
+  const isDesktopTextCenter = selectedDesktopPosition === "center";
+ 
+  const mobileTextAlignmentClass = isMobileTextCenter ? "text-center" : "text-left";
+  const deskotpTextAlignmentClass = isDesktopTextCenter ? "text-center" : "text-left";
 
   return (
     <div className="w-full px-2">
       {selectedFontSizeForMobile && (
-        <div className={`w-full flex ${isCenter ? "justify-center" : ""}`}>
-          <p className={`text-${selectedFontSizeForMobile} md:hidden font-${selectedFontWeight} ${textAlignmentClass} whitespace-pre-wrap`}>
+        <div className={`w-full flex ${isMobileTextCenter ? "justify-center" : ""}`}>
+          <p className={`text-${selectedFontSizeForMobile} md:hidden font-${selectedFontWeight} ${mobileTextAlignmentClass} whitespace-pre-wrap`}>
             {formHeader}
           </p>
         </div>
       )}
 
       {selectedFontSizeForDesktop && (
-        <div className={`w-full hidden md:flex ${isCenter ? "justify-center" : ""}`}>
-          <p className={`text-${selectedFontSizeForDesktop} font-${selectedFontWeight} ${textAlignmentClass} whitespace-pre-wrap`}>
+        <div className={`w-full hidden md:flex ${isDesktopTextCenter ? "justify-center" : ""}`}>
+          <p className={`text-${selectedFontSizeForDesktop} font-${selectedFontWeight} ${deskotpTextAlignmentClass} whitespace-pre-wrap`}>
             {formHeader}
           </p>
         </div>

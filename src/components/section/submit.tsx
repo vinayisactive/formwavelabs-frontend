@@ -170,7 +170,7 @@ const Submit = ({ formId }: { formId: string }) => {
         </div>
 
         <div
-          className={`space-y-4 px-3 py-6 bg-white shadow-lg ${
+          className={`space-y-7 px-3 py-6 bg-white shadow-lg ${
             formData?.theme === "BOXY"
               ? "border-r-4 border-b-4 border-black border"
               : "border rounded-lg"

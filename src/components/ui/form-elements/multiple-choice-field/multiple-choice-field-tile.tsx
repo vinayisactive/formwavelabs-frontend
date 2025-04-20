@@ -6,7 +6,7 @@ import { ElementLayerTile } from "../elements-reusable-comp";
 const MultipleChoiceFieldTile: FC<FormElementProps> = ({ elementInstance }) => {
   const { label } = (elementInstance as MultipleChoiceFieldCustomInstance).extraAttributes;
 
-  return <ElementLayerTile label={label} typeLabel="Checkbox Group" />;
+  return <ElementLayerTile label={label} typeLabel="Multiple Selection" />;
 };
 
 export default MultipleChoiceFieldTile;

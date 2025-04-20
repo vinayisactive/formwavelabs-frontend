@@ -4,7 +4,10 @@ import { FC, useState } from "react";
 import { MultipleChoiceFieldCustomInstance } from "./multiple-choice-prop-attributes";
 import {
   SplitSubmitComponentWrapper,
+  SubmitComponentWrapper,
 } from "../elements-reusable-comp";
+import useMediaQuery from "@/utility/useMediaQuery-hook";
+import { Check } from "lucide-react";
 
 const MultipleChoiceSubmit: FC<submitCompPropsType> = ({
   elementInstance,
@@ -15,14 +18,16 @@ const MultipleChoiceSubmit: FC<submitCompPropsType> = ({
   isFormError,
   theme,
 }) => {
-  const { id, extraAttributes } = 
+  const { id, extraAttributes } =
     elementInstance as MultipleChoiceFieldCustomInstance;
   const { label, helperText, options, required } = extraAttributes;
 
+  const isMobile = useMediaQuery("(max-width: 768px)");
+
   const [selectedOptions, setSelectedOptions] = useState<string[]>(() => {
     const storedValue = formValues?.[id]?.value;
-    return typeof storedValue === "string" && storedValue !== "" 
-      ? storedValue.split(",") 
+    return typeof storedValue === "string" && storedValue !== ""
+      ? storedValue.split(",")
       : [];
   });
 
@@ -33,7 +38,11 @@ const MultipleChoiceSubmit: FC<submitCompPropsType> = ({
         ? cleanPrev.filter((opt) => opt !== option)
         : [...cleanPrev, option];
 
-      handleValues?.(id, {id, value: newOptions.join(","), label: extraAttributes.label});
+      handleValues?.(id, {
+        id,
+        value: newOptions.join(","),
+        label: extraAttributes.label,
+      });
 
       if (required) {
         const isValid = newOptions.length > 0;
@@ -48,43 +57,84 @@ const MultipleChoiceSubmit: FC<submitCompPropsType> = ({
   };
 
   return (
-    <SplitSubmitComponentWrapper
-      id={id}
-      label={label}
-      helperText={helperText}
-      required={required}
-      currentElementToValidate={elementsToValidate?.[id]}
-      isFormError={isFormError}
-    >
-      <div className="space-y-3 mt-2">
-        {options?.map((option) => (
+    <div>
+      {isMobile ? (
+        <SubmitComponentWrapper
+          id={id}
+          label={label}
+          helperText={helperText}
+          required={required}
+          currentElementToValidate={elementsToValidate?.[id]}
+          isFormError={isFormError}
+        >
+          <OptionsContainer
+            options={options}
+            handleChange={handleChange}
+            theme={theme}
+            selectedOptions={selectedOptions}
+          />
+        </SubmitComponentWrapper>
+      ) : (
+        <SplitSubmitComponentWrapper
+          id={id}
+          label={label}
+          helperText={helperText}
+          required={required}
+          currentElementToValidate={elementsToValidate?.[id]}
+          isFormError={isFormError}
+        >
+          <OptionsContainer
+            options={options}
+            handleChange={handleChange}
+            theme={theme}
+            selectedOptions={selectedOptions}
+          />
+        </SplitSubmitComponentWrapper>
+      )}
+    </div>
+  );
+};
+
+const OptionsContainer = ({
+  options,
+  handleChange,
+  theme,
+  selectedOptions,
+}: {
+  options: string[];
+  handleChange: (option: string) => void;
+  theme: "BOXY" | "ROUNDED" | undefined;
+  selectedOptions: string[];
+}) => {
+  return (
+    <div className="flex flex-col gap-2 mt-2 w-full">
+      {options?.map((option) => (
+        <label
+          key={option}
+          className={`cursor-pointer group border-2 rounded-lg ${selectedOptions.includes(option) ? "border-black" : "border-gray-200"} `}
+          onClick={(e) => {
+            e.preventDefault();
+            handleChange(option);
+          }}
+        >
           <div
-            key={option}
-            onClick={() => handleChange(option)}
-            className={`cursor-pointer p-2 border bg-white transition-all 
-              ${theme === "BOXY"
-                ? selectedOptions.includes(option)
-                  ? "border-black border-r-4 border-b-4"
-                  : "border border-black"
-                : selectedOptions.includes(option)
-                  ? "rounded-md border-black border-2 shadow-md shadow-black/30"
-                  : "border-2 border-gray-300 rounded-md"
-              }`}
+            className={`px-4 py-2.5 text-sm flex items-center transition-all duration-200
+              ${
+                theme === "BOXY"
+                  ? ""
+                  : "rounded-lg "
+              }
+
+              ${selectedOptions.includes(option) ? "bg-gray-100" : "text-white"}
+              group-hover:bg-gray-100`}
           >
-            <label className="flex items-center space-x-3 cursor-pointer overflow-hidden">
-              <input
-                type="checkbox"
-                checked={selectedOptions.includes(option)}
-                readOnly
-                className="h-4 w-4 text-black accent-black focus:ring-black checked:rounded-none"
-              />
-              {/* Removed redundant onClick from span */}
-              <span className="text-sm text-gray-700 w-full">{option}</span>
-            </label>
+            <span className={` flex justify-start items-center gap-2 ${selectedOptions.includes(option) ? "font-semibold text-black" : "text-gray-700"}`}>{option}
+               {selectedOptions.includes(option) && <Check size={18} />}
+            </span>
           </div>
-        ))}
-      </div>
-    </SplitSubmitComponentWrapper>
+        </label>
+      ))}
+    </div>
   );
 };
 

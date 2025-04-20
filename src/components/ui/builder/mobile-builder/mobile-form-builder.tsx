@@ -96,7 +96,7 @@ const MobileFormBuilder = ({
           }}
         >
           <DndContextWrapper>
-            <div className="w-[80%] bg-white rounded-md p-2  h-[80%]">
+            <div className="w-[90%] bg-white rounded-md p-2 h-[80%] overflow-hidden">
               <TileContainer />
             </div>
           </DndContextWrapper>

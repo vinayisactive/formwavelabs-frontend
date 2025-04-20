@@ -3,11 +3,8 @@ import { submitCompPropsType } from "@/utility/ts-types";
 import { FC, useState } from "react";
 import { FileUploadCustomInstance } from "./file-upload-prop-attributes";
 import { SubmitComponentWrapper } from "../elements-reusable-comp";
-// import ImageKitFileUpload from "../../imagekit-file-uploader";
-import { Loader, X } from "lucide-react";
-import { handleAxiosError } from "@/utility/axios-err-handler";
-import axios from "axios";
 import FileUploader from "../../file-uploader";
+import { X, File } from "lucide-react";
 
 const FileUploadSubmit: FC<submitCompPropsType> = ({
   elementInstance,
@@ -16,14 +13,11 @@ const FileUploadSubmit: FC<submitCompPropsType> = ({
   handleValues,
   formValues,
   isFormError,
-  formId
+  formId,
 }) => {
   const { id, extraAttributes } = elementInstance as FileUploadCustomInstance;
   const { label, helperText, required, selectedFileType } = extraAttributes;
-  const [fileUrl, setFileUrl] = useState<string | null>(formValues?.[id].value || null);
-
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [fileUrl, setFileUrl] = useState<string>(formValues?.[id]?.value || "");
 
   const handleChange = (url: string) => {
     setFileUrl(url);
@@ -35,36 +29,7 @@ const FileUploadSubmit: FC<submitCompPropsType> = ({
       }));
     }
 
-    handleValues?.(id, {id, value: url, label: extraAttributes.label});
-  };
-
-  const handleRemoveUrl = async () => {
-    const [, fileId] = fileUrl?.split("::") as [string, string];
-
-    try {
-      setErrorMsg(null);
-      setIsLoading(true);
-
-      await axios.delete("/api/imagekit-auth", {
-        data: {
-          fileId,
-        },
-      });
-
-      setIsLoading(false);
-      setFileUrl(null);
-      handleValues?.(id, {id, value: "", label: extraAttributes.label});
-    } catch (error) {
-      setErrorMsg(handleAxiosError(error));
-      setIsLoading(false);
-    }
-
-    if (required) {
-      setElementsToValidate?.((prev) => ({
-        ...prev,
-        [id]: "",
-      }));
-    }
+    handleValues?.(id, { id, value: url, label: extraAttributes.label });
   };
 
   return (
@@ -76,7 +41,21 @@ const FileUploadSubmit: FC<submitCompPropsType> = ({
       currentElementToValidate={elementsToValidate?.[id]}
       isFormError={isFormError}
     >
-      {!fileUrl && (
+      {fileUrl ? (
+        <div className=" text-black flex justify-start gap-2 items-center">
+          <div className="flex justify-start gap-2   px-3 py-1 rounded-md items-center border-2 border-gray-300">
+            <File size={15} />{" "}
+            {fileUrl.length > 10 ? fileUrl.slice(0, 10) : fileUrl}...
+          </div>
+
+          <div
+           className="text-black text-xs bg-gray-300 hover:bg-black hover:text-white px-2 py-2 rounded-md flex justify-start gap-2 items-center"
+           onClick={() => handleChange("")}
+           >
+            <X size={15} />
+          </div>
+        </div>
+      ) : (
         <FileUploader
           type="FORM"
           id={formId || ""}
@@ -84,17 +63,6 @@ const FileUploadSubmit: FC<submitCompPropsType> = ({
           onUploadComplete={(res) => handleChange(res.assetUrl)}
         />
       )}
-
-      {fileUrl && (
-        <p className="border px-2 border-black flex justify-between items-center overflow-hidden">
-          {fileUrl?.split("::")[0]}
-          <span onClick={handleRemoveUrl}>
-           { isLoading ? <Loader className="animate-spin"/> :  <X />}
-          </span>
-        </p>
-      )}
-
-      {errorMsg && <p>{errorMsg}</p>}
     </SubmitComponentWrapper>
   );
 };

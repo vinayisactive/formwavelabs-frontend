@@ -14,7 +14,7 @@ const MobileBuilderPreview = ({
   return (
     <div className="w-full px-1 flex justify-between">
       <div
-        className={` w-full flex flex-col max-w-3xl gap-5 p-2 mx-auto shadow-md  bg-white ${
+        className={` w-full space-y-6 max-w-3xl  p-2 mx-auto shadow-md  bg-white ${
           theme === "BOXY"
             ? "border-r-4 border-b-4 border-black border"
             : "border rounded-tl-md"

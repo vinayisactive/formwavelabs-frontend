@@ -6,7 +6,7 @@ import { ElementLayerTile } from "../elements-reusable-comp";
 const DateFieldTile: FC<FormElementProps> = ({ elementInstance }) => {
   const { label } = (elementInstance as DateFieldCustomElement).extraAttributes;
 
-  return <ElementLayerTile label={label} typeLabel="Date Picker" />;
+  return <ElementLayerTile label={label} typeLabel="Date Input" />;
 };
 
 export default DateFieldTile;

@@ -1,8 +1,14 @@
+
 "use client";
 import { submitCompPropsType } from "@/utility/ts-types";
 import { FC, useState } from "react";
 import { RadioButtonCustomInstance } from "./radio-btn-prop-attributes";
-import { SplitSubmitComponentWrapper } from "../elements-reusable-comp";
+import {
+  SplitSubmitComponentWrapper,
+  SubmitComponentWrapper,
+} from "../elements-reusable-comp";
+import useMediaQuery from "@/utility/useMediaQuery-hook";
+import { Check } from "lucide-react";
 
 const RadioBtnSubmit: FC<submitCompPropsType> = ({
   elementInstance,
@@ -15,25 +21,32 @@ const RadioBtnSubmit: FC<submitCompPropsType> = ({
 }) => {
   const { id, extraAttributes } = elementInstance as RadioButtonCustomInstance;
   const { label, helperText, options, required } = extraAttributes;
-  const [inputValue, setInputValue] = useState<string>(
+  const [selected, setSelected] = useState<string>(
     formValues?.[id]?.value || ""
   );
 
-  const handleChange = (value: string) => {
-    setInputValue(value);
+  const isMobile = useMediaQuery("(max-width: 768px)");
+
+  const handleChange = (option: string) => {
+    const isSame = selected === option;
+    const newValue = isSame ? "" : option;
+
+    setSelected(newValue);
 
     if (required) {
       setElementsToValidate?.((prev) => ({
         ...prev,
-        [id]: value.trim() === "" ? "" : undefined,
+        [id]: newValue === "" ? "" : undefined,
       }));
     }
 
-    handleValues?.(id, {id, value, label: extraAttributes.label});
+    handleValues?.(id, { id, value: newValue, label: extraAttributes.label });
   };
 
+  const Wrapper = isMobile ? SubmitComponentWrapper : SplitSubmitComponentWrapper;
+
   return (
-    <SplitSubmitComponentWrapper
+    <Wrapper
       id={id}
       label={label}
       helperText={helperText}
@@ -41,38 +54,49 @@ const RadioBtnSubmit: FC<submitCompPropsType> = ({
       currentElementToValidate={elementsToValidate?.[id]}
       isFormError={isFormError}
     >
-      <div className="flex flex-col gap-3 mt-2">
-        {options.map((option) => (
-          <label
-            key={option}
-            htmlFor={`${id}-${option}`}
-            className="cursor-pointer"
-          >
-            <input
-              type="radio"
-              id={`${id}-${option}`}
-              name={id}
-              value={option}
-              checked={
-                formValues?.[id]?.value === option || inputValue === option
-              }
-              onChange={(e) => handleChange(e.target.value)}
-              className="peer hidden"
-            />
-            <div
-              className={`px-3 py-2 text-sm overflow-hidden text-gray-700 flex items-center justify-start shrink-0 whitespace-nowrap ${
-                theme === "BOXY"
-                  ? "border border-black/50 peer-checked:border-black peer-checked:border-r-4 peer-checked:border-b-4 peer-checked:text-black"
-                  : "border-2 rounded-md border-gray-300 peer-checked:border-2 peer-checked:border-black peer-checked:shadow-md peer-checked:shadow-black/40 peer-checked:text-black"
-              }`}
-            >
-              {option}
-            </div>
-          </label>
-        ))}
-      </div>
-    </SplitSubmitComponentWrapper>
+      <OptionsContainer
+        options={options}
+        selected={selected}
+        handleChange={handleChange}
+        theme={theme}
+      />
+    </Wrapper>
   );
 };
+
+const OptionsContainer = ({
+  options,
+  selected,
+  handleChange,
+  theme,
+}: {
+  options: string[];
+  selected: string;
+  handleChange: (option: string) => void;
+  theme: "ROUNDED" | "BOXY" | undefined;
+}) => (
+  <div className="flex flex-col gap-2 w-full mt-2">
+    {options.map((option) => (
+      <label
+        key={option}
+        className={`cursor-pointer group border-2 rounded-lg transition-colors duration-200 \
+          ${option === selected ? "border-black bg-gray-100" : "border-gray-200"}`}
+        onClick={(e) => {
+          e.preventDefault();
+          handleChange(option);
+        }}
+      >
+        <div
+          className={`px-4 py-2.5 text-sm flex items-center gap-2 \
+            ${theme === "BOXY" ? "" : "rounded-lg"} \
+            ${option === selected ? "font-semibold text-black" : "text-gray-700"}`}
+        >
+          {option}
+          {option === selected && <Check size={18} />}
+        </div>
+      </label>
+    ))}
+  </div>
+);
 
 export default RadioBtnSubmit;

@@ -52,7 +52,7 @@ const EmailSubmit: FC<submitCompPropsType> = ({
         required={required}
         value={formValues?.[id]?.value || inputValue}
         onChange={(event) => handleChange(event.target.value)}
-        className="w-full pb-1 border-b-2 border-gray-300 focus:outline-none text-sm mt-1"
+        className="w-full pb-1 border-b-2 border-gray-300 focus:outline-none text-sm mt-1 focus:border-black"
       />
     </SubmitComponentWrapper>
   );

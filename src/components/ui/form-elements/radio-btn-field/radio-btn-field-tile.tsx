@@ -6,7 +6,7 @@ import { ElementLayerTile } from "../elements-reusable-comp";
 const RadioBtnFieldTile: FC<FormElementProps> = ({ elementInstance }) => {
   const { label } = (elementInstance as RadioButtonCustomInstance).extraAttributes;
 
-  return <ElementLayerTile label={label} typeLabel="Radio Group" />;
+  return <ElementLayerTile label={label} typeLabel="Single Selection" />;
 };
 
 export default RadioBtnFieldTile;

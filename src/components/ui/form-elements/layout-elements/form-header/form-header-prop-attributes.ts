@@ -12,7 +12,8 @@ type formHeaderExtraAttributesType = {
     selectedFontSizeForDesktop: availableFontSizes; 
     selectedFontSizeForMobile: availableFontSizes;
     selectedFontWeight: avaibaleFontWeight;
-    selectedPosition: availablePositions; 
+    selectedDesktopPosition: availablePositions,
+    selectedMobilePosition: availablePositions
 }
 
 export const formHeaderExtraAttributes: formHeaderExtraAttributesType = {
@@ -23,7 +24,8 @@ export const formHeaderExtraAttributes: formHeaderExtraAttributesType = {
     selectedFontSizeForDesktop: "xl",
     selectedFontSizeForMobile: "lg",
     selectedFontWeight: "normal",
-    selectedPosition: "left"  
+    selectedDesktopPosition: "left",
+    selectedMobilePosition: "left"  
 }; 
 
 export type FormHeaderCustomInstance = FormElemetInstance & {

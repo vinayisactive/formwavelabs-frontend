@@ -6,7 +6,7 @@ import { ElementLayerTile } from "../elements-reusable-comp";
 const FileUploadFieldTile: FC<FormElementProps> = ({ elementInstance }) => {
   const { label } = (elementInstance as FileUploadCustomInstance).extraAttributes;
 
-  return <ElementLayerTile label={label} typeLabel="File Upload" />;
+  return <ElementLayerTile label={label} typeLabel="Upload File" />;
 };
 
 export default FileUploadFieldTile;
