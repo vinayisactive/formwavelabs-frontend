@@ -8,7 +8,9 @@ const LayoutProvider = ({ children }: { children: React.ReactNode }) => {
   const [client] = useState(() => new QueryClient());
   return (
     <SessionProvider>
-      <QueryClientProvider client={client}>{children}</QueryClientProvider>
+      <QueryClientProvider client={client}>
+            {children}
+      </QueryClientProvider>
     </SessionProvider>
   );
 };

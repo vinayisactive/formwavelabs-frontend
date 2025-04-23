@@ -1,11 +1,9 @@
 "use client"
 import { handleAxiosError } from "@/utility/axios-err-handler";
 import axios from "axios";
-import { ChevronsRight, Eye, BarChart, Clock, CalendarDays, Globe} from "lucide-react";
+import {Eye, BarChart, Clock, CalendarDays, Globe} from "lucide-react";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
-import { HiOutlineSquare3Stack3D } from "react-icons/hi2";
-import Link from "next/link";
 import {
     LineChart,
     Line,
@@ -19,8 +17,20 @@ import {
     Cell,
     PieChart
   } from "recharts";
+import { Breadcrumb } from "../ui/builder/builder-navbar/common-comp";
+
+export interface FormDataInterface {
+  id: string; 
+  title: string; 
+  status: boolean; 
+  workspace: {
+    id: string; 
+    name: string; 
+  }
+}
 
 interface AnalyticsData {
+  form: FormDataInterface; 
   totalVisits: number;
   totalSubmissions: number;
   conversionRate: string;
@@ -46,25 +56,25 @@ interface SectionHeaderProps {
   title: string;
 }
 
-const Breadcrumb = ({ workspaceId, workspaceName, formTitle }: { 
-  workspaceId: string | undefined;
-  workspaceName: string | undefined;
-  formTitle: string | undefined;
-}) => (
-  <div className="mb-8 flex items-center text-sm text-gray-500">
-    <HiOutlineSquare3Stack3D className="mr-2 h-4 w-4" />
-    <Link
-      href={`/workspaces/${workspaceId}`}
-      className="hover:text-gray-700 hover:underline"
-    >
-      {workspaceName || "Loading..."}
-    </Link>
-    <ChevronsRight className="mx-2 h-4 w-4" />
-    <span className="font-medium text-gray-900">
-      {formTitle ? `${formTitle.slice(0, 15)}${formTitle.length > 15 ? "..." : ""}` : "Loading..."}
-    </span>
-  </div>
-);
+// const Breadcrumb = ({ workspaceId, workspaceName, formTitle }: { 
+//   workspaceId: string | undefined;
+//   workspaceName: string | undefined;
+//   formTitle: string | undefined;
+// }) => (
+//   <div className="mb-8 flex items-center text-sm text-gray-500">
+//     <HiOutlineSquare3Stack3D className="mr-2 h-4 w-4" />
+//     <Link
+//       href={`/workspaces/${workspaceId}`}
+//       className="hover:text-gray-700 hover:underline"
+//     >
+//       {workspaceName || "Loading..."}
+//     </Link>
+//     <ChevronsRight className="mx-2 h-4 w-4" />
+//     <span className="font-medium text-gray-900">
+//       {formTitle ? `${formTitle.slice(0, 15)}${formTitle.length > 15 ? "..." : ""}` : "Loading..."}
+//     </span>
+//   </div>
+// );
 
 const StatsCard = ({ title, value, icon, color = 'gray' }: StatsCardProps) => (
   <div className={`bg-white p-6 rounded-xl border border-${color}-100 shadow-sm hover:shadow-md transition-shadow`}>
@@ -182,46 +192,19 @@ const EngagementTrends = ({ data }: { data: AnalyticsData['recentDailyAnalytics'
   }
 
 const Analytics = ({ formId }: { formId: string }) => {
-  const [formData, setFormData] = useState<FormDataInterface | undefined | null>(null);
   const { data: currentUserData, status } = useSession();
-  // const [workspaceName, setWorkspaceName] = useState<null | string>(null);
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
-
-  // const [workspaceId, setWorkspaceId] = useState<null | string>(null); 
-
-  // useEffect(() => {
-  //   const fetchWorkspace = async() => {
-  //     if(!workspaceId) return; 
-  //     const workspaceRes = await axios.get(
-  //       `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/workspaces/${workspaceId}`,
-  //       { headers: { Authorization: `Bearer ${currentUserData?.accessToken}` } }
-  //     );
-  //     setWorkspaceName(workspaceRes.data.data.name);
-  //   }
-
-  //   fetchWorkspace();
-  // },[workspaceId, currentUserData])
-
 
   useEffect(() => {
     if(status === "authenticated" && currentUserData.accessToken){
      const fetchData = async () => {
         try {
 ; 
-       const formRes = await axios.get(
-          `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formId}`,
-          { headers: { Authorization: `Bearer ${currentUserData?.accessToken}` } }
-        );
-        setFormData(formRes.data.data);
-        // setWorkspaceId(formRes.data.data.workspaceId); 
-        console.log(formRes)
-
         const analyticsRes = await axios.get(
           `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/forms/${formId}/track`,
         );
-        setAnalyticsData(analyticsRes.data.data);
-        
+        setAnalyticsData(analyticsRes.data.data);  
       } catch (error) {
         console.error(handleAxiosError(error));
       } finally {
@@ -278,12 +261,14 @@ const Analytics = ({ formId }: { formId: string }) => {
   }
 
   return (
-    <div className="w-full max-w-screen-xl mx-auto px-4 py-8 overflow-x-hidden">
-      <Breadcrumb 
-        workspaceId={formData?.workspace.id}
-        workspaceName={formData?.workspace.name}
-        formTitle={formData?.title}
-      />
+    <div className="w-full max-w-screen-2xl mx-auto px-4 md:px-7 py-2.5 space-y-3 overflow-x-hidden">
+      <div className="w-full md:w-1/3 flex items-center h-full border rounded-md md:border-none shadow-inner md:shadow-none">
+        <Breadcrumb
+          workspaceId={analyticsData?.form.workspace.id}
+          workspaceName={analyticsData?.form.workspace.name}
+          formTitle={analyticsData?.form.title}
+        />
+      </div>
 
       <div className="mb-10">
         <SectionHeader title="Overall Analytics" />

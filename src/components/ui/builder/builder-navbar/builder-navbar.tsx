@@ -21,13 +21,14 @@ import {
   UnPublishBtn,
 } from "./btns";
 import { areElementsChanged } from "@/utility/compare-fns";
-import { HiOutlineSquare3Stack3D } from "react-icons/hi2";
-import Link from "next/link";
-import { ChevronsRight } from "lucide-react";
+// import { HiOutlineSquare3Stack3D } from "react-icons/hi2";
+// import Link from "next/link";
+// import { ChevronsRight } from "lucide-react";
+import { Breadcrumb } from "./common-comp";
 
 interface BuilderNavbarProps {
   formData: FormData | undefined;
-  workspaceId: string | undefined;
+  // workspaceId: string | undefined;
   page: number;
   setCurrentPage: Dispatch<SetStateAction<number>>;
   totalPage: number | undefined;
@@ -35,7 +36,7 @@ interface BuilderNavbarProps {
 
 const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
   formData,
-  workspaceId,
+  // workspaceId,
   page,
   totalPage,
   setCurrentPage,
@@ -47,7 +48,6 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
   const initialElements = useRef<FormElemetInstance[] | null>(null);
   const [isNextAvailable, setIsNextAvailable] = useState<boolean>(false);
   const [isSaveAllowed, setIsSaveAllowed] = useState<boolean>(false);
-  const [workspaceName, setWorkspaceName] = useState<null | string>(null);
   const copyToClipboardText = `https://formwavelabs-frontend.vercel.app/submit/${formData?.id}`;
 
   useEffect(() => {
@@ -74,30 +74,6 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
       initialElements.current = null;
     }
   }, [formData]);
-
-  useEffect(() => {
-    const fetchWorkspace = async () => {
-      try {
-        const data = await fetch(
-          `https://formwavelabs-backend.alfreed-ashwry.workers.dev/api/v1/workspaces/${workspaceId}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        const response = await data.json();
-        setWorkspaceName(response.data.name);
-      } catch (error) {
-        console.log(handleAxiosError(error));
-      }
-    };
-
-    fetchWorkspace();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[]);
 
   useEffect(() => {
     if (elements) {
@@ -171,79 +147,71 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
 
   return (
     <div
-    className={`flex flex-col md:flex-row justify-between items-center gap-2 py-2 w-full md:px-2`}
-  >
-    <div className="w-full md:w-1/3 text-black text-left flex items-center gap-1">
-      <HiOutlineSquare3Stack3D />
-      <Link
-        href={`/workspaces/${workspaceId}`}
-        className="font-bold text-sm text-gray-500 hover:underline whitespace-nowrap"
-      >
-        {workspaceName ? workspaceName : "loading..."}
-      </Link>
-      <ChevronsRight size={15} />
-      {formData && formData?.title?.length > 15
-        ? formData?.title.slice(0, 15)
-        : formData?.title}
-      ...
-    </div>
-  
-    <div className="w-full md:w-2/3 flex  justify-between items-center">
-      <div className="flex gap-2 items-center justify-start md:justify-center w-1/2">
-        {page > 1 && (
-          <PreviousBtn
-            handlePrevious={handlePrevious}
+      className={`flex flex-col md:flex-row justify-between items-center gap-2 py-2 w-full md:px-2`}
+    > 
+      <div className="w-full md:w-1/3 flex items-center h-full border rounded-md md:border-none shadow-inner md:shadow-none">
+        <Breadcrumb
+          workspaceId={formData?.workspace.id}
+          workspaceName={formData?.workspace.name}
+          formTitle={formData?.title}
+        />
+      </div>
+
+      <div className="w-full md:w-2/3 flex  justify-between items-center">
+        <div className="flex gap-2 items-center justify-start md:justify-center w-1/2">
+          {page > 1 && (
+            <PreviousBtn
+              handlePrevious={handlePrevious}
+              isSaveAllowed={isSaveAllowed}
+            />
+          )}
+
+          <div className="py-2 px-3 text-xs rounded-lg text-black border">
+            {page}/{totalPage}
+          </div>
+
+          <SaveBtn
+            savePageMutation={savePageMutation}
             isSaveAllowed={isSaveAllowed}
           />
-        )}
-  
-        <div className="bg-black p-1.5 px-2 text-sm rounded-md text-white">
-          {page}/{totalPage}
+
+          {isNextAvailable ? (
+            <NextBtn
+              handleNextPage={handleNextPage}
+              isSaveAllowed={isSaveAllowed}
+            />
+          ) : (
+            initialElements.current &&
+            initialElements.current?.length > 0 && (
+              <CreateNextBtn
+                createNextMutation={createNextMutation}
+                isSaveAllowed={isSaveAllowed}
+              />
+            )
+          )}
         </div>
 
-        <SaveBtn
-          savePageMutation={savePageMutation}
-          isSaveAllowed={isSaveAllowed}
-        />
-
-         {isNextAvailable ? (
-          <NextBtn
-            handleNextPage={handleNextPage}
-            isSaveAllowed={isSaveAllowed}
-          />
-        ) : (
-          initialElements.current &&
-          initialElements.current?.length > 0 && (
-            <CreateNextBtn
-              createNextMutation={createNextMutation}
-              isSaveAllowed={isSaveAllowed}
-            />
-          )
-        )}
-      </div>
-  
-      <div className="flex gap-2 items-center w-1/2 justify-end">
-        {formData?.status ? (
-          <>
-            <UnPublishBtn savePublishMutation={savePublishMutation} />
-            <CopyToClipboard
-              textToCopy={copyToClipboardText}
-              className="py-2 px-2"
-            />
-          </>
-        ) : (
-          initialElements.current &&
-          initialElements.current?.length > 0 && (
-            <PublishBtn
-              savePublishMutation={savePublishMutation}
-              isSaveAllowed={isSaveAllowed}
-            />
-          )
-        )}
+        <div className="flex gap-2 items-center w-1/2 justify-end">
+          {formData?.status ? (
+            <>
+              <UnPublishBtn savePublishMutation={savePublishMutation} />
+              <CopyToClipboard
+                textToCopy={copyToClipboardText}
+                className="py-2 px-2 rounded-lg"
+              />
+            </>
+          ) : (
+            initialElements.current &&
+            initialElements.current?.length > 0 && (
+              <PublishBtn
+                savePublishMutation={savePublishMutation}
+                isSaveAllowed={isSaveAllowed}
+              />
+            )
+          )}
+        </div>
       </div>
     </div>
-  </div>
-  
   );
 };
 

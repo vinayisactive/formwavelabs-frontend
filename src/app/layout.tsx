@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/ui/navbar";
 import { Manrope } from "next/font/google";
-import LayoutProvider from "@/components/wrap/layout-provider-wrapper";
+import LayoutProvider from "@/components/ui/layout-provider-wrapper";
 
 const manRope = Manrope({ weight: "400", subsets: ["latin"] });
 

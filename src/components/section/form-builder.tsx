@@ -27,7 +27,10 @@ export interface FormData {
   title: string;
   status: boolean;
   totalPages: number;
-  workspaceId: string; 
+  workspace: {
+    id: string; 
+    name: string; 
+  }
   theme: "BOXY" | "ROUNDED";
 }
 
@@ -95,7 +98,7 @@ const FormBuilder = ({
   }
 
   if (error) {
-    return <ErrorScreen error={error} workspaceId={formData?.workspaceId} />;
+    return <ErrorScreen error={error} workspaceId={formData?.workspace.id} />;
   }
 
   return (
@@ -104,7 +107,7 @@ const FormBuilder = ({
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[10] flex">
           <div className=" w-full overflow-y-auto">
             <div className="h-full w-[90%] md:w-[60%] flex items-center justify-center mx-auto">
-              <ElementEditSetting elementInstance={selectedElementInstance} workspaceId={formData?.workspaceId} />
+              <ElementEditSetting elementInstance={selectedElementInstance} workspaceId={formData?.workspace.id} />
             </div>
           </div>
         </div>
@@ -113,7 +116,6 @@ const FormBuilder = ({
       <div className="min-h-[50px] h-auto md:h-[7%] flex justify-center items-center">
         <BuilderNavbar
           formData={formData} 
-          workspaceId={formData?.workspaceId}
           page={currentPage}
           setCurrentPage={setCurrentPage}
           totalPage={formData?.totalPages}
