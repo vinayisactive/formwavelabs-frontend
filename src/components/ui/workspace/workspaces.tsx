@@ -127,7 +127,7 @@ const Workspaces = ({ setCreateWorkspaceModal, wsId }: {
         Create Workspace
       </button>
 
-      <div className="space-y-2 overflow-y-auto overflow-x-hidden flex-grow">
+      <div className="space-y-4 overflow-y-auto overflow-x-hidden flex-grow">
         <WorkspaceSection
           title="Personal"
           sectionType="owned"

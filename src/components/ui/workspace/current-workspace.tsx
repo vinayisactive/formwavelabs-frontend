@@ -104,7 +104,7 @@ const CurrentWorkspace = ({ wsId, setCreateWorkspaceModal }: { wsId: string, set
             </div>
             ) : (
               <div className="w-full h-full flex justify-center items-center">
-                No Forms in this workspace.
+                <p className="px-4 py-2 border rounded-full text-xs">No forms, create now.</p>
               </div>
             )}
           </div>

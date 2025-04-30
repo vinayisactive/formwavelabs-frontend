@@ -154,7 +154,6 @@ const FormActionsMenu: FC<FormActionsMenuProps> = ({ formId, userRole }) => {
           <div className="p-1.5 space-y-0.5">
             {userRole !== "VIEWER" && <MenuItemLink href={`/forms/${formId}/builder`} label="Edit Form" onClose={() => setIsMenuOpen(false)} />}
             <MenuItemLink href={`/forms/${formId}/submission`} label="Submissions" onClose={() => setIsMenuOpen(false)} />
-            <MenuItemLink href={`/forms/${formId}/analytics`} label="Analytics" onClose={() => setIsMenuOpen(false)} />
           </div>
 
           <div className="border-t border-gray-100 p-1.5">

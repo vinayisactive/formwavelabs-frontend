@@ -162,10 +162,7 @@ interface ResponseCardProps {
 }
 
 const ResponseCard = ({ response, index, ref }: ResponseCardProps) => (
-  <div
-    ref={ref}
-    className="max-w-[300px] w-full border rounded-lg p-4 flex flex-col gap-4 justify-start items-start"
-  >
+  <div ref={ref} className="w-[95%] md:w-[45%] lg:w-[24%] border rounded-lg p-4 flex flex-col gap-4 justify-center items-start">
     <p className="bg-black text-white w-5 h-5 flex justify-center items-center rounded-md text-sm">
       {index + 1}
     </p>
@@ -334,7 +331,7 @@ const SubmissionsLayout = ({ formId }: { formId: string }) => {
 
             {responses.length === 0 ? (
               <div className="text-md text-center w-full h-full flex items-center justify-center">
-                Zero submissions yet.
+                 <p className="px-4 py-2 text-xs border rounded-full">Zero submissions yet.</p>
               </div>
             ) : (
               <div className="w-full h-full flex flex-col  gap-2 overflow-y-scroll">
