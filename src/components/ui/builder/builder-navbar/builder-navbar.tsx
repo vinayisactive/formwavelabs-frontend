@@ -3,14 +3,11 @@
 import { useRef, useState, useEffect, Dispatch, SetStateAction } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-
 import axios, { AxiosError } from "axios";
 import { FormData } from "@/components/section/form-builder";
-
 import { handleAxiosError } from "@/utility/axios-err-handler";
 import useElements from "@/utility/useElements-hook";
 import { FormElemetInstance } from "@/utility/ts-types";
-
 import CopyToClipboard from "../../copy-to-clipboard";
 import {
   CreateNextBtn,
@@ -21,14 +18,10 @@ import {
   UnPublishBtn,
 } from "./btns";
 import { areElementsChanged } from "@/utility/compare-fns";
-// import { HiOutlineSquare3Stack3D } from "react-icons/hi2";
-// import Link from "next/link";
-// import { ChevronsRight } from "lucide-react";
-import { Breadcrumb } from "./common-comp";
+import Breadcrumb from "../../breadcrum";
 
 interface BuilderNavbarProps {
   formData: FormData | undefined;
-  // workspaceId: string | undefined;
   page: number;
   setCurrentPage: Dispatch<SetStateAction<number>>;
   totalPage: number | undefined;
@@ -36,7 +29,6 @@ interface BuilderNavbarProps {
 
 const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
   formData,
-  // workspaceId,
   page,
   totalPage,
   setCurrentPage,
@@ -149,7 +141,7 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
     <div
       className={`flex flex-col md:flex-row justify-between items-center gap-2 py-2 w-full md:px-2`}
     > 
-      <div className="w-full md:w-1/3 flex items-center h-full border rounded-md md:border-none shadow-inner md:shadow-none">
+      <div className="w-full md:w-1/3 flex items-center h-full">
         <Breadcrumb
           workspaceId={formData?.workspace.id}
           workspaceName={formData?.workspace.name}

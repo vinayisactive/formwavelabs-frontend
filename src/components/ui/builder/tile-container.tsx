@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import DndDraggableButton from "../../dnd-reusable/dnd-draggable-button";
 import useElements from "@/utility/useElements-hook";
 import useMediaQuery from "@/utility/useMediaQuery-hook";
-import MobileDndDraggableButton from "../../dnd-reusable/dnd-draggable-button-mobile";
+import MobileDndDraggableButton from "../dnd-reusable/dnd-draggable-button-mobile";
+import DndDraggableButton from "../dnd-reusable/dnd-draggable-button";
 
 const TileContainer = () => {
   const { elements } = useElements();  

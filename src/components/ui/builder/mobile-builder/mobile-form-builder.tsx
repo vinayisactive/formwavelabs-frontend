@@ -3,9 +3,9 @@ import { Plus } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import DndContextWrapper from "../../dnd-reusable/dnd-context-wrapper";
 import MobileBuilderPreview from "./mobile-builder-preview";
-import ElementsContainer from "../elements-container/elements-container";
+import ElementsContainer from "../elements-container";
 import useElements from "@/utility/useElements-hook";
-import TileContainer from "../tile-container/tile-container";
+import TileContainer from "../tile-container";
 
 const MobileFormBuilder = ({
   theme,

@@ -100,7 +100,7 @@ const Workspaces = ({ setCreateWorkspaceModal, wsId }: {
 
   if (isLoading) {
     return (
-      <div className="w-full h-full flex items-center justify-center p-8">
+      <div className="w-full h-full flex items-center justify-center p-8 bg-[#f1f1f1]">
         <Loader2 className="animate-spin" />
       </div>
     );
