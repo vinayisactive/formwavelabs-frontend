@@ -31,7 +31,7 @@ const NavItems = ({ isAuthenticated }: { isAuthenticated: boolean }) => (
     {isAuthenticated && (
       <Link
         href="/workspaces"
-        className="hidden md:flex text-sm font-medium text-black hover:text-blue-600 transition-colors px-2 py-1 rounded-lg hover:bg-blue-50/50"
+        className="flex text-sm font-medium text-black hover:text-blue-600 transition-colors px-2 py-1 rounded-lg hover:bg-blue-50/50"
       >
         Workspaces
       </Link>
