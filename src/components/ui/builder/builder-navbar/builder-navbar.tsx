@@ -40,7 +40,7 @@ const BuilderNavbar: React.FC<BuilderNavbarProps> = ({
   const initialElements = useRef<FormElemetInstance[] | null>(null);
   const [isNextAvailable, setIsNextAvailable] = useState<boolean>(false);
   const [isSaveAllowed, setIsSaveAllowed] = useState<boolean>(false);
-  const copyToClipboardText = `https://formwavelabs-frontend.vercel.app/submit/${formData?.id}`;
+  const copyToClipboardText = `https://formwavelabs.vercel.app/submit/${formData?.id}`;
 
   useEffect(() => {
     if (totalPage && page < totalPage) {

@@ -60,7 +60,7 @@ const FormCard: FC<FormCardProps> = ({
           />
           {status && (
             <CopyToClipboard
-              textToCopy={`${window.location.origin}/forms/${formId}`}
+              textToCopy={`${window.location.origin}/submit/${formId}`}
               className="p-1.5 hover:bg-gray-100 rounded-2xl transition-colors"
             />
           )}
